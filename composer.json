@@ -1,5 +1,10 @@
 {
     "require": {
-        "slim/slim": "^3.0"
+        "slim/slim": "^3.0",
+        "phpmailer/phpmailer": "^6.0",
+        "twilio/sdk": "4.*",
+        "slim/twig-view": "^2.4",
+        "awurth/slim-helpers": "^1.0",
+        "firebase/php-jwt": "^5.0"
     }
 }

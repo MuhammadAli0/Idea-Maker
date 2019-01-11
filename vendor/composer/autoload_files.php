@@ -7,4 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '253c157292f75eb38082b5acb06f3f01' => $vendorDir . '/nikic/fast-route/src/functions.php',
+    '320cde22f66dd4f5d3fd621d3e88b98f' => $vendorDir . '/symfony/polyfill-ctype/bootstrap.php',
+    '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => $vendorDir . '/symfony/polyfill-mbstring/bootstrap.php',
+    'bccfaf6207f67190a92f35585e9a78b2' => $vendorDir . '/twilio/sdk/Services/Twilio.php',
 );
