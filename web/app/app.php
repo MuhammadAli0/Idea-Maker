@@ -60,7 +60,7 @@ class mailer{
         <tr><td>..</td><tr>
         <tr><tr><tr>
         <td> You have Regiterd With Username  </td> <td><td>'. $user .' <tr> 
-        <td> your Code is <td><a href="https://ffb4e1be.ngrok.io/Idea-Maker/profile/register/code/'. $user . '/' . $code .'
+        <td> your Code is <td><a href="https://idea-maker.herokuapp.com/web/index.php/register/code/'. $user . '/' . $code .'
         ">Activate</a></table>
         </body>
         ';
@@ -269,7 +269,7 @@ class DataHandeler extends Register{
     private static $instance;
 
     function __construct(){
-        $conn = new PDO("mysql:host=$this->host;dbname=$this->DBname", $this->MySqlUsername, $this->MySqlPassword);
+        $conn = new PDO("mysql:host=$this->host;dbname=$this->DBname;charset=utf8", $this->MySqlUsername, $this->MySqlPassword, []);
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $conn->beginTransaction();
@@ -337,6 +337,7 @@ class DataHandeler extends Register{
     }
 
     function __destruct(){
+        $this->conn->commit();
         $this->conn = null; 
     }
 
@@ -537,10 +538,7 @@ class _Loyal extends mailer{
             try {
                 $decoded = JWT::decode($jwt, $this->key, array('HS256'));
                 http_response_code(200);     
-                return json_encode(array(
-                    "status" => 200,
-                    "data" => $decoded->data
-                ));
+                return $decoded->data->id;
          
             }catch (Exception $e){
      
@@ -556,15 +554,15 @@ class _Loyal extends mailer{
 
 
     protected function createSeection($username){
-        header("Access-Control-Allow-Origin: https://ffb4e1be.ngrok.io/Idea-Maker/profile/");
+        header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com/web/index.php/");
         header("Content-Type: application/json; charset=UTF-8");
         header("Access-Control-Allow-Methods: POST");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
         
         $key = $this->key;
-        $iss = "https://ffb4e1be.ngrok.io/Idea-Maker/profile/recovery/password/";
-        $aud = "https://ffb4e1be.ngrok.io/Idea-Maker/profile/recovery/password/";
+        $iss = "https://idea-maker.herokuapp.com/web/index.php/recovery/password/";
+        $aud = "https://idea-maker.herokuapp.com/web/index.php/recovery/password/";
         $iat = 1356999524;
         $nbf = 1357000000;
 
@@ -613,7 +611,7 @@ class Login extends Loyal {
 
             $this->Email = $result['email'];
 
-            if($result['accStatus'] != 'ACTIVE'){
+            if($result['accStatus'] != 'ACTIVATED'){
                 $this->logging->write(json_encode(array(
                     "Status" => "Interapt",
                     "Message" => "UnValid Account",
@@ -622,7 +620,7 @@ class Login extends Loyal {
                 )));
                 return json_encode(array(
                     "status" => 122,
-                    "message" => "PLISE VALIDATE YOUR ACCOUT"
+                    "message" => "PLISE VALIDATE YOUR ACCOUNT"
                     
                 ));
             }else{
@@ -678,6 +676,7 @@ class Recovery extends _Loyal{
     private $conn;
     private $vCode;
     private $link ;
+    public $error = [];
 
     function __construct($mail){
         $db = DataHandeler::getInstance();
@@ -697,16 +696,24 @@ class Recovery extends _Loyal{
     }
 
     public function recover(){
+        $this->error['status'] = 200;
         if($this->isValidEmail() == TRUE){
             if($this->loadData() == TRUE){
                 if($this->updateCode() == TRUE){
-                    $this->link = "https://ffb4e1be.ngrok.io/Idea-Maker/profile/recovery/$this->username/$this->vCode";
+                    $this->link = "https://idea-maker.herokuapp.com/web/index.php/recovery/$this->username/$this->vCode";
                     if($this->sendRecoveryMali() == TRUE){
+                        $this->error['message'] = 'mail sended';
                         return TRUE;
                     }
                 }
             }
+        }else{
+            $this->error['status'] = 300;
+            $this->error['message'] = 'Mail not execit in our database';
+            return FALSE;
         }
+        $this->error['status'] = 400;
+        $this->error['message'] = "Internal Server Error" ;
         return FALSE;
     }
 

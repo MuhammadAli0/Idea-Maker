@@ -89,26 +89,16 @@ $app->get('/register/code/{username}/{code}', function($request, $response, $arg
             "username" => $user,
             "code" => $code
         )));
-
-        $response->write(json_encode(array(
-            'status' => 122,
-            "message" => "Activated Successfully"
-        )));
-
-        // header("Location: http://www.IdeaMaker.com/login/activatedSuccess", true, 301);
-        // exit();
+        header("Location: http://www.IdeaMaker.com/login/activatedSuccess", true, 301);
+        exit();
     }else{
         $logging->write(json_encode(array(
             "Status" => "SomeThingWrong",
             "username" => $user,
             "code" => $code
         )));
-        $response->write(json_encode(array(
-            'status' => 123,
-            "message" => "WRONG CODE VALUE"
-        )));
-        // header("Location: http://www.IdeaMaker.com/SomeThingWrong", true, 301);
-        // exit();
+        header("Location: http://www.IdeaMaker.com/SomeThingWrong", true, 301);
+        exit();
     }
 
 });
@@ -154,20 +144,14 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
                 "Email" => $email
             )));
 
-            $response->write(json_encode(array(
-                "status" => 200,
-                "message" => "MAIL SENDED SUCCESSFULLY"
-            )));
+            $response->write(json_encode($recover->error));
         }else{
             $logging->write(json_encode(array(
                 "Status" => "SomeThingWrong",
                 "Email" => $email
             )));
 
-            $response->write(json_encode(array(
-                "status" => 123,
-                "message" => "SOMETHING WRONG, TRAY AGAIN LATARE"
-            )));
+            $response->write(json_encode($recover->error));
         }
     }else{
         $username = $argc['value1'];
@@ -181,7 +165,7 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
                 "Code" =>$code
             )));
 
-            header("Location: https://ffb4e1be.ngrok.io/Idea-Maker/profile/passwordRecov.html?".$token, true, 301);
+            header("Location: https://idea-maker.herokuapp.com/web/passwordRecov.html?".$token, true, 301);
             exit();
 
             // $response->write( $token );
@@ -206,22 +190,24 @@ $app->post('/recovery/password/', function($request, $response){
     $logging = new  RecoveryLog;
     
     $jwt            = $data['jwt'];
-    $recover        = new Recovery('1234');
-    $tokenData      = $recover->DecodeToken($jwt);
-    if ($tokenData  !== FALSE){
-        if ($recover->RePassword($tokenData['username'], $data['password']) == TRUE ){
-            $logging->write(json_encode(array(
-                "Status" => "Recoverd",
-                "Username" => $tokenData['username']
-            )));
+    $recover        = new Recovery('----');
+    $UserName      = $recover->DecodeToken($jwt);
+    if ($UserName  !== FALSE){
+        if ($recover->RePassword($UserName, $data['password']) == TRUE ){
+            
             $response->write(json_encode(array(
                 "status" => 200,
                 "message" => "PASSWORD UPDATED SUCC"
             )));
+            $logging->write(json_encode(array(
+                "Status" => "Recoverd",
+                "Username" => $UserName
+            )));
+
         }else{
             $logging->write(json_encode(array(
                 "Status" => "SomeThingWrong",
-                "Username" => $tokenData['username']
+                "Username" => $UserName
             )));
 
             $response->write(json_encode(array(
