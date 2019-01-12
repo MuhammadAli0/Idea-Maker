@@ -313,7 +313,7 @@ class DataHandeler extends Register{
                     ");
                 $this->sendValidationMali();
             }
-            $this->conn->commit();
+            
 
 
             }
@@ -607,7 +607,7 @@ class Login extends Loyal {
 
         if($dlb->rowCount() > 0){
             $result     = $dlb->fetch();
-            $this->conn->commit();
+            
 
             $this->Email = $result['email'];
 
