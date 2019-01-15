@@ -5,6 +5,7 @@
         "twilio/sdk": "4.*",
         "slim/twig-view": "^2.4",
         "awurth/slim-helpers": "^1.0",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "google/photos-library": "^1.1"
     }
 }

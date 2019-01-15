@@ -395,28 +395,6 @@ class Session {
     }
 }
 
-class GetRequre{
-
-    private $conn;
-
-
-    public function GetName($username){
-        $db = DataHandeler::getInstance();
-        $conn = $db->conn;
-        $user = $username;
-        $dlb = $conn->prepare("SELECT * FROM uname WHERE username = '$user'");
-        $dlb->execute();
-        if($dlb->rowCount() > 0){
-            $name     = $dlb->fetch(PDO::FETCH_ASSOC);
-            return json_encode($name);
-        }else{
-            return FALSE;
-        }
-    }
-
-
-}
-
 class Loyal extends GetRequre { 
     private $key = "MIIEowIBAAKCAQEA23LlN6jUJrsACaQeJlRlYeY38tL7oBGsaJNWvA44mgnkrmQt
     rd4uyltlX0hAfVVLAuZ1CnW9CU18VmSEhB8NgnF4x5f1cLlfev9Q01gBrWhoRYMP
