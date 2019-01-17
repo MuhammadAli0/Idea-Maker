@@ -89,7 +89,7 @@ $app->get('/register/code/{username}/{code}', function($request, $response, $arg
             "username" => $user,
             "code" => $code
         )));
-        header("Location: http://www.IdeaMaker.com/login/activatedSuccess", true, 301);
+        header("Location: https://idea-maker.herokuapp.com/web/index.html?login", true, 301);
         exit();
     }else{
         $logging->write(json_encode(array(
@@ -97,40 +97,13 @@ $app->get('/register/code/{username}/{code}', function($request, $response, $arg
             "username" => $user,
             "code" => $code
         )));
-        header("Location: http://www.IdeaMaker.com/SomeThingWrong", true, 301);
+        header("Location: https://idea-maker.herokuapp.com/web/SomeThingWrong", true, 301);
         exit();
     }
 
 });
 
-// ------------- HOME -------------------
-$app->post('/home', function($request, $response){
-    // session_start();
-    // $cs  = new Session();
-    // if (isset($_COOKIE['username'])){
-    //     if($cs->getCookie('username')=='eclipse')
-    //     {
-    //         return "Welcome To Home";
-    //     }else
-    //     {
-    //         return "Go And Kill";
-    //     }
-    // }
-
-    $data = $request->getParsedBody();
-    
-    $jwt            = $data['jwt'];
-    $allowMe        = new Loyal;
-    $AllowData      = $allowMe->isAllow($jwt);
-
-    if ($AllowData  !== FALSE){
-        $response->write("Welcome To Home Page");
-    }else{
-        $response->write("GO To HELL *********** ");
-    }
-     
-});
-
+// ------------- Passowrd Recovery 1st -------------------
 $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $response, $argc){
     
     $logging = new  RecoveryLog;
@@ -184,6 +157,7 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
 
 });
 
+// ------------- Passowrd Recovery 2nd -------------------
 $app->post('/recovery/password/', function($request, $response){
 
     $data = $request->getParsedBody();
@@ -227,6 +201,62 @@ $app->post('/recovery/password/', function($request, $response){
     }
      
 });
+
+// ------------- HOME -------------------
+$app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $response, $argc){
+
+    $data = $request->getParsedBody();
+    $token          = $data['jwt'];
+    $allowMe        = new Loyal;
+    $AllowData      = $allowMe->isAllow($token);
+
+    if ($AllowData != FALSE){
+
+        if($request->isPost()){
+            $home = new retriveHome($AllowData->id);
+            $home->name = json_decode($AllowData->name);
+            $home->email = $AllowData->email;
+            $home->username = $AllowData->id;
+            $home->__prepare();
+            $response->write($home->home);
+        }else{
+
+        }
+    }else{
+        header("Location: https://idea-maker.herokuapp.com/web/index.html?login", true, 301);
+        exit();
+    }
+     
+});
+
+// ------------- Profile -------------------
+$app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, $response, $argc){
+
+    $data = $request->getParsedBody();
+    $token          = $data['jwt'];
+    $allowMe        = new Loyal;
+    $AllowData      = $allowMe->isAllow($token);
+
+    if ($AllowData != FALSE){
+
+        if($request->isPost()){
+            $profile = new retriveProfile($AllowData->id);
+            $profile->name = json_decode($AllowData->name);
+            $profile->email = $AllowData->email;
+            $profile->username = $AllowData->id;
+            $profile->__prepare();
+            $response->write($profile->profile);
+        }else{
+
+        }
+    }else{
+        header("Location: https://idea-maker.herokuapp.com/web/index.html?login", true, 301);
+        exit();
+    }
+     
+});
+
+
 
 
 ?>

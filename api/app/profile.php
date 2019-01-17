@@ -1,5 +1,4 @@
 <?php
-require  __DIR__ . '/../../vendor/autoload.php';
 
 
 class profileDB{
@@ -39,7 +38,7 @@ class profileDB{
 
 }
 
-class GetRequre{
+class GetRequerd{
 
     private $conn;
     function  __construct(){
@@ -47,43 +46,51 @@ class GetRequre{
         $this->conn = $DB->conn;
     }
 
-    protected function GetName($username){
-        $user = $username;
-        $dlb = $this->conn->prepare("SELECT fname, lname FROM uname WHERE username = '$user'");
+    public function getUser($username){
+        $dlb = $this->conn->prepare("SELECT * FROM users WHERE username = '$username'");
         $dlb->execute();
         if($dlb->rowCount() > 0){
-            $name     = $dlb->fetch(PDO::FETCH_ASSOC);
-            return json_encode($name);
+            $data     = $dlb->fetch(PDO::FETCH_ASSOC);
+            return $data;
         }else{
             return FALSE;
         }
     }
+}
 
 
 
+class retriveProfile{
+    public $profile ;
+    public $name ;
+    public $email;
+    public $username;
+
+
+
+    public function __prepare(){
+        $GetDataX = new GetRequerd;
+        $data = $GetDataX->getUser($this->username);
+        $data = (array) $data;
+        $this->profile = json_encode(array(
+            "username" => $this->username,
+            "personal" => array(
+                "name"     => $this->name,
+                "gender"   => $data['gender'],
+                "country"  => $data['country'],
+                "town"     => $data['town'],
+                "contact"  => array(
+                    "email"    => $this->email,
+                    "phone"    => $data['phone'])
+            ),
+            "accType"  => $data['uType'],
+            "EnterdDate" => $data['cDateTime']
+
+                ));
+    }
 
 }
 
-class profilePicuture{
-    private $picLink;
-
-    function __construct(){
-
-    }
-
-    public function upload(){
-
-    }
-
-}
-
-class retriveProfile extends GetRequre{
-    function __constant($username){
-        $name = $this->GetName($username);
-        
-
-    }
-}
 
 
 ?>

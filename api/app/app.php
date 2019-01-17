@@ -2,6 +2,10 @@
 require  __DIR__ . '/../../vendor/autoload.php';
 require  __DIR__ . '/log.php';
 require  __DIR__ . '/database.php';
+require  __DIR__ . '/profile.php';
+require  __DIR__ . '/home.php';
+
+
 
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -60,7 +64,7 @@ class mailer{
         <tr><td>..</td><tr>
         <tr><tr><tr>
         <td> You have Regiterd With Username  </td> <td><td>'. $user .' <tr> 
-        <td> your Code is <td><a href="https://idea-maker.herokuapp.com/web/index.php/register/code/'. $user . '/' . $code .'
+        <td> your Code is <td><a href="https://idea-maker.herokuapp.com/api/index.php/register/code/'. $user . '/' . $code .'
         ">Activate</a></table>
         </body>
         ';
@@ -395,43 +399,84 @@ class Session {
     }
 }
 
-class Loyal extends GetRequre { 
-    private $key = "MIIEowIBAAKCAQEA23LlN6jUJrsACaQeJlRlYeY38tL7oBGsaJNWvA44mgnkrmQt
-    rd4uyltlX0hAfVVLAuZ1CnW9CU18VmSEhB8NgnF4x5f1cLlfev9Q01gBrWhoRYMP
-    V2Od+cpvi83Pd5k/j8CmF8aYjagnvDNAe5GUSuTCUaj8hyDUDvIgopJxpbLYzdHf
-    6S1ZgK+K147ORt/zmemRAzc3JwErPnlhtoOjCljgk597p53cP+xmv1erZt4bidj6
-    L4DyeO2QDSSinD+8AZfNriX5Nda5vBpB6iHOxw9HOGc6Hc6VuJ7r5noro2gI8RYD
-    3aXsCa4oITp6Jr1kMkVyxjUZzHTebrVet0riwwIDAQABAoIBAAOGpBIx3z7EEGsX
-    PPjGsF5TUaDQLQTUY93GSEV7QQOQlyEKMQWzJTNRJp7STV72KN9iDo1deO0WVqIY
-    uVxaF2B6LEOguGvYPqV+RrEun9BGdi5vvaZczmP+Ea7AXs4AI1pO8Rw+r6LPCdxn
-    Qmj53NUbOdgQDAary1x2HXofOj48SstaSQ50imr/8ah7erSVD0tTu9UA5Da/icBS
-    TMPsDqy1xsVjrXla4YTwnTE83obQx84/Ja+7oPnBCR8vxAl0f+YFW7BmV0q8BHpD
-    RbNWenTSj5n6RlSeIuwQ2HgXG3821qIQ9J5b33vBGre3ZtNs0yeEo8Hjzv699/p8
-    nilfvpkCgYEA8PPVMx7ok3UlMrY11fGjlp2bnb/2FwAc/IEgtTkILyoJUExTL7G3
-    dGtWjQ/johlrx2FQceEmzZsrbGW8Bw7VDnwnly7es39cjF8APc73tzrdq99x6jc3
-    1n01lGHyJZtbeUbeKKaKYlwe4AoG0W2LsJUiFWBT5aB5yROn2mWD9rUCgYEA6SdH
-    NjaNfuyTqnFMhopKvK3FhisCl5vj0WrrAgM9EfUb6ACvhVPmMWqOCduvaeVRma6+
-    hSy5wk/GyeP4uG3sqIhLFjjEjSuVWsIOHMFpWhaFnxs8toV49KsOxehPuKSIlkCQ
-    LwNynH0JdCNUGslTHFAe6/pJCrVZet3yX5xvppcCgYAqNu4RaMbintGHkvjXpOA+
-    URqkhq881F4/tvfeCEHw0XKUSOsCHibAFNYzHKeLDN0fL2OCsCm2OAthkGli6yxU
-    v1fIWwPVeujiBvrp2Ur5JS0VIa65lDcKMyGh/48HG7LpCot9n7/6/5zBL8CGDKU+
-    qMIx8JCCWJ09p13vG34FSQKBgCRoh8xFdI8Pbne9PY/85HLWR/QNn1gBde/r3Ery
-    KoU1W2g9Qyt00IuC8i9D6P6GWtm+2e198HwRbR91xA84yy3+KouLzdWlqqsDhqSi
-    50q0HaWc4Tw3V44NcD8jad+RgerEpj9RMIKTW/iQ079jFOFk+Y8sBF/xtclkA0c+
-    7Ih9AoGBAJs0FhDqM5mIvUaxCjys2MqCSLW8xK+ioVtLk7TV9Vs96EmQXPPTQYzb
-    DLOKNgK/0UTA0xzIR8jk0g3vJ534nYtZIePmueQ6RrPshrqK0uLLtWF8/i3iUckS
-    8yWQ4RufkYhfqVcQCE1Scyl4t+YcSW1a84qyBNAnwe1rqk/sAWYh";
+class GetRequre{
 
+    private $conn;
+    protected function  __prepare(){
+        $DB = DataHandeler::getInstance();
+        $this->conn = $DB->conn;
+    }
+
+    protected function GetName($username){
+        $dlb = $this->conn->prepare("SELECT fname, lname FROM uname WHERE username = '$username'");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $name     = $dlb->fetch(PDO::FETCH_ASSOC);
+            return json_encode($name);
+        }else{
+            return FALSE;
+        }
+    }
+}
+
+class Loyal extends GetRequre{
+    private $private_key = "
+    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";
     public function isAllow($jwt){
         if($jwt){
             try {
-                $decoded = JWT::decode($jwt, $this->key, array('HS256'));
+                $decoded = JWT::decode($jwt, $this->private_key, array('HS256'));
                 http_response_code(200);     
-                return json_encode(array(
-                    "message" => "TRUE",
-                    "data" => $decoded->data
-                ));
-         
+                return $decoded->data;
+
             }catch (Exception $e){
      
                 // http_response_code(401);         
@@ -451,8 +496,8 @@ class Loyal extends GetRequre {
         header("Access-Control-Allow-Methods: POST");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-        
-        $key = $this->key;
+        $this->__prepare();
+        $key = $this->private_key;
         $iss = "http://localhost/Idea-Maker/profile/home";
         $aud = "http://localhost/Idea-Maker/profile/home";
         $iat = 1356999524;
@@ -532,15 +577,15 @@ class _Loyal extends mailer{
 
 
     protected function createSeection($username){
-        header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com/web/index.php/");
+        header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com/api/index.php/");
         header("Content-Type: application/json; charset=UTF-8");
         header("Access-Control-Allow-Methods: POST");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
         
         $key = $this->key;
-        $iss = "https://idea-maker.herokuapp.com/web/index.php/recovery/password/";
-        $aud = "https://idea-maker.herokuapp.com/web/index.php/recovery/password/";
+        $iss = "https://idea-maker.herokuapp.com/api/index.php/recovery/password/";
+        $aud = "https://idea-maker.herokuapp.com/api/index.php/recovery/password/";
         $iat = 1356999524;
         $nbf = 1357000000;
 
@@ -591,7 +636,7 @@ class Login extends Loyal {
 
             if($result['accStatus'] != 'ACTIVATED'){
                 $this->logging->write(json_encode(array(
-                    "Status" => "Interapt",
+                    "status" => "Interapt",
                     "Message" => "UnValid Account",
                     "username" => $this->valueX,
                     "Email"  => $this->Email
@@ -603,7 +648,7 @@ class Login extends Loyal {
                 ));
             }else{
                 $this->logging->write(json_encode(array(
-                    "Status" => "LogedIn",
+                    "status" => 200,
                     "username" => $this->valueX
                 )));
                 // $_SESSION["$this->valueX"] = TRUE; 
@@ -678,7 +723,7 @@ class Recovery extends _Loyal{
         if($this->isValidEmail() == TRUE){
             if($this->loadData() == TRUE){
                 if($this->updateCode() == TRUE){
-                    $this->link = "https://idea-maker.herokuapp.com/web/index.php/recovery/$this->username/$this->vCode";
+                    $this->link = "https://idea-maker.herokuapp.com/api/index.php/recovery/$this->username/$this->vCode";
                     if($this->sendRecoveryMali() == TRUE){
                         $this->error['message'] = 'mail sended';
                         return TRUE;
