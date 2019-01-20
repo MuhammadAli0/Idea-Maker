@@ -47,7 +47,7 @@ $(document).ready(function () {
             }
         });
 
-        xhr.open("POST", "http://localhost:8080/Idea-Maker/api/index.php/register");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/register");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(data);
@@ -102,7 +102,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "http://localhost:8080/Idea-Maker/api/index.php/login");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/login");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -172,7 +172,7 @@ $(document).ready(function () {
             }
         });
 
-        xhr.open("POST", "http://localhost:8080/Idea-Maker/api/index.php/profile/");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -643,7 +643,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "http://localhost:8080/Idea-Maker/api/index.php/home/");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -1100,7 +1100,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "http://localhost:8080/Idea-Maker/api/index.php/profile/");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
