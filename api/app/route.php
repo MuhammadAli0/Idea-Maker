@@ -239,18 +239,36 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
 
     if ($AllowData != FALSE){
 
-        if($request->isPost()){
+        if($data['status'] == 200){
             $profile = new retriveProfile($AllowData->id);
             $profile->name = json_decode($AllowData->name);
             $profile->email = $AllowData->email;
             $profile->username = $AllowData->id;
             $profile->__prepare();
             $response->write($profile->profile);
-        }else{
+        }else if ($data['status'] == 300) {
+            $upDate = new UpdateProfile();
+            $upDate->username = $AllowData->id;
+            $upDate->email    = $data['data']['email'];
+            $upDate->phone    = $data['data']['phone'];
+            $upDate->fname    = $data['data']['fname'];
+            $upDate->lname    = $data['data']['lname'];
+            $upDate->country  = $data['data']['country'];
+            $upDate->town     = $data['data']['town'];
+            $upDate->pwHash   = md5(filter_var($data['data']['password'], FILTER_SANITIZE_STRING));
+            if($upDate->PersonalDataUpdate() == TRUE){
+                $upDate->__prepare();
+                $response->write($upDate->profile);
 
+            }else{
+                echo($upDate->error);
+
+            }
+
+
+        
         }
     }else{
-        header("Location: https://idea-maker.herokuapp.com/web/index.html?login", true, 301);
         exit();
     }
      
