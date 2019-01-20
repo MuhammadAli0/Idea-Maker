@@ -545,7 +545,7 @@ $(document).ready(function () {
     function showLoggedOutMenu() {
         // show login and sign up from navbar & hide logout button
         $("#login, #sign_up").show();
-        $("#logout, #profile, #home, #update_account").hide();
+        $("#logout").hide();
 
     }
 
