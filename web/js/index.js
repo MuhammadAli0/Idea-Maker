@@ -590,7 +590,7 @@ $(document).ready(function () {
                                         <div class="panel-body">
                                             
                                             
-                                                <img class="avatar img-circle img-thumbnail" src="img/profile.png" width="300px" height="300px">
+                                                <img class="avatar img-circle img-thumbnail" src="`+ (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png" ;+`" width="300px" height="300px">
 
                                                 <div class="media-body">
                                                     <h3><strong>`+ result['personal']['name']['fname'] + ` ` + result['personal']['name']['lname'] + `</strong></h3>
@@ -694,7 +694,7 @@ $(document).ready(function () {
                       
         
               <div class="text-center">
-                <img src="img/profile.png" class="avatar img-circle img-thumbnail" alt="avatar">
+                <img src="`+ (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png" ;+`" class="avatar img-circle img-thumbnail" alt="avatar">
               </div></hr><br>
         
                        
@@ -1112,11 +1112,8 @@ $(document).ready(function () {
     }
 
 
-
-
-
-
 });
+
 // function to make form values to json format
 $.fn.serializeObject = function () {
 
