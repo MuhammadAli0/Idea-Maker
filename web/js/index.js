@@ -47,7 +47,7 @@ $(document).ready(function () {
             }
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/register");
+        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/register");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(data);
@@ -102,7 +102,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/login");
+        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/login");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -172,7 +172,7 @@ $(document).ready(function () {
             }
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
+        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -571,7 +571,7 @@ $(document).ready(function () {
                     if (result) {
                         showLoggedInMenu();
 
-
+                        GetProfilePicture = (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png" ;
                         var Home_html = `
 
                         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -590,7 +590,7 @@ $(document).ready(function () {
                                         <div class="panel-body">
                                             
                                             
-                                                <img class="avatar img-circle img-thumbnail" src="`+ (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png" ;+`" width="300px" height="300px">
+                                                <img class="avatar img-circle img-thumbnail" src="`+ GetProfilePicture  +`" width="300px" height="300px">
 
                                                 <div class="media-body">
                                                     <h3><strong>`+ result['personal']['name']['fname'] + ` ` + result['personal']['name']['lname'] + `</strong></h3>
@@ -643,7 +643,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/home/");
+        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -680,6 +680,7 @@ $(document).ready(function () {
 
     // account Update Form
     function ShowAccountUpdateForm() {
+        GetProfilePicture = (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png" ;
         var html = `
 
                       
@@ -694,7 +695,7 @@ $(document).ready(function () {
                       
         
               <div class="text-center">
-                <img src="`+ (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png" ;+`" class="avatar img-circle img-thumbnail" alt="avatar">
+                <img src="`+ GetProfilePicture +`" class="avatar img-circle img-thumbnail" alt="avatar">
               </div></hr><br>
         
                        
@@ -1102,7 +1103,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
+        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 

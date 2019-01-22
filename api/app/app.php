@@ -1,9 +1,9 @@
 <?php
-require  __DIR__ . '/../../vendor/autoload.php';
-require  __DIR__ . '/log.php';
-require  __DIR__ . '/database.php';
-require  __DIR__ . '/profile.php';
-require  __DIR__ . '/home.php';
+require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/log.php';
+require __DIR__ . '/database.php';
+require __DIR__ . '/profile.php';
+require __DIR__ . '/home.php';
 
 
 
@@ -18,26 +18,28 @@ use \Firebase\JWT\JWT;
 // Create and configure Slim app
 $config = ['settings' => [
     'addContentLengthHeader' => false,
-    'displayErrorDetails'   => true,
+    'displayErrorDetails' => true,
 ]];
 $app = new \Slim\App($config);
 date_default_timezone_set('UTC');
 
 
-class mailer{
-    private $host           = "smtp.gmail.com";
-    private $smtpAut        = true;
-    private $EmailAddress   = "mohamed007258@gmail.com";
-    private $EmailPassword  = "Imiss2egy";
-    private $smtpProto      = "tls";
-    private $mailPort       = 587;
-    private $mail ;
+class mailer
+{
+    private $host = "smtp.gmail.com";
+    private $smtpAut = true;
+    private $EmailAddress = "mohamed007258@gmail.com";
+    private $EmailPassword = "Imiss2egy";
+    private $smtpProto = "tls";
+    private $mailPort = 587;
+    private $mail;
 
     private $body;
     private $footer = "\n \n\ \n \nCreated By organizing team";
-    
 
-    private function load(){
+
+    private function load()
+    {
         $this->mail = new PHPMailer(true);
         $this->mail->isSMTP();
         $this->mail->Host = $this->host;
@@ -48,14 +50,15 @@ class mailer{
         $this->mail->Port = $this->mailPort;
     }
 
-    protected function CreateVerficationMailBody($code, $name, $user){
+    protected function CreateVerficationMailBody($code, $name, $user)
+    {
         $this->load();
         $MailBody = '
         <body style="margin: 0; padding: 0;">
         <table border="1" cellpadding="0" cellspacing="0" width="100%">
         <tr>
         <td>
-            Hello '. $name .'! 
+            Hello ' . $name . '! 
         </td>
         <td>    
             Thanks For Join  ---------
@@ -63,16 +66,17 @@ class mailer{
         </tr>
         <tr><td>..</td><tr>
         <tr><tr><tr>
-        <td> You have Regiterd With Username  </td> <td><td>'. $user .' <tr> 
-        <td> your Code is <td><a href="https://idea-maker.herokuapp.com/api/index.php/register/code/'. $user . '/' . $code .'
+        <td> You have Regiterd With Username  </td> <td><td>' . $user . ' <tr> 
+        <td> your Code is <td><a href="https://idea-maker.herokuapp.com/api/index.php/register/code/' . $user . '/' . $code . '
         ">Activate</a></table>
         </body>
         ';
-        $this->body = $MailBody ;
+        $this->body = $MailBody;
     }
 
-    protected function CreateRecoveryMailBody($username, $link){
-        
+    protected function CreateRecoveryMailBody($username, $link)
+    {
+
         $this->load();
         $MailBody = '
         <body style="margin: 0; padding: 0;">
@@ -87,28 +91,29 @@ class mailer{
         </tr>
         <tr><td>..</td><tr>
         <tr><tr><tr>
-        <td> Your Username  is  </td> <td>'. $username .' <tr> 
-        <td> Plice Follow This Link  <td><a href="' . $link .'">Recover</a>
+        <td> Your Username  is  </td> <td>' . $username . ' <tr> 
+        <td> Plice Follow This Link  <td><a href="' . $link . '">Recover</a>
         </table>
         </body>
         ';
-        $this->body = $MailBody ;
+        $this->body = $MailBody;
     }
 
-    protected function sendMail($target, $tName, $Subject){
-        try{
-            $this->mail->From       = $this->EmailAddress;
-            $this->mail->FromName   = "Mohammed Ali";
+    protected function sendMail($target, $tName, $Subject)
+    {
+        try {
+            $this->mail->From = $this->EmailAddress;
+            $this->mail->FromName = "Mohammed Ali";
 
             $this->mail->addAddress($target, $tName);
 
-            $this->mail->WordWrap   = 50;
+            $this->mail->WordWrap = 50;
 
             $this->mail->isHTML(true);
 
-            $this->mail->Subject    = $Subject;
-            $this->mail->Body             = $this->body;
-            $this->mail->AltBody          = $this->footer;
+            $this->mail->Subject = $Subject;
+            $this->mail->Body = $this->body;
+            $this->mail->AltBody = $this->footer;
 
             $this->mail->send();
         } catch (Exception $e) {
@@ -117,7 +122,8 @@ class mailer{
     }
 }
 
-class Register extends mailer {
+class Register extends mailer
+{
     protected $username;
     protected $Fname;
     protected $Lname;
@@ -134,25 +140,27 @@ class Register extends mailer {
 
     public $errors = [];
 
-    function load($User, $FirstName, $LastName, $Sex, $PhoneNumber, $EmailAddress, $MyCountry, $MyTown, $AccType, $Password ){
+    function load($User, $FirstName, $LastName, $Sex, $PhoneNumber, $EmailAddress, $MyCountry, $MyTown, $AccType, $Password)
+    {
         $this->username = $User;
-        $this->Fname    = $FirstName;
-        $this->Lname    = $LastName;
-        $this->gender   = $Sex;
-        $this->country  = $MyCountry;
-        $this->town     = $MyTown;
-        $this->email    = $EmailAddress;
-        $this->phone    = $PhoneNumber;
-        $this->type     = $AccType;
-        $this->hash     = md5($Password);
+        $this->Fname = $FirstName;
+        $this->Lname = $LastName;
+        $this->gender = $Sex;
+        $this->country = $MyCountry;
+        $this->town = $MyTown;
+        $this->email = $EmailAddress;
+        $this->phone = $PhoneNumber;
+        $this->type = $AccType;
+        $this->hash = md5($Password);
         $this->signedDate = date('Y-m-d H:i:s');
-        $this->status   ='DisActive';
-        
+        $this->status = 'DisActive';
+
     }
 
-    protected function isValidForm($conn){
+    protected function isValidForm($conn)
+    {
         $error = $this->errors;
-        if ($error == NULL){
+        if ($error == null) {
             $this->errors['Status'] = 200;
             $this->errors['username'] = "ACCEPTABLE";
             $this->errors['email'] = "ACCEPTABLE";
@@ -165,76 +173,84 @@ class Register extends mailer {
 
     }
 
-    private function isValidUsername($conn){
+    private function isValidUsername($conn)
+    {
         $query = $conn->prepare("SELECT username FROM users WHERE username = '$this->username'");
         $query->execute();
-        if ($query->rowCount() > 0){
+        if ($query->rowCount() > 0) {
             $this->errors['username'] = "Already in use";
             $this->errors['Status'] = $this->errors['Status'] + 100;
-        
+
         }
 
     }
 
-    private function isValidEmail($conn){
+    private function isValidEmail($conn)
+    {
 
 
         $query = $conn->prepare("SELECT email FROM users WHERE email = '$this->email'");
         $query->execute();
-        if ($query->rowCount() > 0){
+        if ($query->rowCount() > 0) {
             $this->errors['email'] = "Already in use";
             $this->errors['Status'] = $this->errors['Status'] + 100;
         }
     }
 
-    private function isValidPhone($conn){
+    private function isValidPhone($conn)
+    {
         $query = $conn->prepare("SELECT phone FROM users WHERE phone = '$this->phone'");
         $query->execute();
-        if ($query->rowCount() > 0){
+        if ($query->rowCount() > 0) {
             $this->errors['phone'] = "Already in use";
             $this->errors['Status'] = $this->errors['Status'] + 100;
-        
+
         }
     }
-        
-    protected function gnreateCode(){
-        $chars = "abcdefghijkmnopqrstuvwxyz023456789"; 
-        srand((double)microtime()*1000000); 
-        $i = 0; 
-        $pass = '' ; 
-    
-        while ($i <= 5) { 
-            $num = rand() % 33; 
-            $tmp = substr($chars, $num, 1); 
-            $pass = $pass . $tmp; 
-            $i++; 
-        } 
-    
-        $this->vCode =  $pass; 
+
+    protected function gnreateCode()
+    {
+        $chars = "abcdefghijkmnopqrstuvwxyz023456789";
+        srand((double)microtime() * 1000000);
+        $i = 0;
+        $pass = '';
+
+        while ($i <= 5) {
+            $num = rand() % 33;
+            $tmp = substr($chars, $num, 1);
+            $pass = $pass . $tmp;
+            $i++;
+        }
+
+        $this->vCode = $pass;
     }
 
-    protected function sendValidationMali(){
+    protected function sendValidationMali()
+    {
         $this->CreateVerficationMailBody($this->vCode, $this->Fname, $this->username);
-        $this->sendMail($this->email, $this->Fname , 'verfication mail');
+        $this->sendMail($this->email, $this->Fname, 'verfication mail');
     }
-} 
+}
 
-class Activation{
-    private $username ;
+class Activation
+{
+    private $username;
     private $code;
     private $conn;
 
-    function __construct($user, $code){
+    function __construct($user, $code)
+    {
         $this->username = $user;
-        $this->code     = $code;
-        $DB             = DataHandeler::getInstance();
-        $this->conn     = $DB->conn;
+        $this->code = $code;
+        $DB = DataHandeler::getInstance();
+        $this->conn = $DB->conn;
         $this->check();
 
     }
 
 
-    public function check(){
+    public function check()
+    {
         $query = $this->conn->prepare("SELECT 
             *
         FROM
@@ -251,28 +267,30 @@ class Activation{
         WHERE
             username = '$this->username'";
 
-        if ($query->rowCount() > 0){
+        if ($query->rowCount() > 0) {
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
-            return TRUE;
-        }else{
-            return FALSE;
+            return true;
+        } else {
+            return false;
         }
-        return FALSE;
+        return false;
     }
 }
 
-class DataHandeler extends Register{
+class DataHandeler extends Register
+{
     private $host = 'sql2.freemysqlhosting.net';
     private $MySqlUsername = 'sql2273620';
     private $MySqlPassword = 'hM6!mZ9*';
-    private $DBname        = 'sql2273620';
+    private $DBname = 'sql2273620';
 
     public $conn;
 
     private static $instance;
 
-    function __construct(){
+    function __construct()
+    {
         $conn = new PDO("mysql:host=$this->host;dbname=$this->DBname;charset=utf8", $this->MySqlUsername, $this->MySqlPassword, []);
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -280,12 +298,13 @@ class DataHandeler extends Register{
         $this->conn = $conn;
     }
 
-    public function regist(){
+    public function regist()
+    {
         try {
 
             $this->isValidForm($this->conn);
-           
-            if ($this->errors['Status'] == 200){
+
+            if ($this->errors['Status'] == 200) {
                 $this->conn->exec("INSERT INTO users (username, gender, email, phone, country, town, pwHash, uType, cDateTime, accStatus)
                 VALUES(
                     '$this->username', 
@@ -299,7 +318,7 @@ class DataHandeler extends Register{
                     '$this->signedDate', 
                     '$this->status')
                     ");
-                
+
 
                 $this->conn->exec("INSERT INTO uname(username, fname, lname)
                 VALUES(
@@ -317,21 +336,19 @@ class DataHandeler extends Register{
                     ");
                 $this->sendValidationMali();
             }
-            
 
 
-            }
-        catch(PDOException $e)
-            {
-                die($e->getMessage());
-            }
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
 
     }
 
-    public static function getInstance(){
+    public static function getInstance()
+    {
         // Check is $_instance has been set
-        if(!isset(self::$instance)) 
-        {
+        if (!isset(self::$instance)) {
             // Creates sets object to instance
             self::$instance = new DataHandeler();
         }
@@ -340,86 +357,102 @@ class DataHandeler extends Register{
         return self::$instance;
     }
 
-    function __destruct(){
+    function __destruct()
+    {
         $this->conn->commit();
-        $this->conn = null; 
+        $this->conn = null;
     }
 
 }
 
-class Session {
+class Session
+{
 
     private $cookieTime;
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         session_start();
         session_cache_limiter(false); // disable cache limiter. See here: http://docs.slimframework.com/sessions/native/
         $this->cookieTime = strtotime('+30 days');
     }
-    
-    public function set($name, $value) {
+
+    public function set($name, $value)
+    {
         $_SESSION[$name] = $value;
         header('Location: localhost/Idea-Maker/profile/home/');
     }
-    
-    public function setMulti($base, $key, $value) {
+
+    public function setMulti($base, $key, $value)
+    {
         $_SESSION[$base][$key] = $value;
     }
-    
-    public function get($name) {
+
+    public function get($name)
+    {
         if (isset($_SESSION[$name])) {
             return $_SESSION[$name];
         }
     }
-    
-    public function getMulti($base, $key) {
+
+    public function getMulti($base, $key)
+    {
         if (isset($_SESSION[$base][$key])) {
             return $_SESSION[$base][$key];
         }
     }
-    
-    public function kill($name) {
+
+    public function kill($name)
+    {
         unset($_SESSION[$name]);
     }
-    
-    public function killAll() {
+
+    public function killAll()
+    {
         session_destroy();
     }
-    
-    public function setCookie($name, $value) {
+
+    public function setCookie($name, $value)
+    {
         setcookie($name, $value, $this->cookieTime, '/');
     }
-    
-    public function getCookie($name) {
+
+    public function getCookie($name)
+    {
         return $_COOKIE[$name];
     }
-    
-    public function killCookie($name) {
+
+    public function killCookie($name)
+    {
         setcookie($name, null);
     }
 }
 
-class GetRequre{
+class GetRequre
+{
 
     private $conn;
-    protected function  __prepare(){
+    protected function __prepare()
+    {
         $DB = DataHandeler::getInstance();
         $this->conn = $DB->conn;
     }
 
-    protected function GetName($username){
+    protected function GetName($username)
+    {
         $dlb = $this->conn->prepare("SELECT fname, lname FROM uname WHERE username = '$username'");
         $dlb->execute();
-        if($dlb->rowCount() > 0){
-            $name     = $dlb->fetch(PDO::FETCH_ASSOC);
+        if ($dlb->rowCount() > 0) {
+            $name = $dlb->fetch(PDO::FETCH_ASSOC);
             return json_encode($name);
-        }else{
-            return FALSE;
+        } else {
+            return false;
         }
     }
 }
 
-class Loyal extends GetRequre{
+class Loyal extends GetRequre
+{
     private $private_key = "
     MIIJKQIBAAKCAgEAzylRyoqvW68Fx4JmaOElItc/clhUZ0ywxi2jEwQp5BhgZXeq
     DV3cfI8HGHiL/YiRrwUpzRvctYolNYr8AHHYxYo8s/1EiYQEuB9QgJmD4ilUCvKY
@@ -470,27 +503,29 @@ class Loyal extends GetRequre{
     7iv4X29lXf/t77EZLlbLjoDwtfmzMlFnt9YGH4/zdndVknDlftUWp8RKt9BEuZmn
     1zaTDqSli8DIEbrAoaiCfOmwX5kPBpYTy86ujAF5eMkyZVTVgp7bv28a2bZkkSrA
     r3wiFQ+c50J3xd/D+6nPkq/AiHa5vIg3taoV7dOcoTGSu7m644YdhopUdpQc";
-    public function isAllow($jwt){
-        if($jwt){
+    public function isAllow($jwt)
+    {
+        if ($jwt) {
             try {
                 $decoded = JWT::decode($jwt, $this->private_key, array('HS256'));
-                http_response_code(200);     
+                http_response_code(200);
                 return $decoded->data;
 
-            }catch (Exception $e){
+            } catch (Exception $e) {
      
                 // http_response_code(401);         
                 // return json_encode(array(
                 //     "message" => "Access denied.",
                 //     "error" => $e->getMessage()
                 // ));
-                return FALSE;
+                return false;
             }
         }
     }
 
 
-    protected function createSeection($username, $Email){
+    protected function createSeection($username, $Email)
+    {
         header("Access-Control-Allow-Origin: http://localhost/profile/");
         header("Content-Type: application/json; charset=UTF-8");
         header("Access-Control-Allow-Methods: POST");
@@ -516,7 +551,7 @@ class Loyal extends GetRequre{
                 "name" => $name,
                 "email" => $Email
             )
-         );
+        );
         $jwt = JWT::encode($token, $key);
 
         return json_encode(
@@ -529,7 +564,8 @@ class Loyal extends GetRequre{
     }
 }
 
-class _Loyal extends mailer{ 
+class _Loyal extends mailer
+{
     private $key = "MIIEowIBAAKCAQEAtldr2s0VAfIL0UsChgKsQm3Vy0xU2eVAh9BKAKyDZ0rCiYzG
     C8mvAZ59wtnBfmfwbwV0NyKOgjhIT9l2WH89lEAVsWzLNkUWgPV/U2PL1xv+mNvK
     dGQpcctOtjZcANDE7EYKJJwfncPjux2TzK8fE3wWAuvkEBftYL2lJD9VyqVvrVtn
@@ -556,33 +592,35 @@ class _Loyal extends mailer{
     XFbxyrx9gW63XS6YXfl1AZWpeSWlPoReeCqHF2h8HbG8MBkm9M/jdd0QDl4GQhHt
     RVxuhJakK/4DXpsSiUcELrBm0/9ebi0Nrt2dj8nlVYp+EMlY5m6Y";
 
-    public function isAllow($jwt){
-        if($jwt){
+    public function isAllow($jwt)
+    {
+        if ($jwt) {
             try {
                 $decoded = JWT::decode($jwt, $this->key, array('HS256'));
-                http_response_code(200);     
+                http_response_code(200);
                 return $decoded->data->id;
-         
-            }catch (Exception $e){
+
+            } catch (Exception $e) {
      
                 // http_response_code(401);         
                 // return json_encode(array(
                 //     "message" => "Access denied.",
                 //     "error" => $e->getMessage()
                 // ));
-                return FALSE;
+                return false;
             }
         }
     }
 
 
-    protected function createSeection($username){
+    protected function createSeection($username)
+    {
         header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com/api/index.php/");
         header("Content-Type: application/json; charset=UTF-8");
         header("Access-Control-Allow-Methods: POST");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-        
+
         $key = $this->key;
         $iss = "https://idea-maker.herokuapp.com/api/index.php/recovery/password/";
         $aud = "https://idea-maker.herokuapp.com/api/index.php/recovery/password/";
@@ -597,7 +635,7 @@ class _Loyal extends mailer{
             "data" => array(
                 "id" => $username
             )
-         );
+        );
         $jwt = JWT::encode($token, $key);
 
         return $jwt;
@@ -605,59 +643,71 @@ class _Loyal extends mailer{
     }
 }
 
-class Login extends Loyal {
+class Login extends Loyal
+{
     private $valueX;
     private $LoginHash;
     private $Email;
+    private $username;
     protected $logging;
 
     private $conn;
 
     public $errors = [];
 
-    function __construct($X, $Y){
-        $this->valueX    = $X;
+    function __construct($X, $Y)
+    {
+        $this->valueX = $X;
         $this->LoginHash = $Y;
         $db = DataHandeler::getInstance();
         $this->conn = $db->conn;
         $this->logging = new LoginLog;
 
     }
-    
-    public function login(){
-        $dlb = $this->conn->prepare("SELECT username, email, pwHash, accStatus FROM users WHERE username = '$this->valueX' and pwHash = '$this->LoginHash'");
+
+    public function login()
+    {
+        $dlb = $this->conn->prepare("SELECT 
+            username, email, pwHash, accStatus 
+        FROM users 
+            WHERE 
+                username = '$this->valueX' and pwHash = '$this->LoginHash' 
+                or 
+                email = '$this->valueX' and pwHash = '$this->LoginHash'");
+
         $dlb->execute();
 
-        if($dlb->rowCount() > 0){
-            $result     = $dlb->fetch();
-            
+        if ($dlb->rowCount() > 0) {
+            $result = $dlb->fetch();
+
 
             $this->Email = $result['email'];
+            $this->username = $result['username'];
 
-            if($result['accStatus'] != 'ACTIVATED'){
+            if ($result['accStatus'] != 'ACTIVATED') {
                 $this->logging->write(json_encode(array(
                     "status" => "Interapt",
                     "Message" => "UnValid Account",
-                    "username" => $this->valueX,
-                    "Email"  => $this->Email
+                    "username" => $this->username,
+                    "Email" => $this->Email
                 )));
                 return json_encode(array(
                     "status" => 122,
                     "message" => "PLISE VALIDATE YOUR ACCOUNT"
-                    
+
                 ));
-            }else{
+            } else {
                 $this->logging->write(json_encode(array(
                     "status" => 200,
-                    "username" => $this->valueX
+                    "username" => $this->username
                 )));
                 // $_SESSION["$this->valueX"] = TRUE; 
                 // header('Location: /');
                 // $this->setCookie('username', $this->valueX);
-                return $this->createSeection($this->valueX, $this->Email);
+                return $this->createSeection($this->username, $this->Email);
 
             }
-        }else{
+        } else {
             $this->logging->write(json_encode(array(
                 "Status" => "WongLoginData",
                 "username" => $this->valueX
@@ -669,177 +719,194 @@ class Login extends Loyal {
         }
     }
 
-    private function isPhone(){
-        if(strlen($this->valueX) == 14 ){
-            
-            return TRUE;
-        }else{
-            return FALSE;
+    private function isPhone()
+    {
+        if (strlen($this->valueX) == 14) {
+
+            return true;
+        } else {
+            return false;
         }
     }
 
-    private function isUsername(){
+    private function isUsername()
+    {
 
     }
 
-    private function isEmail(){
+    private function isEmail()
+    {
 
     }
 
-    private function createSection(){
+    private function createSection()
+    {
 
     }
 
 }
 
-class Recovery extends _Loyal{
+class Recovery extends _Loyal
+{
     private $email;
     private $username;
-    public  $token;
+    public $token;
     private $conn;
     private $vCode;
-    private $link ;
+    private $link;
     public $error = [];
 
-    function __construct($mail){
+    function __construct($mail)
+    {
         $db = DataHandeler::getInstance();
         $this->conn = $db->conn;
-        $this->email= $mail;
+        $this->email = $mail;
 
     }
 
-    public function recoverd($username, $code){
+    public function recoverd($username, $code)
+    {
         $this->vCode = $code;
         $this->username = $username;
-        if($this->check() == TRUE){
-            return TRUE;
-        }else{
-            return FALSE;
+        if ($this->check() == true) {
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public function recover(){
+    public function recover()
+    {
         $this->error['status'] = 200;
-        if($this->isValidEmail() == TRUE){
-            if($this->loadData() == TRUE){
-                if($this->updateCode() == TRUE){
+        if ($this->isValidEmail() == true) {
+            if ($this->loadData() == true) {
+                if ($this->updateCode() == true) {
                     $this->link = "https://idea-maker.herokuapp.com/api/index.php/recovery/$this->username/$this->vCode";
-                    if($this->sendRecoveryMali() == TRUE){
+                    if ($this->sendRecoveryMali() == true) {
                         $this->error['message'] = 'mail sended';
-                        return TRUE;
+                        return true;
                     }
                 }
             }
-        }else{
+        } else {
             $this->error['status'] = 300;
             $this->error['message'] = 'Mail not execit in our database';
-            return FALSE;
+            return false;
         }
         $this->error['status'] = 400;
-        $this->error['message'] = "Internal Server Error" ;
-        return FALSE;
+        $this->error['message'] = "Internal Server Error";
+        return false;
     }
 
-    public function createToken(){
+    public function createToken()
+    {
         return $this->createSeection($this->username);
     }
 
-    public function DecodeToken($token){
+    public function DecodeToken($token)
+    {
         return $this->isAllow($token);
     }
 
-    public function RePassword($user, $passwd){
-        try{
+    public function RePassword($user, $passwd)
+    {
+        try {
             $paswd = md5($passwd);
             $dlb = $this->conn->prepare("UPDATE users SET pwHash = '$paswd' WHERE username = '$user'");
             $dlb->execute();
-            return TRUE;
-        }catch(PDOException $e){
-            return FALSE;
+            return true;
+        } catch (PDOException $e) {
+            return false;
         }
     }
 
-    private function loadData(){
+    private function loadData()
+    {
 
-        try{
+        try {
             $dlb = $this->conn->prepare("SELECT username FROM users WHERE email = '$this->email'");
             $dlb->execute();
-            if($dlb->rowCount() > 0){
-                $result     = $dlb->fetch();
+            if ($dlb->rowCount() > 0) {
+                $result = $dlb->fetch();
                 $this->username = $result['username'];
-                return TRUE;
+                return true;
             }
 
-        }catch(PDOException $e){
-            return FALSE;
+        } catch (PDOException $e) {
+            return false;
         }
-                
+
     }
 
-    private function isValidEmail(){
+    private function isValidEmail()
+    {
 
         $query = $this->conn->prepare("SELECT email FROM users WHERE email = '$this->email'");
         $query->execute();
-        if ($query->rowCount() > 0){
-            return TRUE;
-        }else{
-            return FALSE;
+        if ($query->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
         }
- 
+
     }
 
-    private function updateCode(){
-        try{
+    private function updateCode()
+    {
+        try {
             $this->gnreateCode();
             $dlb = $this->conn->prepare("UPDATE activationCode SET code = '$this->vCode' WHERE username = '$this->username'");
             $dlb->execute();
-            return TRUE;
-        }catch(PDOException $e){
-            return FALSE;
+            return true;
+        } catch (PDOException $e) {
+            return false;
         }
     }
 
-    private function gnreateCode(){
-        $chars = "abcdefghijkmnopqrstuvwxyz023456789"; 
-        srand((double)microtime()*1000000); 
-        $i = 0; 
-        $pass = '' ; 
-    
-        while ($i <= 5) { 
-            $num = rand() % 33; 
-            $tmp = substr($chars, $num, 1); 
-            $pass = $pass . $tmp; 
-            $i++; 
-        } 
-    
-        $this->vCode =  $pass;
+    private function gnreateCode()
+    {
+        $chars = "abcdefghijkmnopqrstuvwxyz023456789";
+        srand((double)microtime() * 1000000);
+        $i = 0;
+        $pass = '';
+
+        while ($i <= 5) {
+            $num = rand() % 33;
+            $tmp = substr($chars, $num, 1);
+            $pass = $pass . $tmp;
+            $i++;
+        }
+
+        $this->vCode = $pass;
     }
 
 
-    private function sendRecoveryMali(){
+    private function sendRecoveryMali()
+    {
 
-        try{
+        try {
             $this->CreateRecoveryMailBody($this->username, $this->link);
-            $this->sendMail($this->email, "Idea Maker User" , 'Idea Maker Password Recovery');
-            return TRUE;
-        }catch(Exception $e){
-            return FALSE;
+            $this->sendMail($this->email, "Idea Maker User", 'Idea Maker Password Recovery');
+            return true;
+        } catch (Exception $e) {
+            return false;
         }
     }
 
-    private function check(){
+    private function check()
+    {
         $query = $this->conn->prepare("SELECT * FROM activationCode WHERE username = '$this->username' and code = '$this->vCode'");
         $query->execute();
-        if ($query->rowCount() > 0){
-            try{
+        if ($query->rowCount() > 0) {
+            try {
                 $dlb = $this->conn->prepare("UPDATE activationCode SET code = 'REC0VERD' WHERE username = '$this->username'");
                 $dlb->execute();
-                return TRUE;
+                return true;
             } catch (Exception $e) {
-                return FALSE;
+                return false;
             }
-        }else{
-            return FALSE;
+        } else {
+            return false;
         }
     }
 }
