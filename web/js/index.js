@@ -590,7 +590,7 @@ $(document).ready(function () {
                                         <div class="panel-body">
                                             
                                             
-                                                <img class="avatar img-circle img-thumbnail" src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" width="300px" height="300px">
+                                                <img class="avatar img-circle img-thumbnail" src="img/profile.png" width="300px" height="300px">
 
                                                 <div class="media-body">
                                                     <h3><strong>`+ result['personal']['name']['fname'] + ` ` + result['personal']['name']['lname'] + `</strong></h3>
@@ -694,7 +694,7 @@ $(document).ready(function () {
                       
         
               <div class="text-center">
-                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
+                <img src="img/profile.png" class="avatar img-circle img-thumbnail" alt="avatar">
               </div></hr><br>
         
                        
