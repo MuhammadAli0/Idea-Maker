@@ -597,7 +597,7 @@ $(document).ready(function () {
                                                     <hr>
                                                     <hr>
                                                     <h4><strong>Bio</strong></h4>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel gravida metus, non ultrices sapien. Morbi odio metus, dapibus non nibh id amet.</p>
+                                                    <p>`+ result['personal']['summary'] + `.</p>
                                                     <hr>
                                                     <h4><strong>Location</strong></h4>
                                                     <p>`+ result['personal']['town'] + ` ` + result['personal']['country'] + `</p>
@@ -703,15 +703,17 @@ $(document).ready(function () {
                   
                   <ul class="list-group">
                     <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Requests</strong></span> 125</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Likes</strong></span> 13</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Posts</strong></span> 37</li>
+                    <li class="list-group-item text-right"><span class="pull-left"><strong>Will Come Soon</strong></span> 0000</li>
+
                   </ul> 
                        
                   <div class="panel panel-default">
                     <div class="panel-heading">Social Media</div>
                     <div class="panel-body">
-                        <i class="fa fa-facebook fa-2x"></i> <i class="fa fa-github fa-2x"></i> <i class="fa fa-twitter fa-2x"></i> <i class="fa fa-pinterest fa-2x"></i> <i class="fa fa-google-plus fa-2x"></i>
+
+
+
+
                     </div>
                   </div>
                   
