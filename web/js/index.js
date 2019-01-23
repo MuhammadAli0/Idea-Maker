@@ -47,7 +47,7 @@ $(document).ready(function () {
             }
         });
 
-        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/register");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/register");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(data);
@@ -102,7 +102,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/login");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/login");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -172,7 +172,7 @@ $(document).ready(function () {
             }
         });
 
-        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/profile/");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -190,6 +190,18 @@ $(document).ready(function () {
         showLoginPage();
         $('#response').html("<div class='alert alert-info'>You are logged out.</div>");
     });
+
+    $(document).on('click', '#passwordRecovery', function () {
+        ShowSendRecoverMailForm();
+    });
+
+    $(document).on('submit', '#recovry-form', function () {
+
+        SendPassowrRecovery(document.getElementById('email').value);
+
+        return false;
+    });
+
 
     function ShowSignUpForm() {
         var html = `
@@ -526,6 +538,7 @@ $(document).ready(function () {
  
             <button type='submit' class='btn btn-primary'>Login</button>
         </form>
+        <a class="nav-item nav-link" href="#" id='passwordRecovery'>Forgotten password</a>
         `;
 
         $('#content').html(html);
@@ -571,7 +584,7 @@ $(document).ready(function () {
                     if (result) {
                         showLoggedInMenu();
 
-                        GetProfilePicture = (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png" ;
+                        GetProfilePicture = (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png";
                         var Home_html = `
 
                         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -590,7 +603,7 @@ $(document).ready(function () {
                                         <div class="panel-body">
                                             
                                             
-                                                <img class="avatar img-circle img-thumbnail" src="`+ GetProfilePicture  +`" width="300px" height="300px">
+                                                <img class="avatar img-circle img-thumbnail" src="`+ GetProfilePicture + `" width="300px" height="300px">
 
                                                 <div class="media-body">
                                                     <h3><strong>`+ result['personal']['name']['fname'] + ` ` + result['personal']['name']['lname'] + `</strong></h3>
@@ -643,7 +656,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/home/");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -680,7 +693,7 @@ $(document).ready(function () {
 
     // account Update Form
     function ShowAccountUpdateForm() {
-        GetProfilePicture = (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png" ;
+        GetProfilePicture = (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png";
         var html = `
 
                       
@@ -695,7 +708,7 @@ $(document).ready(function () {
                       
         
               <div class="text-center">
-                <img src="`+ GetProfilePicture +`" class="avatar img-circle img-thumbnail" alt="avatar">
+                <img src="`+ GetProfilePicture + `" class="avatar img-circle img-thumbnail" alt="avatar">
               </div></hr><br>
         
                        
@@ -1103,7 +1116,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "http://localhost/Idea-Maker/api/index.php/profile/");
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -1112,6 +1125,77 @@ $(document).ready(function () {
 
     }
 
+    function ShowSendRecoverMailForm() {
+        var html = `
+            <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+                <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+                <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+                <!------ Include the above in your HEAD tag ---------->
+                
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+                    <div class="form-gap"></div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="text-center">
+                                            <h3><i class="fa fa-lock fa-4x"></i></h3>
+                                            <div id="recovryFrom">
+                                            <h2 class="text-center">Forgot Password?</h2>
+                                            <p>You can reset your password here.</p>
+                                            <div class="panel-body" >
+
+                                                <form id="recovry-form" role="form" autocomplete="off" class="form" method="PUT">
+
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
+                                                            <input id="email" name="email" placeholder="email address" class="form-control" type="email">
+                        </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input name="recover-submit" class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
+                      </div>
+                    </form>
+                    <div>
+
+                                                        </div>
+                                                    </div>
+              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+`;
+        $('#content').html(html);
+        clearResponse();
+    }
+
+    function SendPassowrRecovery(email) {
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                var result = $.parseJSON(this.responseText);
+                console.log(result);
+                if (result['status'] === 200) {
+                    $('#recovryFrom').html("<div class='alert alert-success'>Mail Sended Successfully.</div>");
+                } else if(result['status'] === 300){
+                    $('#response').html("<div class='alert alert-danger'>Email not execit in our database.</div>");
+                } else {
+                    $('#response').html("<div class='alert alert-danger'>SomeThing Wrong Plise Try again latre.</div>");
+                }
+            }
+        });
+
+        xhr.open("PUT", "https://idea-maker.herokuapp.com/api/index.php/recovery/" + email + "/");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(null);
+
+
+    }
 
 });
 

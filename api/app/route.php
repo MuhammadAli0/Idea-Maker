@@ -169,14 +169,13 @@ $app->post('/recovery/password/', function($request, $response){
     if ($UserName  !== FALSE){
         if ($recover->RePassword($UserName, $data['password']) == TRUE ){
             
-            $response->write(json_encode(array(
-                "status" => 200,
-                "message" => "PASSWORD UPDATED SUCC"
-            )));
+            
             $logging->write(json_encode(array(
                 "Status" => "Recoverd",
                 "Username" => $UserName
             )));
+            header("Location: https://idea-maker.herokuapp.com/web/", true, 301);
+            exit();
 
         }else{
             $logging->write(json_encode(array(
@@ -273,6 +272,7 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
     }
      
 });
+
 
 
 
