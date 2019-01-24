@@ -3,10 +3,10 @@
 
 class profileDB
 {
-    private $host = 'sql2.freemysqlhosting.net';
-    private $MySqlUsername = 'sql2273620';
-    private $MySqlPassword = 'hM6!mZ9*';
-    private $DBname = 'sql2273620';
+    private $host = 'remotemysql.com';
+    private $MySqlUsername = 'sH7ujZntL8';
+    private $MySqlPassword = 'tarLEjKZE8';
+    private $DBname        = 'sH7ujZntL8';
 
     public $conn;
 

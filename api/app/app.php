@@ -652,10 +652,10 @@ class Activation
 
 class DataHandeler extends Register
 {
-    private $host = 'sql2.freemysqlhosting.net';
-    private $MySqlUsername = 'sql2273620';
-    private $MySqlPassword = 'hM6!mZ9*';
-    private $DBname = 'sql2273620';
+    private $host = 'remotemysql.com';
+    private $MySqlUsername = 'sH7ujZntL8';
+    private $MySqlPassword = 'tarLEjKZE8';
+    private $DBname        = 'sH7ujZntL8';
 
     public $conn;
 
@@ -898,15 +898,15 @@ class Loyal extends GetRequre
 
     protected function createSeection($username, $Email)
     {
-        header("Access-Control-Allow-Origin: http://localhost/profile/");
+        header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com");
         header("Content-Type: application/json; charset=UTF-8");
         header("Access-Control-Allow-Methods: POST");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
         $this->__prepare();
         $key = $this->private_key;
-        $iss = "http://localhost/Idea-Maker/profile/home";
-        $aud = "http://localhost/Idea-Maker/profile/home";
+        $iss = "https://idea-maker.herokuapp.com/web/";
+        $aud = "https://idea-maker.herokuapp.com/api/";
         $iat = 1356999524;
         $nbf = 1357000000;
         $exp = 60;
@@ -987,7 +987,7 @@ class _Loyal extends mailer
 
     protected function createSeection($username)
     {
-        header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com/api/index.php/");
+        header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com/api/index.php/recovery/password/");
         header("Content-Type: application/json; charset=UTF-8");
         header("Access-Control-Allow-Methods: POST");
         header("Access-Control-Max-Age: 3600");
@@ -995,7 +995,7 @@ class _Loyal extends mailer
 
         $key = $this->key;
         $iss = "https://idea-maker.herokuapp.com/api/index.php/recovery/password/";
-        $aud = "https://idea-maker.herokuapp.com/api/index.php/recovery/password/";
+        $aud = "https://idea-maker.herokuapp.com/web/passwordRecov.html";
         $iat = 1356999524;
         $nbf = 1357000000;
 

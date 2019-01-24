@@ -49,7 +49,9 @@ $(document).ready(function () {
 
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/register");
         xhr.setRequestHeader("content-type", "application/json");
+        
         xhr.setRequestHeader("cache-control", "no-cache");
+        
         xhr.send(data);
 
         return false;
@@ -104,8 +106,9 @@ $(document).ready(function () {
 
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/login");
         xhr.setRequestHeader("content-type", "application/json");
+        
         xhr.setRequestHeader("cache-control", "no-cache");
-
+        
         xhr.send(data);
 
 
@@ -175,6 +178,7 @@ $(document).ready(function () {
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
+        
 
         xhr.send(form_data);
 
@@ -658,7 +662,9 @@ $(document).ready(function () {
 
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
+        
         xhr.setRequestHeader("cache-control", "no-cache");
+        
 
         xhr.send(data);
     }
@@ -1118,7 +1124,9 @@ $(document).ready(function () {
 
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
+        
         xhr.setRequestHeader("cache-control", "no-cache");
+        
 
         xhr.send(data);
 
@@ -1192,6 +1200,7 @@ $(document).ready(function () {
 
         xhr.open("PUT", "https://idea-maker.herokuapp.com/api/index.php/recovery/" + email + "/");
         xhr.setRequestHeader("cache-control", "no-cache");
+        
         xhr.send(null);
 
 
