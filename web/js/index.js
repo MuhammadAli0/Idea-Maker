@@ -222,20 +222,23 @@ $(document).ready(function () {
 
         <div class="form-check">
 
-                <label  class="form-check-label">Gender</label><span style="color: red !important; display: inline; float: none;">*</span>
+            <label  class="form-check-label">Gender</label><span style="color: red !important; display: inline; float: none;">*</span>
             <div style="margin-left: 5rem;">
-                <input type="radio" class="form-check-input" name="gender" value="male" checked required /> Male
-            </div>    
-            <div style="margin-left: 5rem;">
-                <input type="radio" class="form-check-input" name="gender" value="female" required /> Female
-            </div>
+
+            <table>
+                   <tr><th> <input type="radio" class="form-check-input" name="gender" value="male" checked required /> </th> <th><p>Male</th></tr>
+                
+                    <tr><th><input type="radio" class="form-check-input" name="gender" value="female" required />  </th> <th><p>Female</th></tr>
+            </table>
+            </div> <br>
+
         </div>  
             
         
         <div class="form-group">
                 <label for="country">Country</label><span style="color: red !important; display: inline; float: none;">*</span>      
 
-                <select id="country" name="country" class="form-control">
+                <select id="country" style="height: calc(2.25rem + 11px);" name="country" class="form-control">
                     <option value="Afghanistan">Afghanistan</option>
                     <option value="Åland Islands">Åland Islands</option>
                     <option value="Albania">Albania</option>
@@ -497,7 +500,7 @@ $(document).ready(function () {
 
 
                 <label for="type">Account Rule</label><span style="color: red !important; display: inline; float: none;">*</span>             
-                <select id="type" name="type" class="form-control">
+                <select id="type" style="height: calc(2.25rem + 11px);" name="type" class="form-control">
                     <option value="client">Client</option>
                     <option value="developer">Developer</option>
                     <option value="investor">Investor</option>
@@ -786,7 +789,7 @@ $(document).ready(function () {
                                   <div class="col-xs-6">
                                       <label for="country"><h4>Country</h4></label>
 
-              <select id="country" name="country" class="form-control" >
+              <select id="country" style="height: calc(2.25rem + 11px);" name="country" class="form-control" >
                   <option selected="selected">`+ result['personal']['country'] + `</option>
                   <option value="Afghanistan">Afghanistan</option>
                   <option value="Åland Islands">Åland Islands</option>
