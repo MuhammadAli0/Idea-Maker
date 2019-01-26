@@ -1,5 +1,19 @@
 $(document).ready(function () {
 
+    var option = window.location.search.substring(1);
+    if (option === 'login') {
+        showLoginPage();
+    } else if (option === 'home') {
+        showHomePage();
+        clearResponse();
+    } else if (option === 'profile') {
+
+    } else if (option === 'update-profile') {
+        showUpdateAccountForm();
+    } else if (option === 'sign_up') {
+        ShowSignUpForm();
+    }
+
     // show sign up / registration form
     $(document).on('click', '#sign_up', function () {
         ShowSignUpForm();
@@ -49,9 +63,9 @@ $(document).ready(function () {
 
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/register");
         xhr.setRequestHeader("content-type", "application/json");
-        
+
         xhr.setRequestHeader("cache-control", "no-cache");
-        
+
         xhr.send(data);
 
         return false;
@@ -106,9 +120,9 @@ $(document).ready(function () {
 
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/login");
         xhr.setRequestHeader("content-type", "application/json");
-        
+
         xhr.setRequestHeader("cache-control", "no-cache");
-        
+
         xhr.send(data);
 
 
@@ -178,7 +192,7 @@ $(document).ready(function () {
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
-        
+
 
         xhr.send(form_data);
 
@@ -595,7 +609,6 @@ $(document).ready(function () {
                         var Home_html = `
 
                         
-                        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
                         <div class="mainbody container-fluid">
                             <div class="row" style="flex-wrap: unset;">
                                
@@ -660,9 +673,9 @@ $(document).ready(function () {
 
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
-        
+
         xhr.setRequestHeader("cache-control", "no-cache");
-        
+
 
         xhr.send(data);
     }
@@ -1122,9 +1135,9 @@ $(document).ready(function () {
 
         xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
-        
+
         xhr.setRequestHeader("cache-control", "no-cache");
-        
+
 
         xhr.send(data);
 
@@ -1135,7 +1148,6 @@ $(document).ready(function () {
         var html = `
                 <!------ Include the above in your HEAD tag ---------->
                 
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
                     <div class="form-gap"></div>
                     <div class="container">
                         <div class="row">
@@ -1185,7 +1197,7 @@ $(document).ready(function () {
                 console.log(result);
                 if (result['status'] === 200) {
                     $('#recovryFrom').html("<div class='alert alert-success'>Mail Sended Successfully.</div>");
-                } else if(result['status'] === 300){
+                } else if (result['status'] === 300) {
                     $('#response').html("<div class='alert alert-danger'>Email not execit in our database.</div>");
                 } else {
                     $('#response').html("<div class='alert alert-danger'>SomeThing Wrong Plise Try again latre.</div>");
@@ -1195,7 +1207,7 @@ $(document).ready(function () {
 
         xhr.open("PUT", "https://idea-maker.herokuapp.com/api/index.php/recovery/" + email + "/");
         xhr.setRequestHeader("cache-control", "no-cache");
-        
+
         xhr.send(null);
 
 
