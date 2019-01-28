@@ -7,9 +7,6 @@ $(document).ready(function () {
         showHomePage();
         clearResponse();
     } else if (option === 'profile') {
-
-    } else if (option === 'update-profile') {
-        showUpdateAccountForm();
     } else if (option === 'sign_up') {
         ShowSignUpForm();
     }
@@ -135,6 +132,11 @@ $(document).ready(function () {
         clearResponse();
     });
 
+    // show profile form
+    $(document).on('click', '#profile', function () {
+        showProfileForm();
+    });
+
     // show update account form
     $(document).on('click', '#update_account', function () {
         showUpdateAccountForm();
@@ -220,7 +222,71 @@ $(document).ready(function () {
         return false;
     });
 
+    // get or read cookie
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
 
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    // function to set cookie
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    // if the user is logged out
+    function showLoggedOutMenu() {
+        // show login and sign up from navbar & hide logout button
+        $("#login, #sign_up").show();
+        $("#logout").hide();
+
+    }
+
+    // if the user is logged in
+    function showLoggedInMenu() {
+        // hide login and sign up from navbar & show logout button
+        $("#login, #sign_up").hide();
+        $("#logout, #profile, #home, #update_account").show();
+    }
+
+    // remove any prompt messages
+    function clearResponse() {
+        $('#response').html('');
+    }
+
+    // function to make form values to json format
+    $.fn.serializeObject = function () {
+
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function () {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+    // Show SignUp From
     function ShowSignUpForm() {
         var html = `
         <h2>Sign Up</h2>
@@ -532,11 +598,6 @@ $(document).ready(function () {
         $('#content').html(html);
     }
 
-    // remove any prompt messages
-    function clearResponse() {
-        $('#response').html('');
-    }
-
     // show login page
     function showLoginPage() {
 
@@ -549,7 +610,7 @@ $(document).ready(function () {
         <form id='login_form'>
             <div class='form-group'>
                 <label for='username'>Username:</label>
-                <input type='username' class='form-control' id='username' name='username' placeholder='Enter username'>
+                <input type='email' class='form-control' id='username' name='username' placeholder='Email or Username'>
             </div>
  
             <div class='form-group'>
@@ -566,23 +627,6 @@ $(document).ready(function () {
         clearResponse();
         showLoggedOutMenu();
     }
-
-    // function to set cookie
-    function setCookie(cname, cvalue, exdays) {
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-        var expires = "expires=" + d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    }
-
-    // if the user is logged out
-    function showLoggedOutMenu() {
-        // show login and sign up from navbar & hide logout button
-        $("#login, #sign_up").show();
-        $("#logout").hide();
-
-    }
-
 
     // show home page
     function showHomePage() {
@@ -679,34 +723,6 @@ $(document).ready(function () {
 
         xhr.send(data);
     }
-
-
-    // get or read cookie
-    function getCookie(cname) {
-        var name = cname + "=";
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
-
-
-    // if the user is logged in
-    function showLoggedInMenu() {
-        // hide login and sign up from navbar & show logout button
-        $("#login, #sign_up").hide();
-        $("#logout, #profile, #home, #update_account").show();
-    }
-
 
     // account Update Form
     function ShowAccountUpdateForm() {
@@ -1144,6 +1160,7 @@ $(document).ready(function () {
 
     }
 
+    // Show Password Recovry via mail from
     function ShowSendRecoverMailForm() {
         var html = `
                 <!------ Include the above in your HEAD tag ---------->
@@ -1187,6 +1204,7 @@ $(document).ready(function () {
         clearResponse();
     }
 
+    // Send Password Recovry Via Mail
     function SendPassowrRecovery(email) {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -1213,22 +1231,106 @@ $(document).ready(function () {
 
     }
 
+    // show Profile Form
+    function showProfileForm() {
+
+        // validate jwt to verify access
+        var jwt = getCookie('jwt');
+
+
+        var data = JSON.stringify({
+            "jwt": jwt
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                try {
+                    result = $.parseJSON(this.responseText)
+                    if (result) {
+                        showLoggedInMenu();
+
+                        GetProfilePicture = (result['personal']['gender'] === "male") ? "img/M_profile.png" : "img/F_profile.png";
+                        CreateProfileFormPage();
+                    } else {
+                        // on error/fail, tell the user he needs to login to show the home page
+                        showLoginPage();
+                        $('#response').html("<div class='alert alert-danger'>Please login to access the home page.</div>");
+                    }
+                }
+                catch (err) {
+                    // on error/fail, tell the user he needs to login to show the home page
+                    showLoginPage();
+                    $('#response').html("<div class='alert alert-danger'>Please login to access the home page.</div>");
+                }
+
+
+            }
+
+
+
+
+        });
+
+        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+
+        xhr.setRequestHeader("cache-control", "no-cache");
+
+
+        xhr.send(data);
+    }
+
+    function CreateProfileFormPage() {
+        var Home_html = `
+    
+                            
+                            <div class="mainbody container-fluid">
+                                <div class="row" style="flex-wrap: unset;">
+                                   
+                                    <div style="padding-top:50px;"> </div>
+                                    <div class="col-lg-3 col-md-3 hidden-sm hidden-xs">
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                
+                                                
+                                                    <img class="avatar img-circle img-thumbnail" src="`+ GetProfilePicture + `" width="300px" height="300px">
+    
+                                                    <div class="media-body">
+                                                        <h3><strong>`+ result['personal']['name']['fname'] + ` ` + result['personal']['name']['lname'] + `</strong></h3>
+                                                        <hr>
+                                                        <hr>
+                                                        <h4><strong>Bio</strong></h4>
+                                                        <p>`+ result['personal']['summary'] + `.</p>
+                                                        <hr>
+                                                        <h4><strong>Location</strong></h4>
+                                                        <p>`+ result['personal']['town'] + ` ` + result['personal']['country'] + `</p>
+                                                        <hr>
+                                                        <h4><strong>Gender</strong></h4>
+                                                        <p>`+ result['personal']['gender'] + `</p>
+                                                        <hr>
+                                                        <h4><strong>Account Role</strong></h4>
+                                                        <p>`+ result['accType'] + `</p>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <!----- Write NEW POST CODE HERE-------!>
+                                        <hr>
+                                        <div id="posts"></div>
+                                    </div>
+                                </div>   
+                    `;
+
+
+        clearResponse();
+        $('#content').html(Home_html);
+
+    }
+
 });
 
-// function to make form values to json format
-$.fn.serializeObject = function () {
 
-    var o = {};
-    var a = this.serializeArray();
-    $.each(a, function () {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
-};
