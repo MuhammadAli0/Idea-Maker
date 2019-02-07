@@ -59,7 +59,7 @@ $(document).ready(function () {
             }
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/register");
+        xhr.open("POST",  "https://" + window.location.hostname + "/api/index.php/register");
         xhr.setRequestHeader("content-type", "application/json");
 
         xhr.setRequestHeader("cache-control", "no-cache");
@@ -116,7 +116,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/login");
+        xhr.open("POST",  "https://" + window.location.hostname + "/api/index.php/login");
         xhr.setRequestHeader("content-type", "application/json");
 
         xhr.setRequestHeader("cache-control", "no-cache");
@@ -192,7 +192,7 @@ $(document).ready(function () {
             }
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
+        xhr.open("POST",  "https://" + window.location.hostname + "/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
 
@@ -716,7 +716,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/home/");
+        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
 
         xhr.setRequestHeader("cache-control", "no-cache");
@@ -1150,7 +1150,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/profile/");
+        xhr.open("POST",  "https://" + window.location.hostname + "/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
 
         xhr.setRequestHeader("cache-control", "no-cache");
@@ -1212,8 +1212,8 @@ $(document).ready(function () {
 
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
+                console.log(this.responseText);
                 var result = $.parseJSON(this.responseText);
-                console.log(result);
                 if (result['status'] === 200) {
                     $('#recovryFrom').html("<div class='alert alert-success'>Mail Sended Successfully.</div>");
                 } else if (result['status'] === 300) {
@@ -1224,7 +1224,7 @@ $(document).ready(function () {
             }
         });
 
-        xhr.open("PUT", "https://idea-maker.herokuapp.com/api/index.php/recovery/" + email + "/");
+        xhr.open("PUT",  "https://" + window.location.hostname + "/api/index.php/recovery/" + email + "/");
         xhr.setRequestHeader("cache-control", "no-cache");
 
         xhr.send(null);
@@ -1275,7 +1275,7 @@ $(document).ready(function () {
 
         });
 
-        xhr.open("POST", "https://idea-maker.herokuapp.com/api/index.php/home/");
+        xhr.open("POST",  "https://" + window.location.hostname + "/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
 
         xhr.setRequestHeader("cache-control", "no-cache");
