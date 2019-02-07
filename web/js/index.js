@@ -7,6 +7,7 @@ $(document).ready(function () {
         showHomePage();
         clearResponse();
     } else if (option === 'profile') {
+        showProfileForm();
     } else if (option === 'sign_up') {
         ShowSignUpForm();
     }
@@ -610,7 +611,7 @@ $(document).ready(function () {
         <form id='login_form'>
             <div class='form-group'>
                 <label for='username'>Username:</label>
-                <input type='email' class='form-control' id='username' name='username' placeholder='Email or Username'>
+                <input type='text' class='form-control' id='username' name='username' placeholder='Email or Username'>
             </div>
  
             <div class='form-group'>
@@ -1288,40 +1289,8 @@ $(document).ready(function () {
     
                             
                             <div class="mainbody container-fluid">
-                                <div class="row" style="flex-wrap: unset;">
-                                   
-                                    <div style="padding-top:50px;"> </div>
-                                    <div class="col-lg-3 col-md-3 hidden-sm hidden-xs">
-                                        <div class="panel panel-default">
-                                            <div class="panel-body">
-                                                
-                                                
-                                                    <img class="avatar img-circle img-thumbnail" src="`+ GetProfilePicture + `" width="300px" height="300px">
-    
-                                                    <div class="media-body">
-                                                        <h3><strong>`+ result['personal']['name']['fname'] + ` ` + result['personal']['name']['lname'] + `</strong></h3>
-                                                        <hr>
-                                                        <hr>
-                                                        <h4><strong>Bio</strong></h4>
-                                                        <p>`+ result['personal']['summary'] + `.</p>
-                                                        <hr>
-                                                        <h4><strong>Location</strong></h4>
-                                                        <p>`+ result['personal']['town'] + ` ` + result['personal']['country'] + `</p>
-                                                        <hr>
-                                                        <h4><strong>Gender</strong></h4>
-                                                        <p>`+ result['personal']['gender'] + `</p>
-                                                        <hr>
-                                                        <h4><strong>Account Role</strong></h4>
-                                                        <p>`+ result['accType'] + `</p>
-                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-    
-                                    <!----- Write NEW POST CODE HERE-------!>
-                                        <hr>
-                                        <div id="posts"></div>
-                                    </div>
+                            <h1><strong> hi  `+ result['personal']['name']['fname'] + ` ` + result['personal']['name']['lname'] + `</strong></h1>
+                            <h2>This page Under Recover</h2>
                                 </div>   
                     `;
 

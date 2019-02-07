@@ -29,7 +29,7 @@ class mailer
     private $host = "smtp.gmail.com";
     private $smtpAut = true;
     private $EmailAddress = "mohamed007258@gmail.com";
-    private $EmailPassword = "Imiss2egy";
+    private $EmailPassword = "ruiimlicrvbiaenh";
     private $smtpProto = "tls";
     private $mailPort = 587;
     private $mail;
