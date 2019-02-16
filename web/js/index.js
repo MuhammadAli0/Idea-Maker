@@ -217,9 +217,8 @@ $(document).ready(function () {
     });
 
     $(document).on('submit', '#recovry-form', function () {
-
+        $('#loading').html('<button class="buttonload btn btn-lg btn-primary"><i class="fa fa-spinner fa-spin"></i>Loading</button>');
         SendPassowrRecovery(document.getElementById('email').value);
-
         return false;
     });
 
@@ -261,7 +260,7 @@ $(document).ready(function () {
     function showLoggedInMenu() {
         // hide login and sign up from navbar & show logout button
         $("#login, #sign_up").hide();
-        $("#logout, #profile, #home, #update_account").show();
+        $("#logout, #profile, #home").show();
     }
 
     // remove any prompt messages
@@ -610,7 +609,7 @@ $(document).ready(function () {
         <h2>Login</h2>
         <form id='login_form'>
             <div class='form-group'>
-                <label for='username'>Username:</label>
+                <label for='username'>Email or Username:</label>
                 <input type='text' class='form-control' id='username' name='username' placeholder='Email or Username'>
             </div>
  
@@ -1165,7 +1164,6 @@ $(document).ready(function () {
     function ShowSendRecoverMailForm() {
         var html = `
                 <!------ Include the above in your HEAD tag ---------->
-                
                     <div class="form-gap"></div>
                     <div class="container">
                         <div class="row">
@@ -1188,8 +1186,10 @@ $(document).ready(function () {
                         </div>
                                                         </div>
                                                         <div class="form-group">
+                                                        <div id="loading">
+
                                                             <input name="recover-submit" class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
-                      </div>
+                      </div></div>
                     </form>
                     <div>
 
@@ -1218,6 +1218,8 @@ $(document).ready(function () {
                     $('#recovryFrom').html("<div class='alert alert-success'>Mail Sended Successfully.</div>");
                 } else if (result['status'] === 300) {
                     $('#response').html("<div class='alert alert-danger'>Email not execit in our database.</div>");
+                    $('#loading').html('<input name="recover-submit" class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">');
+
                 } else {
                     $('#response').html("<div class='alert alert-danger'>SomeThing Wrong Plise Try again latre.</div>");
                 }
@@ -1289,8 +1291,10 @@ $(document).ready(function () {
     
                             
                             <div class="mainbody container-fluid">
+                            <a class="nav-item nav-link" href="#" id='update_account'>Update Account</a>
+
                             <h1><strong> hi  `+ result['personal']['name']['fname'] + ` ` + result['personal']['name']['lname'] + `</strong></h1>
-                            <h2>This page Under Recover</h2>
+                            <h2>This page Under Maintenance</h2>
                                 </div>   
                     `;
 
