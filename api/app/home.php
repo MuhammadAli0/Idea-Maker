@@ -2,15 +2,16 @@
 
 
 class homeDB{
-    // private $host = 'remotemysql.com';
-    // private $MySqlUsername = 'sH7ujZntL8';
-    // private $MySqlPassword = 'tarLEjKZE8';
-    // private $DBname        = 'sH7ujZntL8';
+    private $host = 'remotemysql.com';
+    private $MySqlUsername = 'ideamakeruser';
+    private $MySqlPassword = '232243125';
+    private $DBname        = 'ideamakerdb';
 
-    private $host = '127.0.0.1';
-    private $MySqlUsername = 'root';
-    private $MySqlPassword = '23243125';
-    private $DBname        = 'mydb';
+
+    // private $host = '127.0.0.1';
+    // private $MySqlUsername = 'root';
+    // private $MySqlPassword = '23243125';
+    // private $DBname        = 'mydb';
 
     public $conn;
 
