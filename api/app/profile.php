@@ -4,9 +4,9 @@ date_default_timezone_set('UTC');
 
 class profileDB
 {
-    private $host = 'remotemysql.com';
+    private $host = 'db4free.net';
     private $MySqlUsername = 'ideamakeruser';
-    private $MySqlPassword = '232243125';
+    private $MySqlPassword = '23243125';
     private $DBname        = 'ideamakerdb';
 
     

@@ -2,11 +2,10 @@
 
 
 class homeDB{
-    private $host = 'remotemysql.com';
+    private $host = 'db4free.net';
     private $MySqlUsername = 'ideamakeruser';
-    private $MySqlPassword = '232243125';
+    private $MySqlPassword = '23243125';
     private $DBname        = 'ideamakerdb';
-
 
     // private $host = '127.0.0.1';
     // private $MySqlUsername = 'root';

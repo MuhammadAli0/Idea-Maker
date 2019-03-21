@@ -760,7 +760,6 @@
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<li><input id="btnsub" type="submit" name="send" class="btn btn-primary btnsub"></li>
 						</div>
-
 					</form>
 				</ul>
 			</div>
@@ -841,6 +840,7 @@
 
 		// trigger when registration form is submitted
 		$(document).on('submit', '#sign_up_form', function () {
+			$('#btnsub').html('<button class="buttonload btn btn-lg btn-primary"><i class="fa fa-spinner fa-spin"></i>Loading</button>');
 
 			// get form data
 			var sign_up_form = $(this);
@@ -854,13 +854,13 @@
 
 			xhr.addEventListener("readystatechange", function () {
 				if (this.readyState === 4) {
+					console.log(this.responseText);
 					var responceData = $.parseJSON(this.responseText);
-					console.log(responceData);
 
 					if (responceData['Status'] === 200) {
-						var html = '<h2>Plise Check your mail for validation link<h2>';
-						$('#content0').html(html);
+						var html = '<h2 style="color: aqua;">Plise Check your mail for validation link</h2>';
 						$('#response0').html("<div class='alert alert-success'>Successful sign up.</div>");
+						$('#content0').html(html);
 						sign_up_form.find('input').val('');
 					} else if (responceData['Status'] > 200) {
 						usernameAlert = '';
