@@ -1,61 +1,103 @@
 <!doctype html>
+
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <title>Idea Maker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous" />
-    <link rel="stylesheet" type="text/css" href="css/custom.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="js/index.js" crossorigin="anonymous"> </script>
+    <meta charset="utf-8">
 
+    <title>Home</title>
+    <script src="/web/js/jquery.min.js"></script>
+    <script>
+
+        loadPage();
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        // function to make form values to json format
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+        function loadPage() {
+            // validate jwt to verify access
+            var jwt = getCookie('jwt');
+            var data = JSON.stringify({
+                "status": 200,
+                "jwt": jwt
+            });
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    try {
+                        result = $.parseJSON(this.responseText)
+                        if (result) {
+
+                            $('#test').html(this.responseText);
+                            console.log(result);
+
+
+                            // ShowAccountUpdateForm();
+                        } else {
+                            // on error/fail, tell the user he needs to login to show the account page
+                            $('#response').html("<div class='alert alert-danger'>Please login to access the account page.</div>");
+                            window.location.href = "https://" + window.location.hostname + "?login";
+
+                        }
+                    }
+                    catch (err) {
+                        // on error/fail, tell the user he needs to login to show the account page
+                        $('#response').html("<div class='alert alert-danger'>Please login to access the account page.</div>");
+                        window.location.href = "https://" + window.location.hostname + "?login";
+                    }
+                }
+            });
+            xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/home/");
+            xhr.setRequestHeader("content-type", "application/json");
+            xhr.setRequestHeader("cache-control", "no-cache");
+            xhr.send(data);
+
+
+        }
+
+
+    </script>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="../web/">Idea-Maker</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <div id="response">
+        <h1> Welcome To Home Page </h1>
+        <h2> <a href="EditProfile.html"> Edit Profile </a> </h2>
+        <p id="test"> </p>
+    <script>
 
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="#" id='home'>Home</a>
-                <a class="nav-item nav-link" href="#" id='profile'>Profile</a>
-                <a class="nav-item nav-link" href="#" id='logout'>Logout</a>
-                <a class="nav-item nav-link" href="#" id='login'>Login</a>
-                <a class="nav-item nav-link" href="#" id='sign_up'>Sign Up</a>
-            </div>
-        </div>
-    </nav>
-    <main role="main" class="container starter-template">
-        <div class="row">
-            <div class="col">
-                <div id="response">
-
-                </div>
-                <div id="content">
-
-                    <header style="background-color: #343a40 !important; border-radius: 30%;">
-                        <div class="container">
-                            <img class="img-fluid mb-5 d-block mx-auto" src="img/profile.png" alt="">
-                            <h1 style="color: #d1d11f;text-align: center;font-size: xx-large;">Its Your Time</h1>
-                        </div>
-                    </header>
-                </div>
-            </div>
-        </div>
-    </main>
+    </script>
 </body>
 
 </html>
-
-

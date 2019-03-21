@@ -2,10 +2,15 @@
 
 
 class homeDB{
-    private $host = 'remotemysql.com';
-    private $MySqlUsername = 'sH7ujZntL8';
-    private $MySqlPassword = 'tarLEjKZE8';
-    private $DBname        = 'sH7ujZntL8';
+    // private $host = 'remotemysql.com';
+    // private $MySqlUsername = 'sH7ujZntL8';
+    // private $MySqlPassword = 'tarLEjKZE8';
+    // private $DBname        = 'sH7ujZntL8';
+
+    private $host = '127.0.0.1';
+    private $MySqlUsername = 'root';
+    private $MySqlPassword = '23243125';
+    private $DBname        = 'mydb';
 
     public $conn;
 
@@ -55,6 +60,28 @@ class GetData{
             return FALSE;
         }
     }
+
+    public function getWork($user_id){
+        $dlb = $this->conn->prepare("SELECT * FROM work WHERE user_id = '$user_id'");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     = $dlb->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        }else{
+            return FALSE;
+        }
+    }
+
+    public function getUniversity($user_id){
+        $dlb = $this->conn->prepare("SELECT * FROM University WHERE user_id = '$user_id'");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     = $dlb->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        }else{
+            return FALSE;
+        }
+    }
 }
 
 class retriveHome {
@@ -70,9 +97,11 @@ class retriveHome {
         $data = $GetDataX->getUser($this->username);
         $data = (array) $data;
         $this->home = json_encode(array(
+            "user_id" => $data['user_id'],
             "username" => $this->username,
             "personal" => array(
-                "name"     => $this->name,
+                "fname"     => $data['fname'],
+                "lname"     => $data['lname'],
                 "gender"   => $data['gender'],
                 "country"  => $data['country'],
                 "town"     => $data['town'],

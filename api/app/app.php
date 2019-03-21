@@ -1,7 +1,6 @@
 <?php
 require __DIR__ . '/../../vendor/autoload.php';
 require __DIR__ . '/log.php';
-require __DIR__ . '/database.php';
 require __DIR__ . '/profile.php';
 require __DIR__ . '/home.php';
 
@@ -499,7 +498,6 @@ class Register extends mailer
     protected $username;
     protected $Fname;
     protected $Lname;
-    protected $gender;
     protected $email;
     protected $phone;
     protected $country;
@@ -512,12 +510,11 @@ class Register extends mailer
 
     public $errors = [];
 
-    function load($User, $FirstName, $LastName, $Sex, $PhoneNumber, $EmailAddress, $MyCountry, $MyTown, $AccType, $Password)
+    function load($User, $FirstName, $LastName, $PhoneNumber, $EmailAddress, $MyCountry, $MyTown, $AccType, $Password)
     {
         $this->username = $User;
         $this->Fname = $FirstName;
         $this->Lname = $LastName;
-        $this->gender = $Sex;
         $this->country = $MyCountry;
         $this->town = $MyTown;
         $this->email = $EmailAddress;
@@ -652,10 +649,15 @@ class Activation
 
 class DataHandeler extends Register
 {
-    private $host = 'remotemysql.com';
-    private $MySqlUsername = 'sH7ujZntL8';
-    private $MySqlPassword = 'tarLEjKZE8';
-    private $DBname        = 'sH7ujZntL8';
+    // private $host = 'remotemysql.com';
+    // private $MySqlUsername = 'sH7ujZntL8';
+    // private $MySqlPassword = 'tarLEjKZE8';
+    // private $DBname        = 'sH7ujZntL8';
+
+    private $host = '127.0.0.1';
+    private $MySqlUsername = 'root';
+    private $MySqlPassword = '23243125';
+    private $DBname        = 'mydb';
 
     public $conn;
 
@@ -677,10 +679,11 @@ class DataHandeler extends Register
             $this->isValidForm($this->conn);
 
             if ($this->errors['Status'] == 200) {
-                $this->conn->exec("INSERT INTO users (username, gender, email, phone, country, town, pwHash, uType, cDateTime, accStatus)
+                $this->conn->exec("INSERT INTO users (username, fname, lname, email, phone, country, town, pwHash, uType, cDateTime, accStatus)
                 VALUES(
                     '$this->username', 
-                    '$this->gender', 
+                    '$this->Fname', 
+                    '$this->Lname', 
                     '$this->email', 
                     '$this->phone', 
                     '$this->country', 
@@ -692,13 +695,6 @@ class DataHandeler extends Register
                     ");
 
 
-                $this->conn->exec("INSERT INTO uname(username, fname, lname)
-                VALUES(
-                    '$this->username',
-                    '$this->Fname',
-                    '$this->Lname' 
-                    )
-                    ");
                 $this->gnreateCode();
                 $this->conn->exec("INSERT INTO activationCode(username, code)
                 VALUES(
@@ -737,93 +733,8 @@ class DataHandeler extends Register
 
 }
 
-class Session
-{
 
-    private $cookieTime;
-
-    public function __construct()
-    {
-        session_start();
-        session_cache_limiter(false); // disable cache limiter. See here: http://docs.slimframework.com/sessions/native/
-        $this->cookieTime = strtotime('+30 days');
-    }
-
-    public function set($name, $value)
-    {
-        $_SESSION[$name] = $value;
-        header('Location: localhost/Idea-Maker/profile/home/');
-    }
-
-    public function setMulti($base, $key, $value)
-    {
-        $_SESSION[$base][$key] = $value;
-    }
-
-    public function get($name)
-    {
-        if (isset($_SESSION[$name])) {
-            return $_SESSION[$name];
-        }
-    }
-
-    public function getMulti($base, $key)
-    {
-        if (isset($_SESSION[$base][$key])) {
-            return $_SESSION[$base][$key];
-        }
-    }
-
-    public function kill($name)
-    {
-        unset($_SESSION[$name]);
-    }
-
-    public function killAll()
-    {
-        session_destroy();
-    }
-
-    public function setCookie($name, $value)
-    {
-        setcookie($name, $value, $this->cookieTime, '/');
-    }
-
-    public function getCookie($name)
-    {
-        return $_COOKIE[$name];
-    }
-
-    public function killCookie($name)
-    {
-        setcookie($name, null);
-    }
-}
-
-class GetRequre
-{
-
-    private $conn;
-    protected function __prepare()
-    {
-        $DB = DataHandeler::getInstance();
-        $this->conn = $DB->conn;
-    }
-
-    protected function GetName($username)
-    {
-        $dlb = $this->conn->prepare("SELECT fname, lname FROM uname WHERE username = '$username'");
-        $dlb->execute();
-        if ($dlb->rowCount() > 0) {
-            $name = $dlb->fetch(PDO::FETCH_ASSOC);
-            return json_encode($name);
-        } else {
-            return false;
-        }
-    }
-}
-
-class Loyal extends GetRequre
+class Loyal
 {
     private $private_key = "
     MIIJKQIBAAKCAgEAzylRyoqvW68Fx4JmaOElItc/clhUZ0ywxi2jEwQp5BhgZXeq
@@ -896,21 +807,19 @@ class Loyal extends GetRequre
     }
 
 
-    protected function createSeection($username, $Email)
+    protected function createSeection($username, $Email, $name, $user_id)
     {
         header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com");
         header("Content-Type: application/json; charset=UTF-8");
         header("Access-Control-Allow-Methods: POST");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-        $this->__prepare();
         $key = $this->private_key;
         $iss = "https://idea-maker.herokuapp.com/web/";
         $aud = "https://idea-maker.herokuapp.com/api/";
         $iat = 1356999524;
         $nbf = 1357000000;
         $exp = 60;
-        $name = $this->GetName($username);
 
         $token = array(
             "iss" => $iss,
@@ -919,7 +828,8 @@ class Loyal extends GetRequre
             "nbf" => $nbf,
             "ttl" => $exp,
             "data" => array(
-                "id" => $username,
+                "id" => $user_id,
+                "username" => $username,
                 "name" => $name,
                 "email" => $Email
             )
@@ -1040,7 +950,7 @@ class Login extends Loyal
     public function login()
     {
         $dlb = $this->conn->prepare("SELECT 
-            username, email, pwHash, accStatus 
+            username, email, user_id, accStatus, fname, lname
         FROM users 
             WHERE 
                 username = '$this->valueX' and pwHash = '$this->LoginHash' 
@@ -1055,6 +965,8 @@ class Login extends Loyal
 
             $this->Email = $result['email'];
             $this->username = $result['username'];
+            $user_id = $result['user_id'];
+            $name = $result['fname']. ' ' . $result['lname'];
 
             if ($result['accStatus'] != 'ACTIVATED') {
                 $this->logging->write(json_encode(array(
@@ -1076,7 +988,7 @@ class Login extends Loyal
                 // $_SESSION["$this->valueX"] = TRUE; 
                 // header('Location: /');
                 // $this->setCookie('username', $this->valueX);
-                return $this->createSeection($this->username, $this->Email);
+                return $this->createSeection($this->username, $this->Email, $name, $user_id);
 
             }
         } else {

@@ -8,17 +8,15 @@ require __DIR__ .  '/app.php';
 // ------------- REGISTER -------------------
 $app->post('/register', function($request, $response){
     $data=$request->getParsedBody();
-    
     $inputData = [];
     $inputData['username']  = filter_var($data['username'], FILTER_SANITIZE_STRING);
     $inputData['fname']     = filter_var($data['fname'],    FILTER_SANITIZE_STRING);
     $inputData['lname']     = filter_var($data['lname'],    FILTER_SANITIZE_STRING);
-    $inputData['gender']    = filter_var($data['gender'],   FILTER_SANITIZE_STRING);
     $inputData['email']     = filter_var($data['email'],    FILTER_SANITIZE_EMAIL);
     $inputData['phone']     = filter_var($data['phone'],    FILTER_SANITIZE_STRING);
     $inputData['country']   = filter_var($data['country'],  FILTER_SANITIZE_STRING);
     $inputData['town']      = filter_var($data['town'],     FILTER_SANITIZE_STRING);
-    $inputData['password']  = filter_var($data['password'], FILTER_SANITIZE_STRING);
+    $inputData['password']  = filter_var($data['password'][0], FILTER_SANITIZE_STRING);
     $inputData['type']      = filter_var($data['type'],     FILTER_SANITIZE_STRING);
     
     $register = DataHandeler::getInstance();
@@ -26,7 +24,6 @@ $app->post('/register', function($request, $response){
         $inputData['username'], 
         $inputData['fname'], 
         $inputData['lname'], 
-        $inputData['gender'], 
         $inputData['phone'], 
         $inputData['email'], 
         $inputData['country'], 
@@ -89,7 +86,7 @@ $app->get('/register/code/{username}/{code}', function($request, $response, $arg
             "username" => $user,
             "code" => $code
         )));
-        header("Location: https://idea-maker.herokuapp.com/web/index.html?login", true, 301);
+        header("Location: https://idea-maker.herokuapp.com/index.html?login", true, 301);
         exit();
     }else{
         $logging->write(json_encode(array(
@@ -97,7 +94,7 @@ $app->get('/register/code/{username}/{code}', function($request, $response, $arg
             "username" => $user,
             "code" => $code
         )));
-        header("Location: https://idea-maker.herokuapp.com/web/SomeThingWrong", true, 301);
+        header("Location: https://idea-maker.herokuapp.com/web/SomeThingWrong.html", true, 301);
         exit();
     }
 
@@ -149,7 +146,7 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
                 "Code" =>$code
             )));
 
-            header("Location: http://www.GoToHell.com", true, 301);
+            header("Location: https://idea-maker.herokuapp.com/web/unvalidLink.html", true, 301);
             exit();
         }
         
@@ -212,17 +209,16 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $re
     if ($AllowData != FALSE){
 
         if($request->isPost()){
-            $home = new retriveHome($AllowData->id);
-            $home->name = json_decode($AllowData->name);
+            $home = new retriveHome($AllowData->username);
             $home->email = $AllowData->email;
-            $home->username = $AllowData->id;
+            $home->username = $AllowData->username;
             $home->__prepare();
             $response->write($home->home);
         }else{
 
         }
     }else{
-        header("Location: https://idea-maker.herokuapp.com/web/index.html?login", true, 301);
+        header("Location: https://idea-maker.herokuapp.com/index.html?login", true, 301);
         exit();
     }
      
@@ -239,22 +235,28 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
     if ($AllowData != FALSE){
 
         if($data['status'] == 200){
-            $profile = new retriveProfile($AllowData->id);
-            $profile->name = json_decode($AllowData->name);
+            $profile = new retriveProfile($AllowData->username);
             $profile->email = $AllowData->email;
-            $profile->username = $AllowData->id;
+            $profile->username = $AllowData->username;
+            $profile->user_id = $AllowData->id;
             $profile->__prepare();
             $response->write($profile->profile);
+
         }else if ($data['status'] == 300) {
             $upDate = new UpdateProfile();
-            $upDate->username = $AllowData->id;
+            $upDate->username = $AllowData->username;
+            $upDate->user_id = $AllowData->id;
             $upDate->email    = $data['data']['email'];
             $upDate->phone    = $data['data']['phone'];
-            $upDate->fname    = $data['data']['fname'];
-            $upDate->lname    = $data['data']['lname'];
+            $upDate->fname    = $data['data']['first_name'];
+            $upDate->lname    = $data['data']['last_name'];
+            $upDate->gender   = $data['data']['gender'];
             $upDate->country  = $data['data']['country'];
             $upDate->town     = $data['data']['town'];
-            $upDate->pwHash   = md5(filter_var($data['data']['password'], FILTER_SANITIZE_STRING));
+            $upDate->summary  = $data['data']['summary'];
+            $upDate->date  = $data['data']['date'];
+
+
             if($upDate->PersonalDataUpdate() == TRUE){
                 $upDate->__prepare();
                 $response->write($upDate->profile);
@@ -266,6 +268,34 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
 
 
         
+        }else if ($data['status'] == 320) {
+            $upDate = new UpdateProfile();
+            $upDate->username = $AllowData->username;
+            $upDate->user_id = $AllowData->id;
+            
+            if($upDate->WorkUpdate($data) == TRUE){
+                $upDate->__prepare();
+                $response->write($upDate->profile);
+
+            }else{
+                echo($upDate->error);
+
+            }
+
+
+        }else if ($data['status'] == 340) {
+            $upDate = new UpdateProfile();
+            $upDate->username = $AllowData->username;
+            $upDate->user_id = $AllowData->id;
+            
+            if($upDate->unvirstyUpdate($data) == TRUE){
+                $upDate->__prepare();
+                $response->write($upDate->profile);
+
+            }else{
+                echo($upDate->error);
+
+            }
         }
     }else{
         exit();
