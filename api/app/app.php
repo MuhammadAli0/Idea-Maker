@@ -1182,7 +1182,7 @@ class Recovery extends _Loyal
     {
         $query = $this->conn->prepare("SELECT * FROM activationCode WHERE username = '$this->username' and code = '$this->vCode'");
         $query->execute();
-        if ($query->rowCount() > 0) {
+        if ($query->rowCount() == 1) {
             try {
                 $dlb = $this->conn->prepare("UPDATE activationCode SET code = 'REC0VERD' WHERE username = '$this->username'");
                 $dlb->execute();
