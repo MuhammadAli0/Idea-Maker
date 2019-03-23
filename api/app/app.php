@@ -17,7 +17,7 @@ use \Firebase\JWT\JWT;
 // Create and configure Slim app
 $config = ['settings' => [
     'addContentLengthHeader' => false,
-    'displayErrorDetails' => true,
+    'displayErrorDetails' => false,
 ]];
 $app = new \Slim\App($config);
 date_default_timezone_set('UTC');
@@ -882,14 +882,16 @@ class _Loyal extends mailer
                 http_response_code(200);
                 return $decoded->data->id;
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
      
                 // http_response_code(401);         
                 // return json_encode(array(
                 //     "message" => "Access denied.",
                 //     "error" => $e->getMessage()
                 // ));
-                return false;
+
+                return FALSE;
+                
             }
         }
     }

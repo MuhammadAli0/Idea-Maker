@@ -161,8 +161,9 @@ $app->post('/recovery/password/', function($request, $response){
     
     $jwt            = $data['jwt'];
     $recover        = new Recovery('----');
+    
     $UserName      = $recover->DecodeToken($jwt);
-    if ($UserName  !== FALSE){
+    if ($UserName  == TRUE){
         if ($recover->RePassword($UserName, $data['password']) == TRUE ){
             
             
@@ -186,12 +187,12 @@ $app->post('/recovery/password/', function($request, $response){
         }
     }else{
         $logging->write(json_encode(array(
-            "Status" => "Some one try to hack you"
+            "Status" => "please do not hack me, I am poor."
         )));
 
         $response->write(json_encode(array(
             "status" => 123,
-            "message" => "GO To HELL ***********"
+            "message" => "This link died, ask for new one and end the opration with 60 seconds"
         )));
     }
      
