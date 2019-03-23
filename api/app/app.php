@@ -913,8 +913,7 @@ class _Loyal extends mailer
         $token = array(
             "iss" => $iss,
             "aud" => $aud,
-            "iat" => $iat,
-            "nbf" => $nbf,
+            "exp" => $exp,
             "data" => array(
                 "id" => $username
             )
