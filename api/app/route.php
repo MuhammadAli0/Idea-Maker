@@ -127,7 +127,7 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
         $username = $argc['value1'];
         $code    = $argc['code'];
         $recover = new Recovery($username);
-        if($recover->recoverd($username, $code) == TRUE ){
+        if($recover->recoverd($username, $code) == true ){
             $token = $recover->createToken();
             $logging->write(json_encode(array(
                 "Status" => "TokenCreated",
