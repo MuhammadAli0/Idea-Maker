@@ -136,7 +136,7 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
             )));
 
             header("Location: https://idea-maker.herokuapp.com/web/passwordRecov.html?".$token, true, 301);
-
+            exit();
             // $response->write( $token );
         }else{
             $logging->write(json_encode(array(
