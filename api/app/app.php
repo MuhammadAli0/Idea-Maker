@@ -1098,7 +1098,7 @@ class Recovery extends _Loyal
             $paswd = md5($passwd);
             $dlb = $this->conn->prepare("UPDATE users SET pwHash = '$paswd' WHERE username = '$user'");
             $dlb->execute();
-            // $this->updateCode();
+            $this->updateCode();
             return true;
         } catch (PDOException $e) {
             return false;
@@ -1184,8 +1184,8 @@ class Recovery extends _Loyal
         $query->execute();
         if ($query->rowCount() > 0) {
             try {
-                $dlb = $this->conn->prepare("UPDATE activationCode SET code = 'REC0VERD' WHERE username = '$this->username'");
-                $dlb->execute();
+                // $dlb = $this->conn->prepare("UPDATE activationCode SET code = 'REC0VERD' WHERE username = '$this->username'");
+                // $dlb->execute();
                 return true;
             } catch (Exception $e) {
                 return false;
