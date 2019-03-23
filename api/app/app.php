@@ -908,7 +908,7 @@ class _Loyal extends mailer
         $aud = "https://idea-maker.herokuapp.com/web/passwordRecov.html";
         // $iat = 1356999524;
         // $nbf = 1357000000;
-        $exp = 30;
+        $exp = time() + 60;
 
         $token = array(
             "iss" => $iss,
