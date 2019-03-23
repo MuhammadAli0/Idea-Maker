@@ -1182,16 +1182,22 @@ class Recovery extends _Loyal
     {
         $query = $this->conn->prepare("SELECT * FROM activationCode WHERE username = '$this->username' and code = '$this->vCode'");
         $query->execute();
-        if ($query->rowCount() == 1) {
-            try {
-                $dlb = $this->conn->prepare("UPDATE activationCode SET code = 'REC0VERD' WHERE username = '$this->username'");
-                $dlb->execute();
-                return true;
-            } catch (Exception $e) {
-                return false;
+        if ($query->rowCount() > 0 ) {
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            if ($data['code'] == $this->vCode){
+                try {
+                    $dlb = $this->conn->prepare("UPDATE activationCode SET code = 'REC0VERD' WHERE username = '$this->username'");
+                    $dlb->execute();
+                    return TRUE;
+                } catch (Exception $e) {
+                    return false;
+                }
+            } else {
+                return FALSE;
             }
+
         } else {
-            return false;
+            return FALSE;
         }
     }
 }
