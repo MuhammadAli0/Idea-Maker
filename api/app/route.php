@@ -201,25 +201,76 @@ $app->post('/recovery/password/', function($request, $response){
 // ------------- HOME -------------------
 $app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $response, $argc){
 
-    $data = $request->getParsedBody();
-    $token          = $data['jwt'];
-    $allowMe        = new Loyal;
-    $AllowData      = $allowMe->isAllow($token);
 
-    if ($AllowData != FALSE){
+    if ($request->isPost()) {
+        $data = $request->getParsedBody();
+        $token          = $data['jwt'];
+        $allowMe        = new Loyal;
+        $AllowData      = $allowMe->isAllow($token);
 
-        if($request->isPost()){
-            $home = new retriveHome($AllowData->username);
-            $home->email = $AllowData->email;
-            $home->username = $AllowData->username;
-            $home->__prepare();
-            $response->write($home->home);
-        }else{
+        if ($AllowData != FALSE){
 
+            if (isset($data['option'])) {
+                $opt = $data['option'];
+                $action = new  userActions($AllowData->user_id);
+
+                if ($opt == 2 ){
+                    if ($action->like($data['post_id'])){
+                        $response->write(json_encode(array(
+                            "status" => 200
+                        )));
+                    }
+
+                } elseif ($opt == 10 ){
+                    if ($action->comment($data['post_id'])){
+                        $response->write(json_encode(array(
+                            "status" => 200
+                        )));
+                    }
+                    
+                } elseif ($opt == 50 ){
+                    if ($action->postIdea($data['idea-form'])){
+                        $response->write(json_encode(array(
+                            "status" => 200
+                        )));
+                    }
+
+                } elseif ($opt ==  100 ){
+                    if ($action->delIdea($data['post_id'])){
+                        $response->write(json_encode(array(
+                            "status" => 200
+                        )));
+                    }
+
+                } elseif ($opt ==  150 ) {
+                    if ($action->unLike($data['post_id'])){
+                        $response->write(json_encode(array(
+                            "status" => 200
+                        )));
+                    }
+                } elseif ($opt ==  200 ) {
+                    if ($action->delComment($data['comment_id'])){
+                        $response->write(json_encode(array(
+                            "status" => 200
+                        )));
+                    }
+                }
+            
+            } else {
+                $home = new retriveHome($AllowData->username);
+                $home->email = $AllowData->email;
+                $home->username = $AllowData->username;
+                $home->__prepare();
+                $response->write($home->home);
+            }
+        } else {
+            header("Location: https://idea-maker.herokuapp.com/index.html?login", true, 301);
+            exit();
         }
-    }else{
-        header("Location: https://idea-maker.herokuapp.com/index.html?login", true, 301);
-        exit();
+    
+    } elseif ($request->isPut()) {
+        $opt = $argc['opt'];
+        $value = $argc['value'];
     }
      
 });
@@ -232,74 +283,109 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
     $allowMe        = new Loyal;
     $AllowData      = $allowMe->isAllow($token);
 
-    if ($AllowData != FALSE){
-
-        if($data['status'] == 200){
-            $profile = new retriveProfile($AllowData->username);
-            $profile->email = $AllowData->email;
-            $profile->username = $AllowData->username;
-            $profile->user_id = $AllowData->id;
-            $profile->__prepare();
-            $response->write($profile->profile);
-
-        }else if ($data['status'] == 300) {
-            $upDate = new UpdateProfile();
-            $upDate->username = $AllowData->username;
-            $upDate->user_id = $AllowData->id;
-            $upDate->email    = $data['data']['email'];
-            $upDate->phone    = $data['data']['phone'];
-            $upDate->fname    = $data['data']['first_name'];
-            $upDate->lname    = $data['data']['last_name'];
-            $upDate->gender   = $data['data']['gender'];
-            $upDate->country  = $data['data']['country'];
-            $upDate->town     = $data['data']['town'];
-            $upDate->summary  = $data['data']['summary'];
-            $upDate->date  = $data['data']['date'];
 
 
-            if($upDate->PersonalDataUpdate() == TRUE){
-                $upDate->__prepare();
-                $response->write($upDate->profile);
 
-            }else{
-                echo($upDate->error);
+    if ($request->isPost()) {
+        $data = $request->getParsedBody();
+        $token          = $data['jwt'];
+        $allowMe        = new Loyal;
+        $AllowData      = $allowMe->isAllow($token);
 
-            }
+        if ($AllowData != FALSE){
 
+            if (isset($data['option'])) {
+                $opt = $data['option'];
+                // if ($opt == "like"){
 
+                // } elseif ($opt == "comment"){
+
+                // } elseif ($opt == "post"){
+
+                // } elseif ($opt == "delete"){
+
+                // } else {
+
+                // }
+            
+            } else {
+
+                if($data['status'] == 200){
+                    $profile = new retrieveProfile($AllowData->username);
+                    $profile->email = $AllowData->email;
+                    $profile->username = $AllowData->username;
+                    $profile->user_id = $AllowData->id;
+                    $profile->__prepare();
+                    $response->write($profile->profile);
         
-        }else if ($data['status'] == 320) {
-            $upDate = new UpdateProfile();
-            $upDate->username = $AllowData->username;
-            $upDate->user_id = $AllowData->id;
-            
-            if($upDate->WorkUpdate($data) == TRUE){
-                $upDate->__prepare();
-                $response->write($upDate->profile);
-
-            }else{
-                echo($upDate->error);
-
+                }else if ($data['status'] == 300) {
+                    $upDate = new UpdateProfile();
+                    $upDate->username = $AllowData->username;
+                    $upDate->user_id = $AllowData->id;
+                    $upDate->email    = $data['data']['email'];
+                    $upDate->phone    = $data['data']['phone'];
+                    $upDate->fname    = $data['data']['first_name'];
+                    $upDate->lname    = $data['data']['last_name'];
+                    $upDate->gender   = $data['data']['gender'];
+                    $upDate->country  = $data['data']['country'];
+                    $upDate->town     = $data['data']['town'];
+                    $upDate->summary  = $data['data']['summary'];
+                    $upDate->date  = $data['data']['date'];
+        
+        
+                    if($upDate->PersonalDataUpdate() == TRUE){
+                        $upDate->__prepare();
+                        $response->write($upDate->profile);
+        
+                    }else{
+                        echo($upDate->error);
+        
+                    }
+        
+        
+                
+                }else if ($data['status'] == 320) {
+                    $upDate = new UpdateProfile();
+                    $upDate->username = $AllowData->username;
+                    $upDate->user_id = $AllowData->id;
+                    
+                    if($upDate->WorkUpdate($data) == TRUE){
+                        $upDate->__prepare();
+                        $response->write($upDate->profile);
+        
+                    }else{
+                        echo($upDate->error);
+        
+                    }
+        
+        
+                }else if ($data['status'] == 340) {
+                    $upDate = new UpdateProfile();
+                    $upDate->username = $AllowData->username;
+                    $upDate->user_id = $AllowData->id;
+                    
+                    if($upDate->unvirstyUpdate($data) == TRUE){
+                        $upDate->__prepare();
+                        $response->write($upDate->profile);
+        
+                    }else{
+                        echo($upDate->error);
+                    }
+                }
             }
 
-
-        }else if ($data['status'] == 340) {
-            $upDate = new UpdateProfile();
-            $upDate->username = $AllowData->username;
-            $upDate->user_id = $AllowData->id;
-            
-            if($upDate->unvirstyUpdate($data) == TRUE){
-                $upDate->__prepare();
-                $response->write($upDate->profile);
-
-            }else{
-                echo($upDate->error);
-
-            }
+        } else {
+            header("Location: https://idea-maker.herokuapp.com/index.html?login", true, 301);
+            exit();
         }
-    }else{
-        exit();
+    
+    } elseif ($request->isPut()) {
+        $opt = $argc['opt'];
+        $value = $argc['value'];
     }
+
+
+
      
 });
 

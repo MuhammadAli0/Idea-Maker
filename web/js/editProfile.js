@@ -53,12 +53,12 @@ function loadPage() {
                     // ShowAccountUpdateForm();
                 } else {
                     // on error/fail, tell the user he needs to login to show the account page
-                    window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "https://" + window.location.hostname + "?login";
                 }
             }
             catch (err) {
                 // on error/fail, tell the user he needs to login to show the account page
-                window.location.href = "https://" + window.location.hostname + "?login";
+                // window.location.href = "https://" + window.location.hostname + "?login";
             }
         }
     });

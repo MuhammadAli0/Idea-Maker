@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set('UTC');
+date_default_timezone_set('Africa/Cairo');
 
 
 class profileDB
@@ -48,7 +48,7 @@ class profileDB
 }
 
 
-class retriveProfile {
+class retrieveProfile {
 
 
     public $profile;
@@ -99,7 +99,7 @@ class retriveProfile {
 }
 
 
-class UpdateProfile extends retriveProfile
+class UpdateProfile extends retrieveProfile
 {
 
     private $conn;

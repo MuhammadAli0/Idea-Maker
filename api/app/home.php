@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Africa/Cairo');
 
 
 class homeDB{
@@ -42,6 +43,7 @@ class homeDB{
     }
 
 }
+
 class GetData{
 
     private $conn;
@@ -116,3 +118,105 @@ class retriveHome {
     }
 
 }
+
+class userActions extends retriveHome {
+
+    public $user_id ;
+    public $post_id ;
+    public $like_id ;
+    public $comment_id ;
+    private $conn;
+
+    function  __construct($user_id){
+        $DB = homeDB::getInstance();
+        $this->conn = $DB->conn;
+        $this->user_id = $user_id;
+    }
+
+    public function postIdea($idea_form){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            $this->conn->exec("INSERT INTO Posts (user_id, caption, date_created)
+                VALUES(
+                    '$this->user_id', 
+                    '$idea_form', 
+                    '$curentDate'
+                    ");
+            return TRUE;
+
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+
+    }
+
+    public function like($post_id){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            $this->conn->exec("INSERT INTO likes (user_id, post_id, date_created)
+                VALUES(
+                    '$this->user_id', 
+                    '$post_id', 
+                    '$curentDate'
+                    ");
+            return TRUE;
+
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+    }
+
+    public function comment ($post_id, $comment_form){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            $this->conn->exec("INSERT INTO Comments (post_id, user_id, content, date_created)
+                VALUES(
+                    '$post_id',
+                    '$this->user_id', 
+                    '$comment_form', 
+                    '$curentDate'
+                    ");
+            return TRUE;
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+
+    }
+
+    public function delIdea ($post_id){
+        try{
+            $this->conn->exec("DELETE FROM Posts WHERE post_id = '$post_id'");
+            return TRUE;
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+    }
+
+    public function delComment ($comment_id){
+        try{
+            $this->conn->exec("DELETE FROM Comments WHERE comment_id = '$comment_id'");
+            return TRUE;
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+
+    }
+
+    public function unLike ($post_id){
+        try{
+            $this->conn->exec("DELETE FROM Comments WHERE user_id = '$this->user_id' AND post_id = '$post_id'");
+            return TRUE;
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+
+    }
+    
+
+    function __destruct(){
+    }
+
+
+
+}
+
