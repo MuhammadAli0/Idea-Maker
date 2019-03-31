@@ -16,7 +16,7 @@ $app->post('/register', function($request, $response){
     $inputData['phone']     = filter_var($data['phone'],    FILTER_SANITIZE_STRING);
     $inputData['country']   = filter_var($data['country'],  FILTER_SANITIZE_STRING);
     $inputData['town']      = filter_var($data['town'],     FILTER_SANITIZE_STRING);
-    $inputData['password']  = filter_var($data['password'][0], FILTER_SANITIZE_STRING);
+    $inputData['password']  = filter_var($data['password'], FILTER_SANITIZE_STRING);
     $inputData['type']      = filter_var($data['type'],     FILTER_SANITIZE_STRING);
     
     $register = DataHandeler::getInstance();
@@ -212,24 +212,24 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $re
 
             if (isset($data['option'])) {
                 $opt = $data['option'];
-                $action = new  userActions($AllowData->user_id);
+                $action = new  userActions($AllowData->id);
 
                 if ($opt == 2 ){
-                    if ($action->like($data['post_id'])){
+                    if ($action->like($data['data']['post_id'])){
                         $response->write(json_encode(array(
                             "status" => 200
                         )));
                     }
 
                 } elseif ($opt == 10 ){
-                    if ($action->comment($data['post_id'])){
+                    if ($action->comment($data['data']['post_id'], $data['data']['form'])){
                         $response->write(json_encode(array(
                             "status" => 200
                         )));
                     }
                     
                 } elseif ($opt == 50 ){
-                    if ($action->postIdea($data['idea-form'])){
+                    if ($action->postIdea($data)){
                         $response->write(json_encode(array(
                             "status" => 200
                         )));
@@ -243,7 +243,7 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $re
                     }
 
                 } elseif ($opt ==  150 ) {
-                    if ($action->unLike($data['post_id'])){
+                    if ($action->unLike($data['data']['post_id'])){
                         $response->write(json_encode(array(
                             "status" => 200
                         )));
@@ -254,12 +254,52 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $re
                             "status" => 200
                         )));
                     }
+                } elseif ($opt == 250) {
+                    $svData = new GetData;
+                    $rvData = $svData->GetComments($data['data']['post_id']);
+                    if ($rvData){
+                        $response->write(json_encode(array(
+                            "status" => 200,
+                            "data" => $rvData
+                        )));
+                    }
+                } elseif ($opt == 300) {
+                    $svData = new GetData;
+                    $rvvData = $svData->GetName($data['user_id']);
+                    if ($rvvData){
+                        $response->write(json_encode(array(
+                            "status" => 200,
+                            "name" => $rvvData
+                        )));
+                    }
+                }elseif ($opt == 600) {
+                    $directory = $this->get('upload_directory');
+                    $uploadedFiles = $request->getUploadedFiles();
+                    $uploadedFile = $uploadedFiles['profile_pic'];
+
+                    if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+
+                        $filename = moveUploadedFile($directory, $uploadedFile);
+                        $response->write('uploaded ' . $filename . '<br/>');
+                    }
+                
+
+                    // if ($profile_pic->getError() === UPLOAD_ERR_OK) {
+                    //     $uploadFileName = $profile_pic->getClientFilename();
+                    //     $type = $profile_pic->getClientMediaType();
+                    //     $name = md5($AllowData->id);
+                    //     $profile_pic->moveTo("/var/www/html/Idea-Maker/web/images/resources/$name");
+                    //     $picUrl = "http://localhost/web/images/resources/$name";
+                        
+                    // }
                 }
-            
+
+
             } else {
                 $home = new retriveHome($AllowData->username);
                 $home->email = $AllowData->email;
                 $home->username = $AllowData->username;
+                $home->user_id = $AllowData->id;
                 $home->__prepare();
                 $response->write($home->home);
             }
@@ -371,7 +411,40 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
                     }else{
                         echo($upDate->error);
                     }
-                }
+                } else if ($data['status'] == 777) {
+                    $upDate = new UpdateProfile();
+                    $upDate->user_id = $AllowData->id;
+                    
+                    if($upDate->summaryUpdate($data) == TRUE){
+                        
+                        $response->write(1);
+        
+                    }else{
+                        $response->write(0);
+                    }
+                } else if ($data['status'] == 111) {
+                    $upDate = new UpdateProfile();
+                    $upDate->user_id = $AllowData->id;
+                    
+                    if($upDate->UpdateLocation($data) == TRUE){
+                        
+                        $response->write(1);
+        
+                    }else{
+                        $response->write(0);
+                    }
+                } else if ($data['status'] == 789) {
+                    $upDate = new UpdateProfile();
+                    $upDate->user_id = $AllowData->id;
+                    
+                    if($upDate->UpdateSkills($data) == TRUE){
+                        
+                        $response->write(1);
+        
+                    }else{
+                        $response->write(0);
+                    }
+                } 
             }
 
         } else {
@@ -387,6 +460,69 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
 
 
      
+});
+
+
+$app->post('/upload', function( $request,  $response) {
+
+
+    if ($request->isPost()) {
+        $data = $request->getParsedBody();
+        $token          = $data['jwt'];
+        $allowMe        = new Loyal;
+        $AllowData      = $allowMe->isAllow($token);
+
+        if ($AllowData != FALSE){
+
+            if (isset($data['option'])) {
+                $opt = $data['option'];
+                $action = new  UpdateProfile();
+                $action->user_id = $AllowData->id;
+
+                if ($opt == 600) {
+
+                    $directory = $this->get('upload_directory');
+                    $uploadedFiles = $request->getUploadedFiles();
+
+                    // handle single input with single file upload
+                    $uploadedFile = $uploadedFiles['profile_pic'];
+                    if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                        // $filename = moveUploadedFile($directory, $uploadedFile);
+                        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+                        $basename = bin2hex(random_bytes(8));
+                        $filename = sprintf('%s.%0.8s', md5($AllowData->id), $extension);
+                        $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+                        if ($action->SetLinkToDb('/images/profile/' . $filename)){
+                            $link = '/images/profile/' . $filename;
+                            $response->write(json_encode(array(
+                            'status' => 200,
+                            'link' => $link
+                            )));
+                        } 
+                    }
+
+
+                    // // handle multiple inputs with the same key
+                    // foreach ($uploadedFiles['example2'] as $uploadedFile) {
+                    //     if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                    //         $filename = moveUploadedFile($directory, $uploadedFile);
+                    //         $response->write('uploaded ' . $filename . '<br/>');
+                    //     }
+                    // }
+
+                    // handle single input with multiple file uploads
+                    // foreach ($uploadedFiles['example3'] as $uploadedFile) {
+                    //     if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                    //         $filename = moveUploadedFile($directory, $uploadedFile);
+                    //         $response->write('uploaded ' . $filename . '<br/>');
+                    //     }
+                    // }
+
+                }
+            }
+        }
+    }
+
 });
 
 

@@ -20,8 +20,8 @@ body{
     color: #fff;
     padding-top: 20px;
     border-bottom: 1px solid #ffffff3b;
-    padding-top: 30px;
-    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-bottom: 15px;
 }
  .ulnavbar{
     list-style-type: none;
@@ -38,7 +38,7 @@ body{
     color: #fff;
     margin: 9px;
     font-size: 17px;
-    padding: 32px 0 31px 0;
+    padding: 32px 0 26px 0;
 }
 .ulnavbar li a:hover{
     border-bottom: 1px solid;
@@ -61,9 +61,16 @@ body{
     box-shadow: 0px 0px 3px 0px #337ab7;
     outline: none;
 }
+.homehov{
+    color: #00c5f3;
+}
 .buttonnav{
     display: none;
     font-size: 50px;
+}
+.logo1{
+    margin-top: -10px;
+    margin-bottom: -7px;
 }
                                 /* F navbar */
 .carousel-inner{
@@ -81,31 +88,46 @@ body{
 .scndsctin p{
     font-size: 18px;
 }
-.fa-phoenix-framework{
-    font-size: 45px;
-}
-.derrentsec .fa-phoenix-framework{
-    color: #53FFBD;
-}
-.derrentsec h3{
-    color: #53FFBD;
+
+
+.scndsctin h3{
+    color: #00c5f3;
 }
                                 /*f section2*/
 
                                 /* S featured work*/
 .featured{
-    background-color: #1B2631;
+    /*background-color: #1B2631;*/
+    background-image: url("../img/jeshoots-com-219388-unsplash.jpg");
     color: white;
+    background-size: :50% ;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: -webkit-fill-available;
     text-align: center;
+    -webkit-clip-path: polygon(0 35%, 100% 0%, 100% 61%, 0% 100%);
+    clip-path: polygon(0 15%, 100% 0%, 100% 80%, 0% 100%);
 }  
-.featured p{
-    font-size: 18px;
-}     
-.featured img{
-    margin-left: px;
-    margin-bottom: 50px;
-    width: 100%;
+.backgr{
+        height: -webkit-fill-available;
+    background-color: #1c2732;
+    opacity: 0.3;
 }
+.featured .textdiv{
+    padding-top: 22%;
+}
+.featured h2{
+    color: white;
+    font-weight: 900;
+    margin-bottom: 20px;
+    opacity: 1;
+}
+.featured p{
+    font-weight: 800;
+    font-size: 27px;
+    opacity: 1;
+}     
+
                                 /* F featured work*/
                                 
                                 /*S about */
@@ -115,7 +137,10 @@ body{
 }
 .about h2{
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    font-weight: 900;
+    color: #10bce2;
 }
 .about img{
     width: 25%;
@@ -125,8 +150,8 @@ body{
 }
 .about div h3{
     margin-top: 29px;
-    font-size: 40px;
-    color: #53FFBD;
+    font-size: 35px;
+    color: #10bce2;
 }
 .about div p{
     font-size: 18px;
@@ -149,19 +174,67 @@ body{
 .contpading{
     padding-top: 76px; 
 }
+
                                  /*F section4 */
                                     
-                                    /* S department*/
-.department{
+                                    /* S services*/
+.services{
     margin: 0;
     text-align: center;
 }
-.department img{
-    width: 100%;
-    border-radius: 50%;
-    margin: 25px 0 25px 0;
+.services h1{
+    margin: 15px 0 30px 0;
+    color: #10bce2;
 }
-                                    /* F department */
+.services h3{
+    margin-top: 0;
+    padding-top: 40%;
+    opacity: 1;
+    font-weight: 800;
+    color: #00c5f3;
+}
+.services p{
+    margin-top: 0;
+    padding-top: 15%;
+    opacity: 1;
+    font-size: 20px;
+}
+.services .services1{
+    background-image: url("../img/Contact.jpg");
+    height: 550px;
+    color: #fff;
+    padding:  0 ;
+    background-size: 97%;
+    background-repeat: no-repeat;
+}
+.services .services2{
+    background-image: url("../img/rights.jpg");
+    height: 550px;
+    color: #fff;
+    padding:  0 ;
+    background-size: 97%;
+    background-repeat: no-repeat;
+}
+.services .services3{
+    background-image: url("../img/Community.jpg");
+    height: 550px;
+    color: #fff;
+    padding:  0 ;
+    background-size: 97%;
+    background-repeat: no-repeat;
+}
+.containerpadding{
+    padding-bottom:185px ;
+    margin-top: 50px;
+}
+.services .backgco{
+    background-color: #000;
+    opacity: .5;
+    width: 97%;
+    padding: 15px;
+    height: 100%;
+}
+                                    /* F services */
 
                                     /* S contactus */
 .contactus{
@@ -173,6 +246,7 @@ body{
     text-align: center;
     color: #fff;
     margin: 20px 0 30px 0;
+    font-size: 30px;
 }
 .name{
     position: relative;
@@ -397,19 +471,19 @@ border-radius: 20px;
 }
 .co{
     position: absolute;
-    z-index: 100;
-    /* text-align: center; */
-    top: 38%;
-    left: 32%;
+    z-index: 88;
+    /*text-align: center;*/
+    top: 35%;
+    left: 40%;
     color: #fff;
 }
-.co p{
+}
+.co h1 p{
     margin: 0 0 10px;
     color: #da5d5d;
-    font-size: 35px;
+    font-size: 50px;
     text-align: center;
     font-weight: bold;
-    font-family: Algerian;
 }
 .co span{
         color: #1c2732;
@@ -505,9 +579,7 @@ border-radius: 20px;
     clip-path: polygon(100% 0%, -2% 91%, 100% 107%);
     margin-top: -200px;
 }
-.container{
-    padding-bottom:185px ;
-}
+
 .black1 {
     width: 100%;
     height: 10vw;
@@ -527,8 +599,12 @@ border-radius: 20px;
 .cont{
     padding-bottom: 0;
 }
+                            /*------------------ s sec2 ----------------*/
 .sec2{
     color: #273540;
+}
+.sec2 img{
+    width:39%; 
 }
 a:hover , .ho:hover{
     color:#337ab7 ;
@@ -536,6 +612,8 @@ a:hover , .ho:hover{
 .face:hover{
     color: #3b5999;
 }
+                            /*------------------ s sec2 ----------------*/
+
 .instagram:hover{
 border-radius: 7px;
     color: rgba(255,219,128,1);
@@ -627,6 +705,9 @@ border-radius: 7px;
         background-repeat: no-repeat;
 
     }
+.featured .textdiv {
+    padding-top: 50%;
+}
 .carousel-inner{
     height: auto;
 }
@@ -666,8 +747,8 @@ border-radius: 7px;
 @media (min-width:376px) and (max-width:600px ){
 .co{
     position: absolute;
-    top: 73px;
-    left: 95px;
+    top: 101px;
+    left: 120px;
     background-position: center;
     background-size: cover;
     animation-name: bg;
@@ -677,7 +758,7 @@ border-radius: 7px;
     z-index: 15;
 }
 .co p{
-    font-size: 20px
+    font-size: 30px
 }
 .co span {
     color: #1c2732;
@@ -743,6 +824,18 @@ border-radius: 7px;
 .eyeopen2{
     right: 4%;
     top: 15%;
+}
+.featured .textdiv {
+    padding-top: 55%;
+}
+.featured .textdiv p{
+    line-height: 1.2
+}
+.services .services2 {
+    margin-bottom: 8px;
+}
+.services .services1 {
+    margin-bottom: 8px;
 }
 }
 @media (min-width:601px) and (max-width:768px ){

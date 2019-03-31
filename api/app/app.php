@@ -9,9 +9,10 @@ require __DIR__ . '/home.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use Slim\Container;
+
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Http\UploadedFile;
 use \Firebase\JWT\JWT;
 
 // Create and configure Slim app
@@ -20,6 +21,10 @@ $config = ['settings' => [
     'displayErrorDetails' => true,
 ]];
 $app = new \Slim\App($config);
+$container = $app->getContainer();
+$container['upload_directory'] = __DIR__ . '/../../web/images/profile';
+
+
 date_default_timezone_set('Africa/Cairo');
 
 
@@ -649,15 +654,15 @@ class Activation
 
 class DataHandeler extends Register
 {
-    private $host = 'db4free.net';
-    private $MySqlUsername = 'ideamakeruser';
-    private $MySqlPassword = '23243125';
-    private $DBname        = 'ideamakerdb';
-    
     // private $host = 'db4free.net';
-    // private $MySqlUsername = 'root';
+    // private $MySqlUsername = 'ideamakeruser';
     // private $MySqlPassword = '23243125';
-    // private $DBname        = 'mydb';
+    // private $DBname        = 'ideamakerdb';
+    
+    private $host = '127.0.0.1';
+    private $MySqlUsername = 'root';
+    private $MySqlPassword = '23243125';
+    private $DBname        = 'mydb';
 
     public $conn;
 

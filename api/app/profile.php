@@ -4,16 +4,16 @@ date_default_timezone_set('Africa/Cairo');
 
 class profileDB
 {
-    private $host = 'db4free.net';
-    private $MySqlUsername = 'ideamakeruser';
-    private $MySqlPassword = '23243125';
-    private $DBname        = 'ideamakerdb';
+    // private $host = 'db4free.net';
+    // private $MySqlUsername = 'ideamakeruser';
+    // private $MySqlPassword = '23243125';
+    // private $DBname        = 'ideamakerdb';
 
     
-    // private $host = '127.0.0.1';
-    // private $MySqlUsername = 'root';
-    // private $MySqlPassword = '23243125';
-    // private $DBname        = 'mydb';
+    private $host = '127.0.0.1';
+    private $MySqlUsername = 'root';
+    private $MySqlPassword = '23243125';
+    private $DBname        = 'mydb';
 
     public $conn;
 
@@ -64,6 +64,7 @@ class retrieveProfile {
     public $gender;
     public $date;
     public $user_id;
+    public $skills;
 
 
     public function __prepare(){
@@ -76,6 +77,8 @@ class retrieveProfile {
         $this->profile = json_encode(array(
             "user_id" => $data['user_id'],
             "username" => $this->username,
+            "profile_pic" => $data['profile_picture_url'],
+            "skills" => $data['skills'],
             "personal" => array(
                 "fname"     => $data['fname'],
                 "lname"     => $data['lname'],
@@ -90,6 +93,8 @@ class retrieveProfile {
             ),
             "work"  => $rData,
             "University" => $unData,
+            "posts" => (array) $GetDataX->GetPosts($this->user_id),
+            "likes" => (array) $GetDataX->GetLikes($this->user_id),
             "accType"  => $data['uType'],
             "EnterdDate" => $data['cDateTime']
 
@@ -111,6 +116,48 @@ class UpdateProfile extends retrieveProfile
         $DB = profileDB::getInstance();
         $this->conn = $DB->conn;
     }
+
+    public function summaryUpdate($data){
+        try{
+            $summary = $data['data']['summary'];
+            $dlp = $this->conn->prepare(" UPDATE users set summary = '$summary' WHERE user_id = '$this->user_id'");
+            $dlp->execute();
+            return true;
+        
+        } catch (ERROR $Er){
+            return FALSE;
+        }
+
+    }
+
+    public function UpdateSkills($data){
+        try{
+            $skills = $data['data']['skills'];
+            $skills = json_encode( explode( ';', $skills) );
+            $dlp = $this->conn->prepare(" UPDATE users set skills = '$skills' WHERE user_id = '$this->user_id'");
+            $dlp->execute();
+            return true;
+        
+        } catch (ERROR $Er){
+            return FALSE;
+        }
+
+    }
+
+    public function UpdateLocation($data){
+        try{
+            $country = $data['data']['country'];
+            $town =  $data['data']['town'];
+            $dlp = $this->conn->prepare(" UPDATE users set country = '$country', town = '$town' WHERE user_id = '$this->user_id'");
+            $dlp->execute();
+            return true;
+        
+        } catch (ERROR $Er){
+            return FALSE;
+        }
+
+    }
+
 
     public function PersonalDataUpdate()
     {
@@ -150,25 +197,25 @@ class UpdateProfile extends retrieveProfile
             // $curentDate = date('Y-m-d H:i:s');
             $workName = $workData['data']['organization'];
             $position = $workData['data']['position'];
-            $expYear  = $workData['data']['expYear'];
+            $number  = $workData['data']['number'];
             $sDate    = $workData['data']['sDate'];
             $eDate    = $workData['data']['eDate'];
             $summary  = $workData['data']['summary'];
 
-            $dlb = $this->conn->prepare("SELECT work_id FROM work WHERE user_id = '$this->user_id'");
+            $dlb = $this->conn->prepare("SELECT work_id FROM work WHERE user_id = '$this->user_id' and work_id_user_id = '$number'");
                 $dlb->execute();
                 if($dlb->rowCount() > 0){
                     $dddata     = $dlb->fetch(PDO::FETCH_ASSOC);
                     $dddata = (array) $dddata;
                     $dddata = $dddata['work_id'];
 
-                    $dlp = $this->conn->prepare("INSERT INTO work (work_id, user_id, work_name, position, exp_Years, started_date, end_date, summary) 
-                VALUES ('$dddata', '$this->user_id', '$workName', '$position', '$expYear',  '$sDate', '$eDate', '$summary')
+                    $dlp = $this->conn->prepare("INSERT INTO work (work_id, user_id, work_name, position, work_id_user_id, started_date, end_date, summary) 
+                VALUES ('$dddata', '$this->user_id', '$workName', '$position', '$number',  '$sDate', '$eDate', '$summary')
                 ON DUPLICATE KEY UPDATE
                 user_id   = '$this->user_id',
                 work_name = '$workName', 
                 position  = '$position', 
-                exp_Years = '$expYear',
+                work_id_user_id = '$number',
                 started_date = '$sDate',
                 end_date  =  '$eDate',
                 summary = '$summary'
@@ -179,12 +226,12 @@ class UpdateProfile extends retrieveProfile
 
                 return true;
                 }else{
-                    $dlp = $this->conn->prepare("INSERT INTO work (user_id, work_name, position, exp_Years, started_date, end_date, summary) 
-                VALUES ('$this->user_id', '$workName', '$position', '$expYear',  '$sDate', '$eDate', '$summary')
+                    $dlp = $this->conn->prepare("INSERT INTO work (user_id, work_name, position, work_id_user_id, started_date, end_date, summary) 
+                VALUES ('$this->user_id', '$workName', '$position', '$number',  '$sDate', '$eDate', '$summary')
                 ON DUPLICATE KEY UPDATE
                 work_name = '$workName', 
                 position  = '$position', 
-                exp_Years = '$expYear',
+                work_id_user_id = '$number',
                 started_date = '$sDate',
                 end_date  =  '$eDate',
                 summary = '$summary'
@@ -212,7 +259,6 @@ class UpdateProfile extends retrieveProfile
                 // $curentDate = date('Y-m-d H:i:s');
                 $university_name = $uData['data']['university_name'];
                 $college_degree  = $uData['data']['college_degree'];
-                $year            = $uData['data']['year'];
                 $start_study     = $uData['data']['start_study'];
                 $end_study       = $uData['data']['end_study'];
                 $summary         = $uData['data']['summary'];
@@ -224,12 +270,11 @@ class UpdateProfile extends retrieveProfile
                     $dddata = (array) $dddata;
                     $dddata = $dddata['uni_id'];
 
-                    $dlp = $this->conn->prepare("INSERT INTO University (uni_id, user_id, uni_name, study_field, year, startDate, endDate, summary) 
-                    VALUES ('$dddata', '$this->user_id', '$university_name', '$college_degree', '$year',  '$start_study', '$end_study', '$summary')
+                    $dlp = $this->conn->prepare("INSERT INTO University (uni_id, user_id, uni_name, study_field, startDate, endDate, summary) 
+                    VALUES ('$dddata', '$this->user_id', '$university_name', '$college_degree',  '$start_study', '$end_study', '$summary')
                     ON DUPLICATE KEY UPDATE
                     uni_name = '$university_name', 
                     study_field  = '$college_degree', 
-                    year = '$year',
                     startDate = '$start_study',
                     endDate  =  '$end_study',
                     summary = '$summary'
@@ -239,12 +284,11 @@ class UpdateProfile extends retrieveProfile
                     return true;
 
                  }else{
-                    $dlp = $this->conn->prepare("INSERT INTO University (user_id, uni_name, study_field, year, startDate, endDate, summary) 
-                    VALUES ('$this->user_id', '$university_name', '$college_degree', '$year',  '$start_study', '$end_study', '$summary')
+                    $dlp = $this->conn->prepare("INSERT INTO University (user_id, uni_name, study_field, startDate, endDate, summary) 
+                    VALUES ('$this->user_id', '$university_name', '$college_degree',  '$start_study', '$end_study', '$summary')
                     ON DUPLICATE KEY UPDATE
                     uni_name = '$university_name', 
                     study_field  = '$college_degree', 
-                    year = '$year',
                     startDate = '$start_study',
                     endDate  =  '$end_study',
                     summary = '$summary'
@@ -262,8 +306,70 @@ class UpdateProfile extends retrieveProfile
 
     }
 
+    public function SetLinkToDb($link){
+     
+        try{
+            $dlp = $this->conn->prepare(" UPDATE users set profile_picture_url = '$link' WHERE user_id = '$this->user_id'");
+            $dlp->execute();
+            return true;
+        
+        } catch (ERROR $Er){
+            return FALSE;
+        }
+    }
 
 }
+
+
+// try {
+//     // $curentDate = date('Y-m-d H:i:s');
+//     $university_name = $uData['data']['university_name'];
+//     $college_degree  = $uData['data']['college_degree'];
+//     $start_study     = $uData['data']['start_study'];
+//     $end_study       = $uData['data']['end_study'];
+//     $summary         = $uData['data']['summary'];
+
+//     $dlb = $this->conn->prepare("SELECT uni_id FROM University WHERE user_id = '$this->user_id'");
+//     $dlb->execute();
+//     if($dlb->rowCount() > 0){
+//         $dddata     = $dlb->fetch(PDO::FETCH_ASSOC);
+//         $dddata = (array) $dddata;
+//         $dddata = $dddata['uni_id'];
+
+//         $dlp = $this->conn->prepare("UPDATE  University 
+//         set 
+//         uni_name = '$university_name', 
+//         study_field  = '$college_degree', 
+//         startDate = '$start_study',
+//         endDate  =  '$end_study',
+//         summary = '$summary'
+//         WHERE user_id = '$this->user_id' 
+//         and uni_id = '$dddata'");
+
+//         $dlp->execute();
+//         return true;
+
+//      }else{
+//         $dlp = $this->conn->prepare("INSERT INTO University (user_id, uni_name, study_field, year, startDate, endDate, summary) 
+//         VALUES ('$this->user_id', '$university_name', '$college_degree', '$year',  '$start_study', '$end_study', '$summary')
+//         ON DUPLICATE KEY UPDATE
+//         uni_name = '$university_name', 
+//         study_field  = '$college_degree', 
+//         startDate = '$start_study',
+//         endDate  =  '$end_study',
+//         summary = '$summary'
+//         ");
+
+//         $dlp->execute();
+//         return true;
+//     }
+
+        
+// } catch (PDOException $e) {
+//     $this->error = $e;
+//     return false;
+// }
+
 
 ?>
 

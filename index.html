@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="icon" href="img/if_2018_social_media_popular_app_logo_facebook_2895133.png" type="img/icon">
+	<link rel="icon" href="img/logo2.png" type="img/icon">
 
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
@@ -20,10 +20,24 @@
 	<script type="text/javascript" src="js/wow.js"></script>
 	<script type="text/javascript" src="js/js.js"></script>
 
-
-
 	<script>
-		
+		wow = new WOW({
+			animateClass: 'animated',
+			offset: 100,
+			callback: function (box) {
+				console.log("WOW: animating <" + box.tagName.toLowerCase() + ">")
+			}
+		});
+		wow.init();
+		document.getElementById('moar').onclick = function () {
+			var section = document.createElement('section');
+			section.className = 'section--purple wow fadeInDown';
+			this.parentNode.insertBefore(section, this);
+		};
+
+	</script>
+	<script>
+
 
 		$.fn.serializeObject = function () {
 
@@ -67,8 +81,9 @@
 			var expires = "expires=" + d.toUTCString();
 			document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 		}
-		
+
 	</script>
+
 </head>
 
 <body>
@@ -80,7 +95,7 @@
 			<div class="row">
 
 				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-					Ideal Idea Maker
+					<img class="logo1" src="img/logo.png">
 				</div>
 
 				<!-- 	dropdown menu for mobile -->
@@ -90,9 +105,9 @@
 							class="fas fa-bars"></i>
 						<span class="caret"></span></button>
 					<ul class="dropdown-menu">
-						<li><a href="#home" data-scroll="home">Home</a></li>
+						<li><a style="color: #00c5f3;" href="#home" data-scroll="home">Home</a></li>
 						<li><a href="#about" data-scroll="about">About</a></li>
-						<li><a href="#department" data-scroll="department">Department</a></li>
+						<li><a href="#services" data-scroll="services">services</a></li>
 						<li><a href="#ContactUs" data-scroll="ContactUs">ContactUs</a></li>
 						<li><a href="#" id="Registermob">Register</a></li>
 						<li><a href="#" id="SignInmob">SignIn</a></li>
@@ -103,21 +118,16 @@
 
 				<div class="nevmenu col-lg-6 col-md-6 col-sm-6 col-xs-9">
 					<ul class="ulnavbar">
-						<li><a href="#home" data-scroll="home">Home</a></li>
+						<li><a style="color: #00c5f3;" href="#home" data-scroll="home">Home</a></li>
 						<li><a href="#about" data-scroll="about">About</a></li>
-						<li><a href="#department" data-scroll="department">Department</a></li>
+						<li><a href="#services" data-scroll="services">services</a></li>
 						<li><a href="#ContactUs" data-scroll="ContactUs">ContactUs</a></li>
 						<li><a href="#" id="Register1">Register</a></li>
 						<li><a href="#" id="SignIn">SignIn</a></li>
 					</ul>
 				</div>
 
-				<div class="search col-lg-4 col-md-4 co-sm-3">
-					<div class="search">
-						<input type="" placeholder="Search" name="">
-						<a class="search-icon" href="#"> <i class="fas fa-search ico"></i></a>
-					</div>
-				</div>
+
 
 			</div>
 		</div>
@@ -126,21 +136,22 @@
 
 	<!-- S slider -->
 	<section id="home">
-		<!--
-			<div class="co">
+
+		<div class="co">
 			<div class="">
-				<h1>
-					<p class="wow bounceIn">Hello idea maker</p>
-					
-					<span
+				<h1 class="wow bounceIn">
+					<p class="wow bounceIn">Your Success</p>
+					<p class="wow bounceIn"> Begins with Us</p>
+
+					<!--	<span
 							class="txt-rotate"
 							data-period="2000"
-							data-rotate='[ "an idea maker.", "a developer.", "an investor."]'></span>
+							data-rotate='[ "an idea maker.", "a developer.", "an investor."]'></span>-->
 				</h1>
 			</div>
 
 		</div>
--->
+
 
 		<div class="">
 			<div class="">
@@ -187,72 +198,6 @@
 		</svg>
 	</section>
 	<!-- f slider -->
-	<!-- S section2 -->
-	<section class="wow fadeInDown">
-		<div class="container sec2">
-			<div class="row">
-
-				<div class="scndsctin col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<i class="fab fa-phoenix-framework"></i>
-					<div>
-						<h3>framework</h3>
-						<p>hello to frameworkhello to frameworkhello to frameworkhello to frameworkhello to framework
-						</p>
-					</div>
-				</div>
-				<div class="scndsctin derrentsec col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<i class="fab fa-phoenix-framework"></i>
-					<div>
-						<h3>framework</h3>
-						<p>hello to frameworkhello to frameworkhello to frameworkhello to frameworkhello to framework
-						</p>
-					</div>
-				</div>
-				<div class="scndsctin col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<i class="fab fa-phoenix-framework"></i>
-					<div>
-						<h3>framework</h3>
-						<p>hello to frameworkhello to frameworkhello to frameworkhello to frameworkhello to framework
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-	</section>
-
-	<!-- F  section2    -->
-
-	<!-- S  featured work    -->
-	<section class="featured wow animated fadeInUp">
-		<svg class="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-			<polygon fill="#1B2631" points="0,100 100,0 100,100" />
-		</svg>
-		<div class="container">
-
-			<div class="row">
-
-				<div>
-					<h2>Featured Work</h2>
-					<p>hello to frameworkhello to frameworkhello to frameworkhello to frameworkhello to framework</p>
-					<div>
-						<img src="img/IMG-20190225-WA0005.jpg">
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-
-
-	</section>
-
-	<svg class="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95 95" preserveAspectRatio="none">
-		<polygon fill="white" points="-10,91 100,0 100,100" />
-	</svg>
-
-	<!-- F featured work    -->
 
 	<!-- S about  project    -->
 	<section id="about" class="about wow animated fadeInDown">
@@ -263,13 +208,17 @@
 
 		<div class="container">
 			<div class="row">
-				<h2>About Project</h2>
+				<h2>About Ideal idea maker</h2>
 				<img src="img/IMG-20190225-WA0008.jpg">
 				<div>
 					<h3>A link</h3>
-					<p>between several member , to improve and develop new ideas by the idea owner to share this idea .
-						and
-						talented student working on their ideas . investors to invest on it .</p>
+					<p>our website is basically about transforming someone's idea into a real project by connecting 3
+						main parts
+						together which are
+						The idea maker who will share his ideas on the website and the Developer who will work on the
+						transformation
+						and The investor who will share the project and spend money in order to have a great outcome in
+						return.</p>
 				</div>
 			</div>
 		</div>
@@ -277,24 +226,39 @@
 	</section>
 	<!-- f about  project    -->
 
-	<!-- S  section4    -->
-	<section class="section4 wow animated fadeInUp">
-		<svg class="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-			<polygon fill="#1B2631" points="0,100 100,0 100,100" />
-		</svg>
-		<div class="container contpading">
+
+
+	<!-- S section2 -->
+	<section class="wow fadeInDown">
+		<div class="container sec2">
 			<div class="row">
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<a href=""><i class="fas fa-users"></i></a>
-					<h2 style="color: #fff;">Communcate</h2>
+
+				<div class="scndsctin col-lg-4 col-md-4 col-sm-6 col-xs-12">
+					<!--<i class="fab fa-phoenix-framework"></i>-->
+					<img src="img/dev.png">
+					<div>
+						<h3>Idea maker</h3>
+						<p>that concept refers to anyone who has new ideas for
+							creating and starting a new project .</p>
+					</div>
 				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<a href=""><i class="fas fa-cloud"></i></a>
-					<h2 style="color: #fff;">Sharing</h2>
+				<div class="scndsctin derrentsec col-lg-4 col-md-4 col-sm-6 col-xs-12">
+					<!--<i class="fab fa-phoenix-framework"></i>-->
+					<img src="img/imaker.png">
+					<div>
+						<h3>Developer</h3>
+						<p>the person who works on developing and transforming
+							the idea to a real project.</p>
+					</div>
 				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<a href=""><i class="far fa-check-square"></i></a>
-					<h2 style="color: #fff;">Easi</h2>
+				<div class="scndsctin col-lg-4 col-md-4 col-sm-6 col-xs-12">
+					<!--<i class="fab fa-phoenix-framework"></i>-->
+					<img src="img/investor.png">
+					<div>
+						<h3>Investor</h3>
+						<p>the person who starts investing any idea they like and starts to share
+							ads about that idea to start making money.</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -302,35 +266,89 @@
 
 	</section>
 
-	<svg class="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95 95" preserveAspectRatio="none">
-		<polygon fill="white" points="-11,96 100,0 100,100" />
-	</svg>
-	<!-- f section4    -->
 
-	<!-- S department  -->
-	<section id="department" class="department wow animated fadeInDown">
-		<svg class="black3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-			<polygon fill="white" points="0,100 100,0 100,100" />
-		</svg>
-		<div class="container">
-			<div class="row">
-				<h1>Department</h1>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<img src="img/IMG-20190225-WA0007.jpg">
-					<h3>department1</h3>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<img src="img/IMG-20190225-WA0007.jpg">
-					<h3>department2</h3>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<img src="img/IMG-20190225-WA0007.jpg">
-					<h3>department3</h3>
+	<!-- F  section2    -->
+
+	<!-- S  featured work    -->
+	<section class="featured wow animated fadeInUp">
+		<div class="backgr">
+			<div class="container">
+
+				<div class="row">
+
+					<div class="textdiv">
+						<p>“Success is not final , failure is not fatal ,
+
+							It is the courage to continue that counts.”</p>
+						<h2> Winston Churchill</h2>
+
+					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-	<!-- F department  -->
+
+	<!-- F featured work    -->
+
+	<!-- S services  -->
+	<section id="services" class="services wow animated fadeInDown">
+
+		<div class="container containerpadding">
+			<div class="row">
+				<h1>Our Services</h1>
+
+				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 services1">
+					<div class="backgco">
+						<!--<img src="img/IMG-20190225-WA0007.jpg">-->
+						<div>
+							<h3>Easy Contact </h3>
+							<p>
+								Here comes the role of site <a href=""> Ideal Idea Maker</a>
+								Is a site that provides an opportunity to communicate between
+								( Investors ,Idea makers and programmers ) easily and rapidly
+
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 services2">
+					<div class="backgco">
+						<!--<img src="img/IMG-20190225-WA0007.jpg">-->
+						<div>
+							<h3>Copyright and intellectual property©</h3>
+							<p>
+								Similar to other intellectual property rights
+								Encourage legal protection for new innovations
+								Presenting the idea, recording it and establishing its ownership rights
+								Protect the ideas from plagiarism
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 services3">
+					<div class="backgco">
+						<!--<img src="img/IMG-20190225-WA0007.jpg">-->
+						<div>
+							<h3>Community</h3>
+							<p>
+								This project may give millions of ideas that would change our society for the better and
+								develop it and
+								that will reflect on the human and improve the environment and community
+								Other goals are linked to the lack of new ideas in the investment market and this is
+								what will be
+								treated by the "Idea maker"
+
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</section>
+	<!-- F services  -->
 
 	<!-- S contactus  -->
 	<section id="ContactUs" class="contactus wow animated infinite fadeInUp">
@@ -339,9 +357,9 @@
 		</svg>
 		<div class="container cont">
 			<div class="row">
-				<h1>Contact Us</h1>
 
 				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+					<h1>GET IN TOUCH</h1>
 					<form>
 						<div class="name">
 							<i class="fas fa-user"></i>
@@ -353,13 +371,15 @@
 						</div>
 						<div class="massage">
 							<i class="fas fa-comment"></i>
-							<textarea placeholder="masseg"></textarea>
+							<textarea placeholder="message"></textarea>
 						</div>
 						<input id="btnsub" type="submit" name="send" class="btn btn-primary btnsub">
 					</form>
 				</div>
 
 				<div style="width: 350px" class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+					<h1>GET SOCIAL</h1>
+
 					<ul>
 						<li><a class="face" href=""><i class="fab fa-facebook-f"></i></a></li>
 						<li><a href=""><i class="instagram fab fa-instagram"></i></a></li>
@@ -369,12 +389,12 @@
 				</div>
 
 				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<h1>Ideal Idea Maker</h1>
+					<img src="img/logo2.png" style="width: 100%">
 				</div>
 			</div>
 		</div>
 		<div>
-			<p class="copyright">copyright &copy; design and develovp by <a href="">idea maker</a></p>
+			<p class="copyright">© 2019 All rights reserved. <a href=""> By IDEAL IDEA MAKER</a></p>
 		</div>
 	</section>
 	<!-- F contactus  -->
@@ -382,7 +402,8 @@
 	<!-- S up  -->
 
 	<section class="up">
-		<div><a href=""> <img src="img/up-arrow.png"></a></div>
+		<div><a href=""> <img src="img/up-arrow.png"></a>
+		</div>
 	</section>
 
 	<!-- F up  -->
@@ -748,19 +769,40 @@
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 								<li class="registinput">
-									<input id="veer" type="password" name="password" placeholder="verify" required="">
+									<input id="veer" type="password" name="confirm_password" placeholder="verify" required="">
 									<span class='glyphicon glyphicon-eye-open eyeopen' id="eye"></span>
 								</li>
 							</div>
 
 						</div>
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-							<li><input id="btnsub" type="submit" name="send" class="btn btn-primary btnsub"></li>
+							<li><input id="btnsub" onclick=validatePassword() type="submit" name="send"
+									class="btn btn-primary btnsub"></li>
 						</div>
 					</form>
 				</ul>
 			</div>
 		</div>
+		<script>
+				var password = document.getElementById("pwd")
+			, confirm_password = document.getElementById("veer");
+
+		function validatePassword() {
+			if (password.value.length > 7){
+				password.setCustomValidity('');
+				if (password.value != confirm_password.value) {
+					confirm_password.setCustomValidity("Passwords Don't Match");
+				} else {
+					confirm_password.setCustomValidity('');
+				}
+			} else {
+				password.setCustomValidity("password should be  at leas lenght 8 ");
+			}
+			password.onchange = validatePassword;
+			confirm_password.onkeyup = validatePassword;
+		}
+
+		</script>
 	</section>
 	<!-- F popup register  -->
 
@@ -828,7 +870,6 @@
 
 
 
-
 	<!-- s script for regist -->
 	<script type="text/javascript">
 		$("#Register1").click(function () {
@@ -862,11 +903,11 @@
 						usernameAlert = '';
 						emailAlert = '';
 						phoneAlert = '';
-						if (responceData['username'] != null) {
+						if (responceData['username'] === "Already in use") {
 							usernameAlert = "<div class='alert alert-danger'>You Username Already in Use.</div>";
-						} if (responceData['email'] != null) {
+						} if (responceData['email'] === "Already in use") {
 							emailAlert = "<div class='alert alert-danger'>You Email Address Already in Use.</div>";
-						} if (responceData['phone'] != null) {
+						} if (responceData['phone'] === "Already in use") {
 							phoneAlert = "<div class='alert alert-danger'>You Phone Number Already in Use.</div>";
 
 						} $('#response0').html(usernameAlert + emailAlert + phoneAlert);
@@ -906,37 +947,37 @@
 			$("#passwodRecov").click(function () {
 				// $(".popup2").hide();
 				// $(".passRec").show(1000);
-				var htmlData = `		
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="text-center">
-							<h3><i class="fa fa-lock fa-4x"></i></h3>
-							<div id="recovryFrom">
-								<h2 class="text-center">Forgot Password?</h2>
+				var htmlData = `
 
-								<p>You can reset your password here.</p>
+				<div class="panel panel-default" style="background-color: #1b2631; border-color: #1b2631;">
+				<div class="panel-body" >
+					<div class="text-center" style="color: white;">
+						<h3><svg class="svg-inline--fa fa-lock fa-w-14 fa-4x" aria-hidden="true" data-prefix="fa" data-icon="lock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"></path></svg><!-- <i class="fa fa-lock fa-4x"></i> --></h3>
+						<div id="recovryFrom">
+							<h2 class="text-center">Forgot Password?</h2>
 
-								<div class="panel-body">
-									<div id="response2"> </div>
-									<form id="recovry-form" role="form" autocomplete="off" class="form" method="PUT">
-										<div class="form-group">
-											<div class="input-group">
-												<span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
-												<input id="email" name="email" placeholder="email address" class="form-control" type="email" required="">
-											</div>
+							<p>You can reset your password here.</p>
+
+							<div class="panel-body">
+								<div id="response2"> </div>
+								<form id="recovry-form" role="form" autocomplete="off" class="form" method="PUT">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
+											<input id="email" name="email" placeholder="email address" class="form-control" type="email" required="">
+																						</div>
 										</div>
 										<div class="form-group">
 											<div id="loading">
-												<input name="recover-submit" class="btn btn-lg btn-primary btn-block" value="Reset Password"
-													type="submit">
+												<input name="recover-submit" class="btn btn-lg btn-primary btn-block" value="Reset Password" type="submit">
+																						</div>
 											</div>
+																				</form>
+										<div>
 										</div>
-									</form>
-									<div>
 									</div>
-								</div>
-							</div>
-						</div>			`
+																		</div>
+							</div>			</div></div>			`
 				$('#content').html(htmlData);
 
 			});
@@ -996,7 +1037,7 @@
 						result = $.parseJSON(this.responseText)
 						if (result['status'] === 200) {
 							setCookie("jwt", result['jwt'], 1);
-							location.replace("/web");
+							location.replace("/web/");
 							$('#response').html("<div class='alert alert-success'>Successful login.</div>");
 						} else if (result['status'] === 122) {
 							$('#response').html("<div class='alert alert-danger'>Plice Validate your Account.</div>");
@@ -1036,6 +1077,7 @@
 			$(".popup2").show(1000);
 		});
 	</script>
+
 
 
 	<script>
@@ -1092,7 +1134,7 @@
 			// INJECT CSS
 			var css = document.createElement("style");
 			css.type = "text/css";
-			css.innerHTML = ".txt-rotate > .wrap { border-right: 0.08em solid #fff }";
+			css.innerHTML = ".txt-rotate > .wrap {border - right: 0.08em solid #fff }";
 			document.body.appendChild(css);
 		};
 	</script>
@@ -1114,38 +1156,14 @@
 		})();
 
 	</script>
-	<script type="text/javascript">
-		google_ad_client = "ca-pub-2783044520727903";
+	<script type="text/javascript">< !--
+			google_ad_client = "ca-pub-2783044520727903";
 		/* jQuery_demo */
 		google_ad_slot = "2780937993";
 		google_ad_width = 728;
 		google_ad_height = 90;
 //-->
 	</script>
-
-	<script>
-		wow = new WOW({
-			animateClass: 'animated',
-			offset: 100,
-			callback: function (box) {
-				console.log("WOW: animating <" + box.tagName.toLowerCase() + ">")
-			}
-		});
-		wow.init();
-
-		document.getElementById('moar').onclick = function () {
-			var section = document.createElement('section');
-			section.className = 'section--purple wow fadeInDown';
-			this.parentNode.insertBefore(section, this);
-		};
-
-	</script>
-
 </body>
-<script>var option = window.location.search.substring(1);
-    	if (option === 'login') {
-			$(".popup2").show(1000);
-			setCookie("jwt", "", 1);
-        	
-		}  </script>
+
 </html>
