@@ -654,15 +654,15 @@ class Activation
 
 class DataHandeler extends Register
 {
-    // private $host = 'db4free.net';
-    // private $MySqlUsername = 'ideamakeruser';
-    // private $MySqlPassword = '23243125';
-    // private $DBname        = 'ideamakerdb';
-    
-    private $host = '127.0.0.1';
-    private $MySqlUsername = 'root';
+    private $host = 'db4free.net';
+    private $MySqlUsername = 'ideamakeruser';
     private $MySqlPassword = '23243125';
-    private $DBname        = 'mydb';
+    private $DBname        = 'ideamakerdb';
+    
+    // private $host = '127.0.0.1';
+    // private $MySqlUsername = 'root';
+    // private $MySqlPassword = '23243125';
+    // private $DBname        = 'mydb';
 
     public $conn;
 
