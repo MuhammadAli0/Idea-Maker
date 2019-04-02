@@ -358,9 +358,9 @@
 		<div class="container cont">
 			<div class="row">
 
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+				<div id="contactUsFormHTMLDiv" class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
 					<h1>GET IN TOUCH</h1>
-					<form>
+					<form id="contactUsForm">
 						<div class="name">
 							<i class="fas fa-user"></i>
 							<input type="" name="name" placeholder="Name">
@@ -371,7 +371,7 @@
 						</div>
 						<div class="massage">
 							<i class="fas fa-comment"></i>
-							<textarea placeholder="message"></textarea>
+							<textarea name="msg" placeholder="message"></textarea>
 						</div>
 						<input id="btnsub" type="submit" name="send" class="btn btn-primary btnsub">
 					</form>
@@ -769,7 +769,8 @@
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 								<li class="registinput">
-									<input id="veer" type="password" name="confirm_password" placeholder="verify" required="">
+									<input id="veer" type="password" name="confirm_password" placeholder="verify"
+										required="">
 									<span class='glyphicon glyphicon-eye-open eyeopen' id="eye"></span>
 								</li>
 							</div>
@@ -784,23 +785,23 @@
 			</div>
 		</div>
 		<script>
-				var password = document.getElementById("pwd")
-			, confirm_password = document.getElementById("veer");
+			var password = document.getElementById("pwd")
+				, confirm_password = document.getElementById("veer");
 
-		function validatePassword() {
-			if (password.value.length > 7){
-				password.setCustomValidity('');
-				if (password.value != confirm_password.value) {
-					confirm_password.setCustomValidity("Passwords Don't Match");
+			function validatePassword() {
+				if (password.value.length > 7) {
+					password.setCustomValidity('');
+					if (password.value != confirm_password.value) {
+						confirm_password.setCustomValidity("Passwords Don't Match");
+					} else {
+						confirm_password.setCustomValidity('');
+					}
 				} else {
-					confirm_password.setCustomValidity('');
+					password.setCustomValidity("password should be  at leas lenght 8 ");
 				}
-			} else {
-				password.setCustomValidity("password should be  at leas lenght 8 ");
+				password.onchange = validatePassword;
+				confirm_password.onkeyup = validatePassword;
 			}
-			password.onchange = validatePassword;
-			confirm_password.onkeyup = validatePassword;
-		}
 
 		</script>
 	</section>
@@ -1164,6 +1165,49 @@
 		google_ad_height = 90;
 //-->
 	</script>
+	<!-- contact Us  -->
+	<script>
+
+		$(document).on('submit', '#contactUsForm', function () {
+
+			// get form data
+			var login_form = $(this);
+			var data = JSON.stringify(login_form.serializeObject());
+			// submit form data to api
+			var xhr = new XMLHttpRequest();
+			xhr.withCredentials = true;
+
+			xhr.addEventListener("readystatechange", function () {
+				if (this.readyState === 4) {
+					try {
+						console.log(this.responseText);
+						result = $.parseJSON(this.responseText)
+						if (result['status'] === 200) {
+							
+							$('#contactUsFormHTMLDiv').html("<div class='alert alert-success'>Successfuly Sent.</div>");
+						} else {
+							console.log(result);
+							// $('#response').html("<div class='alert alert-danger'>Plice Validate your Account.</div>");
+						}
+					}
+					catch (err) {
+						console.log(err);
+						// $('#response').html("<div class='alert alert-danger'>Unable to login, plice contact the admin.</div>");
+					}
+
+
+				}
+
+			});
+			xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/contactus");
+			xhr.setRequestHeader("content-type", "application/json");
+			xhr.setRequestHeader("cache-control", "no-cache");
+			xhr.send(data);
+			return false;
+		});
+
+	</script>
+
 </body>
 
 </html>

@@ -3,15 +3,15 @@ date_default_timezone_set('Africa/Cairo');
 
 
 class homeDB{
-    private $host = 'localhost';
-    private $MySqlUsername = 'root';
-    private $MySqlPassword = '23243125';
-    private $DBname        = 'mydb';
-
-    // private $host = '127.0.0.1';
+    // private $host = 'localhost';
     // private $MySqlUsername = 'root';
     // private $MySqlPassword = '23243125';
     // private $DBname        = 'mydb';
+
+    private $host = 'db4free.net';
+    private $MySqlUsername = 'ideamakeruser';
+    private $MySqlPassword = '23243125';
+    private $DBname        = 'ideamakerdb';
 
     public $conn;
 

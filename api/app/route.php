@@ -462,7 +462,7 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
      
 });
 
-
+// ------------- Upload Files / ProfilePic -------------------
 $app->post('/upload', function( $request,  $response) {
 
 
@@ -525,6 +525,32 @@ $app->post('/upload', function( $request,  $response) {
 
 });
 
+// ------------- REGISTER -------------------
+$app->post('/contactus', function($request, $response){
+    $data=$request->getParsedBody();
+    $inputData = [];
+
+    $CS = new ContactUs;
+
+    $CS->name     = filter_var($data['name'],  FILTER_SANITIZE_STRING);
+    $CS->email    = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
+    $CS->msg      = filter_var($data['msg'],   FILTER_SANITIZE_STRING);
+
+    
+    
+    if ($CS->StoreData())
+    {   
+        $response->getBody()->write(json_encode(array(
+            "status" => 200
+        )));
+        
+    }else{
+        $response->getBody()->write(json_encode(array(
+            "status" => 500
+        )));
+    }
+    
+});
 
 
 

@@ -52,7 +52,14 @@ class mailer
         $this->mail->Password = $this->EmailPassword;
         $this->mail->SMTPSecure = $this->smtpProto;
         $this->mail->Port = $this->mailPort;
+        $this->mail->CharSet = 'UTF-8';
     }
+    protected function CreateContactUsResponceMail($name, $msg){
+        $this->load();
+        $MailBody = "Dear $name \nThanks for contacting us, \nWe Got your message blow \n--------\n$msg\n---------\nand will contact you as soon as posibole\n\n\nBest Regards\nIdea-Maker Devolping Team";
+        $this->body = $MailBody;
+    }
+
 
     protected function CreateVerficationMailBody($code, $name, $user)
     {
@@ -658,6 +665,7 @@ class DataHandeler extends Register
     private $MySqlUsername = 'ideamakeruser';
     private $MySqlPassword = '23243125';
     private $DBname        = 'ideamakerdb';
+
     
     // private $host = '127.0.0.1';
     // private $MySqlUsername = 'root';
@@ -1207,6 +1215,42 @@ class Recovery extends _Loyal
             return FALSE;
         }
     }
+}
+
+class ContactUs extends mailer {
+    public $name;
+    public $email;
+    public $msg;
+    private $conn;
+
+    function __construct (){
+        $DB = homeDB::getInstance();
+        $this->conn = $DB->conn;
+    }
+
+    public function StoreData(){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            $dlp = $this->conn->prepare("INSERT INTO `contact-us` (`name`, `email`, `msg`, `date`)
+                VALUES(
+                    '$this->name', 
+                    '$this->email', 
+                    '$this->msg',
+                    '$curentDate'
+                    )");
+            $dlp->execute();
+            return TRUE;
+
+        } catch (PDOException $e){
+            die($e);
+        }
+    }
+
+    function __destruct(){
+        $this->CreateContactUsResponceMail($this->name, $this->msg);
+        $this->sendMail($this->email, $this->name, "Idea-Maker Team");
+    }
+
 }
 
 ?>
