@@ -8,10 +8,15 @@ class homeDB{
     // private $MySqlPassword = '23243125';
     // private $DBname        = 'mydb';
 
-    private $host = 'db4free.net';
-    private $MySqlUsername = 'ideamakeruser';
-    private $MySqlPassword = '23243125';
-    private $DBname        = 'ideamakerdb';
+    // private $host = 'db4free.net';
+    // private $MySqlUsername = 'ideamakeruser';
+    // private $MySqlPassword = '23243125';
+    // private $DBname        = 'ideamakerdb';
+
+    private $host = 'sql2.freemysqlhosting.net';
+    private $MySqlUsername = 'sql2286394';
+    private $MySqlPassword = 'wY5*fC5*';
+    private $DBname        = 'sql2286394';
 
     public $conn;
 
