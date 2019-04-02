@@ -398,7 +398,7 @@ $(document).ready(function () {
                     result = $.parseJSON(this.responseText);
                     if (result) {
                         $('#workForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>");
-                        loadPage();
+
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#work_responce').html("<div class='alert alert-danger'>INTERNAL?EXTERNAL SERVER ERROR.</div>");
@@ -441,7 +441,7 @@ $(document).ready(function () {
                 try {
                     if (this.responseText > 0) {
                         $('#ProfileSummaryForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>");
-                        loadPage();
+
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#summaryResponce').html("<div class='alert alert-danger'>Internal Server Error.</div>");
@@ -486,8 +486,8 @@ $(document).ready(function () {
                     result = $.parseJSON(this.responseText);
                     if (result) {
                         $('#universityForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>")
-                        // setEducation(result);
-                        loadPage();
+                        setEducation(result);
+
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#edu_responce').html("<div class='alert alert-danger'>INTERNAL?EXTERNAL SERVER ERROR.</div>");
@@ -529,7 +529,7 @@ $(document).ready(function () {
                 try {
                     if (this.responseText > 0) {
                         $('#LocationForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>");
-                        loadPage();
+
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#LocationFormResponce').html("<div class='alert alert-danger'>Internal Server Error.</div>");
@@ -571,7 +571,7 @@ $(document).ready(function () {
                 try {
                     if (this.responseText > 0) {
                         $('#SkillsForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>");
-                        loadPage();
+
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#SkillsFormRS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
@@ -812,7 +812,6 @@ $(document).ready(function () {
             if (e.lengthComputable) {
                 var percentComplete = (e.loaded / e.total) * 100;
                 console.log(percentComplete + '% uploaded');
-                loadPage();
             }
         };
         xhr.onload = function () {
