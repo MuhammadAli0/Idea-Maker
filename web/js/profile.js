@@ -296,7 +296,7 @@ $(document).ready(function () {
                                 height: 60px;" src="`+ profile_pic + `" alt="">
                             </div>
                             <div class="comment">
-                                <h3>`+ name + `</h3>
+                                <h3> <a href="profile.html?id=`+ Comment['user_id'] + `">` + name + `</a></h3>
                                 <span><img src="images/clock.png" alt=""> `+ time + ` </span>
                                 <p>`+ body + ` </p>
                                 
@@ -398,6 +398,19 @@ $(document).ready(function () {
                     result = $.parseJSON(this.responseText);
                     if (result) {
                         $('#workForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>");
+                        html = `											
+        <h4>`+ update_account_form_obj['position'] + `<a href="#" title=""><i class="fa fa-pencil"></i></a></h4>
+        <h5 >at `+ update_account_form_obj['organization'] + `</h5>
+        <span>`+ update_account_form_obj['sDate'] + ` - ` + update_account_form_obj['eDate'] + `</span>
+
+        <p> `+ update_account_form_obj['summary'] + ` </p>
+
+        <input type="hidden" name="workID" value="1">
+`;
+                        // document.getElementById("exp_year").value = result['work']['work_id_user_id'];
+                        $('#work').html(html);
+
+
 
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
@@ -441,6 +454,8 @@ $(document).ready(function () {
                 try {
                     if (this.responseText > 0) {
                         $('#ProfileSummaryForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>");
+                        $('#summary').html(update_account_form_obj['summary']);
+
 
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
@@ -486,7 +501,10 @@ $(document).ready(function () {
                     result = $.parseJSON(this.responseText);
                     if (result) {
                         $('#universityForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>")
-                        setEducation(result);
+                        $("#college_degree").html(update_account_form_obj['college_degree']);
+                        $("#university_name").html(update_account_form_obj['university_name']);
+                        $("#uni_date").html(update_account_form_obj['start_study'] + " - " + update_account_form_obj['end_study']);
+                        $("#uniSummary").html(update_account_form_obj['summary']);
 
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
@@ -529,6 +547,8 @@ $(document).ready(function () {
                 try {
                     if (this.responseText > 0) {
                         $('#LocationForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>");
+                        $("#country").html(update_account_form_obj['country']);
+                        $("#town").html(update_account_form_obj['town']);
 
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
@@ -571,6 +591,14 @@ $(document).ready(function () {
                 try {
                     if (this.responseText > 0) {
                         $('#SkillsForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>");
+                        var skills = update_account_form_obj['skills'].split(";");
+                        $('#skills_list').html("");
+                        for (i in  skills) {
+                            $('#skills_list').append(`
+                        <li><a href="#" title="">`+ skills[i] + `</a></li>
+            
+                        `);
+                        }
 
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
@@ -740,12 +768,12 @@ $(document).ready(function () {
                 try {
                     if (resultx['status'] === 200) {
                         var CommentData = resultx['data'];
-                        for (n in  CommentData) {
+                        for (n in CommentData) {
                             var Comment = CommentData[n];
                             setComments(Comment, update_account_form_obj);
                         }
 
-                       
+
 
 
                     } else {
@@ -785,6 +813,7 @@ $(document).ready(function () {
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 console.log(this.responseText);
+                location.reload(); 
             }
         });
 

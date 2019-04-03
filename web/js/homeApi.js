@@ -306,7 +306,7 @@ $(document).ready(function () {
                 <img style="width: 60px;
                 height: 60px;" src="`+ profile_pic + `" alt="">
                 <div class="usy-name">
-                    <h3>`+ name + `</h3>
+                    <h3> <a href="profile.html?id=`+ owner +`">`+ name + `</a></h3>
                     <span><img src="images/clock.png" alt="">`+ date_created + `</span>
                 </div>
             </div>
@@ -454,7 +454,7 @@ $(document).ready(function () {
                                 height: 60px;" src="`+ profile_pic + `" alt="">
                             </div>
                             <div class="comment">
-                                <h3>`+ name + `</h3>
+                                <h3> <a href="profile.html?id=`+ Comment['user_id'] +`">`+ name + `</a></h3>
                                 <span><img src="images/clock.png" alt=""> `+ time + ` </span>
                                 <p>`+ body + ` </p>
                                 

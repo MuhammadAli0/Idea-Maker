@@ -124,7 +124,7 @@ class UpdateProfile extends retrieveProfile
 
     public function summaryUpdate($data){
         try{
-            $summary = $data['data']['summary'];
+            $summary = filter_var($data['data']['summary'], FILTER_SANITIZE_STRING);
             $dlp = $this->conn->prepare(" UPDATE users set summary = '$summary' WHERE user_id = '$this->user_id'");
             $dlp->execute();
             return true;
@@ -205,7 +205,7 @@ class UpdateProfile extends retrieveProfile
             $number  = $workData['data']['number'];
             $sDate    = $workData['data']['sDate'];
             $eDate    = $workData['data']['eDate'];
-            $summary  = $workData['data']['summary'];
+            $summary  = filter_var($workData['data']['summary'], FILTER_SANITIZE_STRING);
 
             $dlb = $this->conn->prepare("SELECT work_id FROM work WHERE user_id = '$this->user_id' and work_id_user_id = '$number'");
                 $dlb->execute();
@@ -266,7 +266,7 @@ class UpdateProfile extends retrieveProfile
                 $college_degree  = $uData['data']['college_degree'];
                 $start_study     = $uData['data']['start_study'];
                 $end_study       = $uData['data']['end_study'];
-                $summary         = $uData['data']['summary'];
+                $summary         = filter_var($uData['data']['summary'], FILTER_SANITIZE_STRING);
     
                 $dlb = $this->conn->prepare("SELECT uni_id FROM University WHERE user_id = '$this->user_id'");
                 $dlb->execute();
