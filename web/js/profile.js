@@ -813,7 +813,7 @@ $(document).ready(function () {
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 console.log(this.responseText);
-                location.reload(); 
+                
             }
         });
 
@@ -822,6 +822,7 @@ $(document).ready(function () {
         xhr.setRequestHeader("cache-control", "no-cache");
 
         xhr.send(data);
+        location.reload();
         return false;
     });
 
