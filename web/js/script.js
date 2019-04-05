@@ -16,6 +16,51 @@ $(window).on("load", function() {
         return false;
     });
 
+    //  ============= POST JOB POPUP FUNCTION =========
+
+    $(".post-jb").on("click", function(){
+        $(".post-popup.job_post").addClass("active");
+        $(".wrapper").addClass("overlay");
+        return false;
+    });
+    $(".post-project > a").on("click", function(){
+        $(".post-popup.job_post").removeClass("active");
+        $(".wrapper").removeClass("overlay");
+        return false;
+    });
+
+    //  ============= SIGNIN CONTROL FUNCTION =========
+
+    $('.sign-control li').on("click", function(){
+        var tab_id = $(this).attr('data-tab');
+        $('.sign-control li').removeClass('current');
+        $('.sign_in_sec').removeClass('current');
+        $(this).addClass('current animated fadeIn');
+        $("#"+tab_id).addClass('current animated fadeIn');
+        return false;
+    });
+
+    //  ============= SIGNIN TAB FUNCTIONALITY =========
+
+    $('.signup-tab ul li').on("click", function(){
+        var tab_id = $(this).attr('data-tab');
+        $('.signup-tab ul li').removeClass('current');
+        $('.dff-tab').removeClass('current');
+        $(this).addClass('current animated fadeIn');
+        $("#"+tab_id).addClass('current animated fadeIn');
+        return false;
+    });
+
+    //  ============= SIGNIN SWITCH TAB FUNCTIONALITY =========
+
+    $('.tab-feed ul li').on("click", function(){
+        var tab_id = $(this).attr('data-tab');
+        $('.tab-feed ul li').removeClass('active');
+        $('.product-feed-tab').removeClass('current');
+        $(this).addClass('active animated fadeIn');
+        $("#"+tab_id).addClass('current animated fadeIn');
+        return false;
+    });
 
     //  ============= COVER GAP FUNCTION =========
 
@@ -96,7 +141,6 @@ $(window).on("load", function() {
         $(".wrapper").addClass("overlay");
         return false;
     });
-    
     $(".close-box").on("click", function(){
         $("#establish-box").removeClass("open");
         $(".wrapper").removeClass("overlay");
@@ -197,7 +241,6 @@ $(window).on("load", function() {
         e.stopPropagation();
     });
 
-
     //  ============= PORTFOLIO SLIDER FUNCTION =========
 
     $('.profiles-slider').slick({
@@ -241,19 +284,9 @@ $(window).on("load", function() {
 
     });
 
-    // ============ Log Out =============================
-
-    $("logout").on("click", function(){
-        window.location.href = "https://" + window.location.hostname + "/index.html";
-    });
-
-        
-    
-
 
 
 
 
 });
-
 
