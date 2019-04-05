@@ -72,7 +72,7 @@ class retrieveProfile {
     public $skills;
 
 
-    protected function __prepare(){
+    public function __prepare(){
         $GetDataX = new GetData;
         $data = $GetDataX->getUser($this->username);
         $data = (array) $data;

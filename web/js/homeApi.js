@@ -476,8 +476,8 @@ $(document).ready(function () {
                     <li>
                         <div class="comment-list">
                             <div class="bg-img">
-                                <img style="width: 60px;
-                                height: 60px;" src="`+ profile_pic + `" alt="">
+                                <img style="width: 40px;
+                                height: 40px;" src="`+ profile_pic + `" alt="">
                             </div>
                             <div class="comment">
                                 <h3> <a href="profile.html?id=`+ Comment['user_id'] + `">` + name + `</a></h3>

@@ -318,17 +318,7 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
 
             if (isset($data['option'])) {
                 $opt = $data['option'];
-                // if ($opt == "like"){
 
-                // } elseif ($opt == "comment"){
-
-                // } elseif ($opt == "post"){
-
-                // } elseif ($opt == "delete"){
-
-                // } else {
-
-                // }
             
             } else {
 
@@ -434,10 +424,7 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
             exit();
         }
     
-    } elseif ($request->isPut()) {
-        $opt = $argc['opt'];
-        $value = $argc['value'];
-    }
+    } 
 
 
 
