@@ -146,6 +146,48 @@ class GetData{
         }
     }
 
+    public function GetUnReadedMessages($user_id){
+        $dlb = $this->conn->prepare("SELECT user_id_from, content, date_created FROM Messages WHERE seen IS NULL AND user_id_to ='$user_id'");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        }
+
+    }
+
+    private function GetLikesNtuf($user_id){
+        $dlb = $this->conn->prepare("SELECT * FROM Likes WHERE seen IS NULL AND post_id = (select post_id from Posts WHERE user_id = '$user_id')  ;");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        }
+    }
+
+    private function GetCommentsNtuf($user_id){
+        $dlb = $this->conn->prepare("SELECT * FROM Comments WHERE seen IS NULL AND post_id = (select post_id from Posts WHERE user_id = '$user_id')  ;");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        }
+    }
+
+    public function GetNuotification($user_id){
+        
+        return array(
+            "likes" => $this->GetLikesNtuf($user_id),
+            "comments" => $this->GetCommentsNtuf($user_id)
+        );
+    }
+
 
 
 
@@ -183,7 +225,8 @@ class retriveHome {
             "my_Posts" => $GetDataX->GetPosts($this->user_id),
             "posts" => $GetDataX->GetPosts(FALSE),
             "likes" => $GetDataX->GetLikes($this->user_id),
-
+            "msg" => $GetDataX->GetUnReadedMessages($this->user_id),
+            "nutf" => $GetDataX->GetNuotification($this->user_id)
 
                 ));
     }
@@ -267,7 +310,7 @@ class userActions extends retriveHome {
 
     public function delIdea ($post_id){
         try{
-            $this->conn->exec("DELETE FROM Posts WHERE post_id = '$post_id'");
+            $this->conn->exec("DELETE FROM Posts WHERE post_id = '$post_id' AND user_id = '$this->user_id'");
             return TRUE;
         } catch (PDOException $e){
             die($e->getMessage());
@@ -293,6 +336,8 @@ class userActions extends retriveHome {
         }
 
     }
+
+
 
     
     

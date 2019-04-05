@@ -334,6 +334,47 @@ $(document).ready(function () {
 
     }
 
+    function GetUnReadedMessages(){
+        jwt = getCookie('jwt');
+
+        var form_data = JSON.stringify({
+            "option": 150,
+            "jwt": jwt,
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                var rresult = $.parseJSON(this.responseText);
+                try {
+                    if (rresult['status'] === 200) {
+
+
+                        var commentHTML = `
+            
+                        `;
+
+                        // $("#" + update_account_form_obj['post_id'] + "comment").append(commentHTML);
+                        console.log(rresult);
+
+                    } else {
+
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        });
+        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+
+        return false;
+    }
+
     $(document).on('submit', '#registrationForm', function () {
         var update_account_form = $(this);
         var jwt = getCookie('jwt');

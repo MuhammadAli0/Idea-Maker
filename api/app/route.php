@@ -273,25 +273,7 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $re
                         )));
                     }
                 }elseif ($opt == 600) {
-                    $directory = $this->get('upload_directory');
-                    $uploadedFiles = $request->getUploadedFiles();
-                    $uploadedFile = $uploadedFiles['profile_pic'];
-
-                    if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-
-                        $filename = moveUploadedFile($directory, $uploadedFile);
-                        $response->write('uploaded ' . $filename . '<br/>');
-                    }
-                
-
-                    // if ($profile_pic->getError() === UPLOAD_ERR_OK) {
-                    //     $uploadFileName = $profile_pic->getClientFilename();
-                    //     $type = $profile_pic->getClientMediaType();
-                    //     $name = md5($AllowData->id);
-                    //     $profile_pic->moveTo("/var/www/html/Idea-Maker/web/images/resources/$name");
-                    //     $picUrl = "http://localhost/web/images/resources/$name";
-                        
-                    // }
+                    
                 }
 
 
@@ -525,7 +507,7 @@ $app->post('/upload', function( $request,  $response) {
 
 });
 
-// ------------- REGISTER -------------------
+// ------------- Contact Us -------------------
 $app->post('/contactus', function($request, $response){
     $data=$request->getParsedBody();
     $inputData = [];
@@ -552,7 +534,49 @@ $app->post('/contactus', function($request, $response){
     
 });
 
+// ------------- Other Profile Actions -------------------
+$app->post('/action', function($request, $response){
+    $data = $request->getParsedBody();
 
+    $token          = $data['jwt'];
+    $allowMe        = new Loyal;
+    $AllowData      = $allowMe->isAllow($token);
+
+    if ($AllowData != FALSE){
+
+        $action = new actions($AllowData->id);
+    
+        if (isset($data['option'])) {
+            $opt = $data['option'];
+            if ($opt == 150 ){
+                if ($action->SendPostMessage($data['post_id'], $data['target'], $data['msg']) == TRUE){
+                    $response->getBody()->write(json_encode(array(
+                        "status" => 200
+                    )));            
+                }
+
+
+
+            } elseif ($opt == "comment"){
+
+            } elseif ($opt == "post"){
+
+            } elseif ($opt == "delete"){
+
+            } else {
+
+            }
+    
+        } else {
+            $action->__prepare();
+            $response->write($action->profile);
+        }
+
+    }
+
+    
+    
+});
 
 
 ?>

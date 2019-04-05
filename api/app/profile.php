@@ -72,7 +72,7 @@ class retrieveProfile {
     public $skills;
 
 
-    public function __prepare(){
+    protected function __prepare(){
         $GetDataX = new GetData;
         $data = $GetDataX->getUser($this->username);
         $data = (array) $data;
@@ -325,55 +325,67 @@ class UpdateProfile extends retrieveProfile
 
 }
 
+class actions extends retrieveProfile {
 
-// try {
-//     // $curentDate = date('Y-m-d H:i:s');
-//     $university_name = $uData['data']['university_name'];
-//     $college_degree  = $uData['data']['college_degree'];
-//     $start_study     = $uData['data']['start_study'];
-//     $end_study       = $uData['data']['end_study'];
-//     $summary         = $uData['data']['summary'];
+    public $error;
 
-//     $dlb = $this->conn->prepare("SELECT uni_id FROM University WHERE user_id = '$this->user_id'");
-//     $dlb->execute();
-//     if($dlb->rowCount() > 0){
-//         $dddata     = $dlb->fetch(PDO::FETCH_ASSOC);
-//         $dddata = (array) $dddata;
-//         $dddata = $dddata['uni_id'];
+    private $conn;
+    
 
-//         $dlp = $this->conn->prepare("UPDATE  University 
-//         set 
-//         uni_name = '$university_name', 
-//         study_field  = '$college_degree', 
-//         startDate = '$start_study',
-//         endDate  =  '$end_study',
-//         summary = '$summary'
-//         WHERE user_id = '$this->user_id' 
-//         and uni_id = '$dddata'");
+    function __construct($user_id)
+    {
+        $DB = profileDB::getInstance();
+        $this->conn = $DB->conn;
+        $this->user_id = $user_id;
 
-//         $dlp->execute();
-//         return true;
+    }
 
-//      }else{
-//         $dlp = $this->conn->prepare("INSERT INTO University (user_id, uni_name, study_field, year, startDate, endDate, summary) 
-//         VALUES ('$this->user_id', '$university_name', '$college_degree', '$year',  '$start_study', '$end_study', '$summary')
-//         ON DUPLICATE KEY UPDATE
-//         uni_name = '$university_name', 
-//         study_field  = '$college_degree', 
-//         startDate = '$start_study',
-//         endDate  =  '$end_study',
-//         summary = '$summary'
-//         ");
-
-//         $dlp->execute();
-//         return true;
-//     }
-
+    public function SendPostMessage($post_id, $target_id, $msg){
         
-// } catch (PDOException $e) {
-//     $this->error = $e;
-//     return false;
-// }
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            $mssg    = "SENT VIA POST ID = $post_id \n\n" . filter_var($msg, FILTER_SANITIZE_STRING);
+
+            
+            $dlp = $this->conn->prepare(" INSERT INTO  Messages (user_id_from, user_id_to, content, date_created) 
+            VALUES (
+                '$this->user_id',
+                '$target_id',
+                '$mssg',
+                '$curentDate'
+                )");
+            $dlp->execute();
+            return true;
+        
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+        
+    }
+
+    public function SendMsg($target_id, $msg){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            $mssg    = filter_var($msg, FILTER_SANITIZE_STRING);
+
+            
+            $dlp = $this->conn->prepare(" INSERT INTO  Messages (user_id_from, user_id_to, content, date_created) 
+            VALUES (
+                '$this->user_id',
+                '$target_id',
+                '$mssg',
+                '$curentDate'
+                )");
+            $dlp->execute();
+            return true;
+        
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+    }
+
+}
+
 
 
 ?>
