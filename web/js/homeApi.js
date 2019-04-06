@@ -879,6 +879,7 @@ $(document).ready(function () {
         var update_account_form = $(this);
         var jwt = getCookie('jwt');
         var update_account_form_obj = update_account_form.serializeObject()
+        update_account_form[0][0].value = "" ;
         // add jwt on the object
         update_account_form_obj.jwt = jwt;
         // convert object to json string
