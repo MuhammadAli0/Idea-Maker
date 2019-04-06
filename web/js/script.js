@@ -1,6 +1,10 @@
 $(window).on("load", function() {
     "use strict";
 
+    $("#logout").on("click", function(){
+        window.location.replace("/../index.html?login")
+    });
+    
     
 
     //  ============= POST PROJECT POPUP FUNCTION =========
@@ -283,10 +287,5 @@ $(window).on("load", function() {
 
 
     });
-
-
-
-
-
 });
 

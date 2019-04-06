@@ -674,7 +674,7 @@ $(document).ready(function () {
                             <img src="`+ profile_pic +`" alt="">
                         </div>
                         <div class="notification-info">
-                            <h3><a href="/posts.html?post_id=`+ comment['post_id'] +`" title="">`+ name +`</a> Comment on your project.
+                            <h3><a href="/profile.html?id=`+ comment['user_id'] +`" title="">`+ name +`</a> Comment on your project.
                             </h3>
                             <span>`+ comment['date_created'] +`</span>
                         </div>
@@ -738,7 +738,7 @@ $(document).ready(function () {
                             <img src="`+ profile_pic +`" alt="">
                         </div>
                         <div class="notification-info">
-                            <h3><a href="/posts.html?post_id=`+ like['post_id'] +`" title="">`+ name +`</a> Liked your project. .
+                            <h3><a href="/web/profile.html?id=`+ like['user_id'] +`" title="">`+ name +`</a> Liked your project. .
                             </h3>
                             <span>`+ like['date_created'] +`</span>
                         </div>

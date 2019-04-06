@@ -544,13 +544,35 @@ $app->post('/action', function($request, $response){
 
 
 
-            } elseif ($opt == "comment"){
+            } elseif ($opt == 200){
+                $response->getBody()->write(json_encode(array(
+                    "status" => 200,
+                    "msges" => $action->GetMessages($data['user_id'])
+                )));    
 
-            } elseif ($opt == "post"){
+            } elseif ($opt == 250){
+                $response->getBody()->write(json_encode(array(
+                    "status" => 200,
+                    "msges" => $action->GetUsersInChat(),
+                    "data" => $action->GetBasics()
+                )));  
 
-            } elseif ($opt == "delete"){
+            } elseif ($opt == 300){
+                $response->getBody()->write(json_encode(array(
+                    "status" => 200,
+                    "msges" => $action->SendMsg($data['user_id'], $data['msg'])
+                )));
 
-            } else {
+            } elseif ($opt == 360){
+                $response->getBody()->write(json_encode(array(
+                    "status" => $action->SetReadToMsdg($data['user_id'])
+                )));  
+            } elseif ($opt == 400){
+                $response->getBody()->write(json_encode(array(
+                    "msgs" => $action->GetUnReadedMessages()
+                ))); 
+            }
+             else {
 
             }
     

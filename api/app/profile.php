@@ -384,7 +384,80 @@ class actions extends retrieveProfile {
         }
     }
 
+    public function GetMessages($user){
+        $dlb = $this->conn->prepare("SELECT * FROM Messages WHERE 
+        (user_id_from = '$this->user_id' AND user_id_to = '$user') 
+        OR 
+        (user_id_from = '$user' AND user_id_to = '$this->user_id')
+        ");
+
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        }
+
+    }
+
+    public function GetUsersInChat(){
+        $dlb = $this->conn->prepare("SELECT user_id, profile_picture_url, fname, lname from users 
+        WHERE user_id IN 
+        (SELECT user_id_from FROM Messages 
+        WHERE user_id_to = '$this->user_id')
+        ");
+
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        }
+    }
+
+    public function GetBasics(){
+        $dlb = $this->conn->prepare("SELECT user_id, profile_picture_url, fname, lname from users 
+        WHERE user_id = '$this->user_id' ");
+
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        }
+    }
+
+    public function SetReadToMsdg($id){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            
+            $dlp = $this->conn->prepare(" UPDATE Messages SET seen = '$curentDate' WHERE  (user_id_from = '$id'  AND user_id_to = '$this->user_id'  and seen IS NULL)");
+            $dlp->execute();
+            return true;
+        
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+    }
+
+    public function GetUnReadedMessages(){
+        $dlb = $this->conn->prepare("SELECT user_id_from, content, date_created FROM Messages WHERE seen IS NULL AND user_id_to = '$this->user_id' ");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        }
+
+    }
+
+
 }
+    
 
 
 
