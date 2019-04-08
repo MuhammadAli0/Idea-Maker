@@ -63,16 +63,16 @@ $(document).ready(function () {
                         // ShowAccountUpdateForm();
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/profile/");
+        xhr.open("POST", "/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(data);
@@ -140,7 +140,7 @@ $(document).ready(function () {
         }
     }
 
-    function SetMyPosts(i, result) {
+    function SetMyPosts(i, result) { 
         var owner = result['posts'][i]['user_id'];
         var postID = result['posts'][i]['post_id'];
         var title = result['posts'][i]['title'];
@@ -156,7 +156,7 @@ $(document).ready(function () {
         var name = result['personal']['fname'] + ' ' + result['personal']['lname'];
 
         html = `
-    <div class="post-bar">
+    <div class="post-bar" id="post_`+ postID +`">
     <div class="post_topbar">
         <div class="usy-dt">
             <img style="width: 60px;
@@ -169,7 +169,8 @@ $(document).ready(function () {
         <div class="ed-opts">
             <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
             <ul class="ed-options">
-                 <li><a href="#" title="">Edit Post</a></li> 
+                <input type="hidden"  name="post_id" value="`+ postID + `"> 
+                 <li><a href="#" class="Delete-Post" title="">DELETE</a></li> 
             </ul>
         </div>
     </div>
@@ -234,14 +235,14 @@ $(document).ready(function () {
 
 
         $('#feed-dd').append(html);
-        if (result['likes'] != null) {
+        if (result['likes'] != 'false') {
             for (w in result['likes']) {
                 $("#" + result['likes'][w]['post_id'] + "50S50").val(150);
                 $("#" + result['likes'][w]['post_id'] + "like").html("Un Like");
 
             }
         }
-
+        return false;
     }
 
     function setPosts(result) {
@@ -314,18 +315,18 @@ $(document).ready(function () {
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     console.log(err);
                     // on error/fail, tell the user he needs to login to show the account page
                     // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/home/");
+        xhr.open("POST", "/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -367,13 +368,14 @@ $(document).ready(function () {
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/home/");
+        xhr.open("POST", "/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
 
         return false;
     }
+    
 
     $(document).on('submit', '#registrationForm', function () {
         var update_account_form = $(this);
@@ -400,17 +402,17 @@ $(document).ready(function () {
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#response').html("<div class='alert alert-danger'>Please login to access the account page.</div>");
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
                     $('#response').html("<div class='alert alert-danger'>Please login to access the account page.</div>");
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/profile/");
+        xhr.open("POST", "/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -456,17 +458,17 @@ $(document).ready(function () {
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#work_responce').html("<div class='alert alert-danger'>INTERNAL?EXTERNAL SERVER ERROR.</div>");
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
                     $('#work_responce').html("<div class='alert alert-danger'>INTERNAL SERVER ERROR.</div>");
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/profile/");
+        xhr.open("POST", "/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -501,17 +503,17 @@ $(document).ready(function () {
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#summaryResponce').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
                     $('#summaryResponce').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/profile/");
+        xhr.open("POST", "/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -550,17 +552,17 @@ $(document).ready(function () {
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#edu_responce').html("<div class='alert alert-danger'>INTERNAL?EXTERNAL SERVER ERROR.</div>");
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
                     $('#edu_responce').html("<div class='alert alert-danger'>INTERNAL SERVER ERROR.</div>");
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/profile/");
+        xhr.open("POST", "/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -594,17 +596,17 @@ $(document).ready(function () {
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#LocationFormResponce').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
                     $('#LocationFormResponce').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/profile/");
+        xhr.open("POST", "/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -644,17 +646,17 @@ $(document).ready(function () {
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         $('#SkillsFormRS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
                     $('#SkillsFormRS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/profile/");
+        xhr.open("POST", "/api/index.php/profile/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -701,17 +703,17 @@ $(document).ready(function () {
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
                     // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/home/");
+        xhr.open("POST", "/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -768,16 +770,16 @@ $(document).ready(function () {
 
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/home/");
+        xhr.open("POST", "/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -819,16 +821,16 @@ $(document).ready(function () {
 
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/home/");
+        xhr.open("POST", "/api/index.php/home/");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -877,7 +879,7 @@ $(document).ready(function () {
         fd.append("jwt", jwt);
         fd.append("option", 600);
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', "https://" + window.location.hostname + "/api/index.php/upload", true);
+        xhr.open('POST', "/api/index.php/upload", true);
 
         xhr.upload.onprogress = function (e) {
             if (e.lengthComputable) {
@@ -900,6 +902,55 @@ $(document).ready(function () {
         };
         xhr.send(fd);
     }, false);
+
+
+    $(document).on('click', '.ed-opts-open', function (){
+        $(this).next(".ed-options").toggleClass("active");
+        return false;
+    });
+
+
+    $(document).on('click', '.Delete-Post', function (){
+        
+        var post_id = $(this)[0].offsetParent.childNodes[1]["value"];
+        console.log(post_id);
+        DeletePost(post_id);
+        return false;
+    });
+
+    function DeletePost(id){
+        jwt = getCookie('jwt');
+
+        var form_data = JSON.stringify({
+            "option": 100,
+            "jwt": jwt,
+            "post_id": id
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                var rresult = $.parseJSON(this.responseText);
+                try {
+                    if (rresult) {
+                        console.log(rresult);
+                        $("#post_"+id).remove();
+                    } else {
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    }
+
 
 });
 

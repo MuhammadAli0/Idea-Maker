@@ -14,6 +14,8 @@ $(window).on("load", function() {
         $(".wrapper").addClass("overlay");
         return false;
     });
+
+
     $(".post-project > a").on("click", function(){
         $(".post-popup.pst-pj").removeClass("active");
         $(".wrapper").removeClass("overlay");
@@ -206,10 +208,10 @@ $(window).on("load", function() {
     //  ================== Edit Options Function =================
 
 
-    $(".ed-opts-open").on("click", function(){
-        $(this).next(".ed-options").toggleClass("active");
-        return false;
-    });
+    // $(".ed-opts-open").on("click", function(){
+    //     $(this).next(".ed-options").toggleClass("active");
+    //     return false;
+    // });
 
 
     // ============== Menu Script =============

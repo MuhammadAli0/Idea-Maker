@@ -159,7 +159,7 @@ class GetData{
     }
 
     private function GetLikesNtuf($user_id){
-        $dlb = $this->conn->prepare("SELECT * FROM Likes WHERE seen IS NULL AND post_id = (select post_id from Posts WHERE user_id = '$user_id')  ;");
+        $dlb = $this->conn->prepare("SELECT * FROM Likes WHERE seen IS NULL AND post_id IN (select post_id from Posts WHERE user_id = '$user_id')  ;");
         $dlb->execute();
         if($dlb->rowCount() > 0){
             $data     =  $dlb->fetchall();
@@ -170,7 +170,7 @@ class GetData{
     }
 
     private function GetCommentsNtuf($user_id){
-        $dlb = $this->conn->prepare("SELECT * FROM Comments WHERE seen IS NULL AND post_id = (select post_id from Posts WHERE user_id = '$user_id')  ;");
+        $dlb = $this->conn->prepare("SELECT * FROM Comments WHERE seen IS NULL AND post_id IN (select post_id from Posts WHERE user_id = '$user_id')  ;");
         $dlb->execute();
         if($dlb->rowCount() > 0){
             $data     =  $dlb->fetchall();
@@ -309,9 +309,19 @@ class userActions extends retriveHome {
     }
 
     public function delIdea ($post_id){
+
         try{
-            $this->conn->exec("DELETE FROM Posts WHERE post_id = '$post_id' AND user_id = '$this->user_id'");
+            $dlb = $this->conn->prepare("SELECT user_id FROM Posts WHERE post_id = '$post_id' AND user_id = '$this->user_id'");
+            $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $d2 = $this->conn->prepare("DELETE FROM Comments WHERE post_id = '$post_id';
+            DELETE FROM Likes WHERE post_id = '$post_id';
+            DELETE FROM Posts WHERE post_id = '$post_id' AND user_id = '$this->user_id';");
+            $d2->execute();
             return TRUE;
+        }else{
+            return FALSE;
+        }
         } catch (PDOException $e){
             die($e->getMessage());
         }

@@ -919,7 +919,7 @@
 				}
 			});
 
-			xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/register");
+			xhr.open("POST", "/api/index.php/register");
 			xhr.setRequestHeader("content-type", "application/json");
 
 			xhr.setRequestHeader("cache-control", "no-cache");
@@ -1009,7 +1009,7 @@
 					}
 				});
 
-				xhr.open("PUT", "https://" + window.location.hostname + "/api/index.php/recovery/" + email + "/");
+				xhr.open("PUT", "/api/index.php/recovery/" + email + "/");
 				xhr.setRequestHeader("cache-control", "no-cache");
 
 				xhr.send(null);
@@ -1059,7 +1059,7 @@
 
 			});
 
-			xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/login");
+			xhr.open("POST", "/api/index.php/login");
 			xhr.setRequestHeader("content-type", "application/json");
 
 			xhr.setRequestHeader("cache-control", "no-cache");
@@ -1199,7 +1199,7 @@
 				}
 
 			});
-			xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/contactus");
+			xhr.open("POST", "/api/index.php/contactus");
 			xhr.setRequestHeader("content-type", "application/json");
 			xhr.setRequestHeader("cache-control", "no-cache");
 			xhr.send(data);

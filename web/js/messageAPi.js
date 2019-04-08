@@ -67,17 +67,17 @@ $(document).ready(function () {
                         window.myProfilePic = ((result["data"][0]['profile_picture_url'] != null) ? result["data"][0]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                     console.log(err);
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/action");
+        xhr.open("POST", "/api/index.php/action");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(data);
@@ -231,7 +231,7 @@ $(document).ready(function () {
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/action");
+        xhr.open("POST", "/api/index.php/action");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -266,7 +266,7 @@ $(document).ready(function () {
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/action");
+        xhr.open("POST", "/api/index.php/action");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -333,7 +333,7 @@ $(document).ready(function () {
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/action");
+        xhr.open("POST", "/api/index.php/action");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
@@ -403,18 +403,18 @@ $(document).ready(function () {
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
                         // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "https://" + window.location.hostname + "?login";
+                        // window.location.href = "?login";
                     }
                 }
                 catch (err) {
                     console.log(err);
                     // on error/fail, tell the user he needs to login to show the account page
                     // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "https://" + window.location.hostname + "?login";
+                    // window.location.href = "?login";
                 }
             }
         });
-        xhr.open("POST", "https://" + window.location.hostname + "/api/index.php/action");
+        xhr.open("POST", "/api/index.php/action");
         xhr.setRequestHeader("content-type", "application/json");
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
