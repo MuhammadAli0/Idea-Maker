@@ -316,7 +316,7 @@ $(window).on("load", function() {
 
 
     Update();
-    
+
     function Update(){
         var jwt = getCookie("jwt");
         console.log(jwt);

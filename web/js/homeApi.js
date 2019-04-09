@@ -152,13 +152,15 @@ $(document).ready(function () {
             for (i in result['posts']) {
                 owner = result['posts'][i]['user_id'];
 
-                if (owner === result['user_id']) {
+                if (owner == result['user_id']) {
 
                     SetMyPosts(i, result);
                 }
                 else {
 
-                    SetOtherPost(i, result)
+                    SetOtherPost(i, result);
+                    console.log("errd");
+                    
                 }
             }
         }
@@ -313,7 +315,7 @@ $(document).ready(function () {
                 <img style="width: 60px;
                 height: 60px;" src="`+ profile_pic + `" alt="">
                 <div class="usy-name">
-                    <h3> <a href="profile.html?id=`+ owner +`&username=`+ rresult['name']['username'] + `">` + name + `</a></h3>
+                    <h3> <a href="profile.html?user_id=`+ owner + `&username=`+ rrresult['name']['username'] +`">` + name + `</a></h3>
                     <span><img src="images/clock.png" alt="">`+ date_created + `</span>
                 </div>
             </div>
