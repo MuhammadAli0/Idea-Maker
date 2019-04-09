@@ -86,6 +86,7 @@ $(document).ready(function () {
         $("#fname").html(result['personal']['fname']);
 
         $("#name").html(result['personal']['fname'] + ' ' + result['personal']['lname']);
+        $("#accType").html(result['accType']);
         $("#summary").html(result['personal']['summary']);
         $("#country").html(result['personal']['country']);
         $("#town").html(result['personal']['town']);

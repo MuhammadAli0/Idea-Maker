@@ -136,7 +136,7 @@ class GetData{
     }
 
     public function GetName($user_id){
-        $dlb = $this->conn->prepare("SELECT fname, lname, profile_picture_url FROM users WHERE user_id = '$user_id'");
+        $dlb = $this->conn->prepare("SELECT fname, lname, profile_picture_url, username FROM users WHERE user_id = '$user_id'");
         $dlb->execute();
         if($dlb->rowCount() > 0){
             $data     =  $dlb->fetch(PDO::FETCH_ASSOC);
@@ -187,6 +187,8 @@ class GetData{
             "comments" => $this->GetCommentsNtuf($user_id)
         );
     }
+
+
 
 
 
@@ -347,6 +349,9 @@ class userActions extends retriveHome {
 
     }
 
+    public function GetUpdate (){
+        
+    }
 
 
     

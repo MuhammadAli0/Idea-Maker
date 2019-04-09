@@ -298,12 +298,8 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $re
 });
 
 // ------------- Profile -------------------
-$app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, $response, $argc){
+$app->map(['GET', 'PUT', 'POST'], '/profile/[{user_id}/{username}]', function($request, $response, $argc){
 
-    $data = $request->getParsedBody();
-    $token          = $data['jwt'];
-    $allowMe        = new Loyal;
-    $AllowData      = $allowMe->isAllow($token);
 
 
 
@@ -424,7 +420,14 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{op}/{value}]', function($request, 
             exit();
         }
     
-    } 
+    } elseif ($request->isGet()){
+        $profile = new retrieveProfile();
+        $profile->user_id = $argc['user_id'];
+        $profile->username = $argc['username'];
+        $profile->__prepare();
+        $response->write($profile->profile);
+
+    }
 
 
 
@@ -568,8 +571,16 @@ $app->post('/action', function($request, $response){
                     "status" => $action->SetReadToMsdg($data['user_id'])
                 )));  
             } elseif ($opt == 400){
+                $GetDataX = new GetData;
                 $response->getBody()->write(json_encode(array(
-                    "msgs" => $action->GetUnReadedMessages()
+                    "msgs" => $GetDataX->GetUnReadedMessages($AllowData->id)
+                ))); 
+            } elseif ($opt == 500){
+                $GetDataX = new GetData;
+
+                $response->getBody()->write(json_encode(array(
+                "msgs" => $GetDataX->GetUnReadedMessages($AllowData->id),
+                "nutf" => $GetDataX->GetNuotification($AllowData->id)
                 ))); 
             }
              else {

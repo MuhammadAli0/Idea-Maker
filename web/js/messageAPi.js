@@ -129,11 +129,30 @@ $(document).ready(function () {
                 </div>
                 <a href="#" title=""><i class="fa fa-ellipsis-v"></i></a>
             </div><!--message-bar-head end-->
-            <div class="messages-line">
-                
+			<div class="messages-line mCustomScrollbar _mCS_1">
+
+            <div id="mCSB_1" class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside" style="max-height: none; overflow:auto; overflow-x:hidden;"
+            tabindex="0">
+            <div id="mCSB_1_container" class="mCSB_container" style="position: relative; top: -60px; left: 0px;margin-top: 145px;"
+                dir="ltr">
+
             <div id="msgBox`+user_Data['user_id']+`"> </div>
-                
-            </div><!--messages-line end-->
+
+            </div>
+
+            <div id="mCSB_1_scrollbar_vertical"
+                class="mCSB_scrollTools mCSB_1_scrollbar mCS-light mCSB_scrollTools_vertical"
+                style="display: block;">
+                <div class="mCSB_draggerContainer">
+                    <div id="mCSB_1_dragger_vertical" class="mCSB_dragger"
+                        style="position: absolute; min-height: 30px; display: block; height: 453px; max-height: 594px; top: 45px;">
+                        <div class="mCSB_dragger_bar" style="line-height: 30px;"></div>
+                    </div>
+                    <div class="mCSB_draggerRail"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
             <div class="message-send-area">
@@ -164,16 +183,19 @@ $(document).ready(function () {
             if (data[i]['user_id_from'] === myID){
                 var myMsg = `
                 <div class="main-message-box ta-right">
-                <div class="message-dt">
+                <div class="message-dt" style="float: right;">
                     <div class="message-inner-dt">
                         <p>`+ data[i]['content'] +`</p>
-                    </div><!--message-inner-dt end-->
+                    </div> <!--message-inner-dt end-->
                     <span>`+ data[i]['date_created'] +`</span>
                 </div><!--message-dt end-->
                 <div class="messg-usr-img">
                     <img src="`+myProfilePic+`" alt="">
                 </div><!--messg-usr-img end-->
             </div><!--main-message-box end-->
+
+
+
                 `;
                 $("#msgBox"+user_id).append(myMsg);
                 
@@ -384,7 +406,7 @@ $(document).ready(function () {
                     if (result) {
                         var myMsg = `
                 <div class="main-message-box ta-right">
-                <div class="message-dt">
+                <div class="message-dt" style="float: right;">
                     <div class="message-inner-dt">
                         <p>`+ update_account_form_obj['message'] +`</p>
                     </div><!--message-inner-dt end-->
@@ -420,6 +442,8 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     });
+
+    
 
 });
 

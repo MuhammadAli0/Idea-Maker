@@ -65,7 +65,6 @@ $(document).ready(function () {
 
                         if (result['profile_pic'] != null) {
                             setProfilePic(result);
-
                         }
 
                         if (result['msg'] != false){
@@ -100,6 +99,7 @@ $(document).ready(function () {
 
         $("#name").html(result['personal']['fname'] + ' ' + result['personal']['lname']);
 
+        $("#accType").html(result['accType']);
         if (result['accType'] === "idea-maker") {
             $('#Post_button').html('<li><a class="post_project" href="#" title="">Post a Project</a></li>');
         }
@@ -313,7 +313,7 @@ $(document).ready(function () {
                 <img style="width: 60px;
                 height: 60px;" src="`+ profile_pic + `" alt="">
                 <div class="usy-name">
-                    <h3> <a href="profile.html?id=`+ owner + `">` + name + `</a></h3>
+                    <h3> <a href="profile.html?id=`+ owner +`&username=`+ rresult['name']['username'] + `">` + name + `</a></h3>
                     <span><img src="images/clock.png" alt="">`+ date_created + `</span>
                 </div>
             </div>
@@ -342,7 +342,6 @@ $(document).ready(function () {
         <div class="epi-sec">					
             <ul class="bk-links">
             <button id="OpenMsgBut`+postID+`" onclick="openForm()">Send a Message</button>
-
             <div id="`+postID+`msg" style="display: none; border: 3px solid #f1f1f1; z-index: 9;">	
             <button id="CloseMsgBut`+postID+`" onclick="closeForm()">Close</button>
             <form id="message">
@@ -352,7 +351,7 @@ $(document).ready(function () {
                 <button type="submit"  class="la la-envelope"> </button> 
             </form>
 			</ul>
-         </div>
+        </div>
 
                                                 
         
@@ -475,7 +474,7 @@ $(document).ready(function () {
                                 height: 40px;" src="`+ profile_pic + `" alt="">
                             </div>
                             <div class="comment">
-                                <h3> <a href="profile.html?id=`+ Comment['user_id'] + `">` + name + `</a></h3>
+                                <h3> <a href="profile.html?id=`+ Comment['user_id'] +`&username=`+ rresult['name']['username'] + `">` + name + `</a></h3>
                                 <span><img src="images/clock.png" alt=""> `+ time + ` </span>
                                 <p>`+ body + ` </p>
                                 
@@ -669,7 +668,7 @@ $(document).ready(function () {
                             <img src="`+ profile_pic +`" alt="">
                         </div>
                         <div class="notification-info">
-                            <h3><a href="/profile.html?id=`+ comment['user_id'] +`" title="">`+ name +`</a> Comment on your project.
+                            <h3><a href="profile.html?user_id=`+ comment['user_id'] +`&username=`+ rresult['name']['username'] +`" title="">`+ name +`</a> Comment on your project.
                             <p> `+ comment['content'] +` </p>
                             </h3><br/>
                             <span>`+ comment['date_created'] +`</span>
@@ -734,7 +733,7 @@ $(document).ready(function () {
                             <img src="`+ profile_pic +`" alt="">
                         </div>
                         <div class="notification-info">
-                            <h3><a href="/web/profile.html?id=`+ like['user_id'] +`" title="">`+ name +`</a> Liked your project. .
+                            <h3><a href="profile.html?user_id=`+ like['user_id'] +`&username=`+ rresult['name']['username'] +`" title="">`+ name +`</a> Liked your project. .
                             </h3>
                             <span>`+ like['date_created'] +`</span>
                         </div>
@@ -772,6 +771,10 @@ $(document).ready(function () {
         return false;
     }
 
+    function custom_sort(a, b) {
+        return new Date(a.date_created).getTime() - new Date(b.date_created).getTime();
+    }
+    
 
     $(document).on('submit', '#Post_Form', function () {
         var update_account_form = $(this);
@@ -964,7 +967,8 @@ $(document).ready(function () {
                 console.log(resultx);
                 try {
                     if (resultx['status'] === 200) {
-                        var CommentData = resultx['data'];
+                        var CommentData = resultx['data'].sort(custom_sort);
+
                         for (n in CommentData) {
                             var Comment = CommentData[n];
                             setComments(Comment, update_account_form_obj);
