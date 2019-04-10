@@ -232,6 +232,23 @@ class retriveHome {
 
                 ));
     }
+    public function __GetHeader(){
+        $GetDataX = new GetData;
+        $data = $GetDataX->getUser($this->username);
+        $data = (array) $data;
+        $this->home = json_encode(array(
+            "user_id" => $data['user_id'],
+            "username" => $this->username,
+            "profile_pic" => $data['profile_picture_url'],
+            "personal" => array(
+                "fname"     => $data['fname'],
+                "lname"     => $data['lname'],
+                "gender"   => $data['gender'],
+                "country"  => $data['country'],
+                "town"     => $data['town']
+            )
+                ));
+    }
 
 }
 

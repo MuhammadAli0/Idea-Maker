@@ -2,7 +2,7 @@ $(window).on("load", function() {
     "use strict";
 
     $("#logout").on("click", function(){
-        window.location.replace("/../index.html?login")
+        window.location.replace("/index.html?login")
     });
     
     
@@ -314,11 +314,10 @@ $(window).on("load", function() {
 
     // setInterval(function(){ Update(); }, 5000);
 
-
+    window.jwt = getCookie("jwt");
     Update();
 
     function Update(){
-        var jwt = getCookie("jwt");
         console.log(jwt);
         var form_data = JSON.stringify({
             "option": 500,
@@ -355,6 +354,25 @@ $(window).on("load", function() {
         xhr.send(form_data);
         return false;
     }
+
+    function parseJwt (token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(window.atob(base64));
+    };
+    var token = parseJwt(jwt);
+
+    var url = "/api/index.php/home/" + token['data']['id'] + '/' + token['data']['username'];
+    $.get(url, function (data) {
+        console.log(data);
+        var result = $.parseJSON(data);
+        $("#fname").html(result['personal']['fname']);
+        if (result['profile_pic'] != null){
+            $("#usr-pic-nav").attr('src', result['profile_pic'].slice(1))
+        }
+
+        
+    });
 
 
     function SetMsgs(msgs){
@@ -615,6 +633,8 @@ $(window).on("load", function() {
         xhr.send(form_data);
         return false;
     };
+
+
 
 });
 

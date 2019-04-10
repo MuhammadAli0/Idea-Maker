@@ -156,50 +156,72 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
 // ------------- Passowrd Recovery 2nd -------------------
 $app->post('/recovery/password/', function($request, $response){
 
-    $data = $request->getParsedBody();
-    $logging = new  RecoveryLog;
-    
-    $jwt            = $data['jwt'];
-    $recover        = new Recovery('----');
-    
-    $UserName      = $recover->DecodeToken($jwt);
-    if ($UserName  == TRUE){
-        if ($recover->RePassword($UserName, $data['password']) == TRUE ){
-            
-            
-            $logging->write(json_encode(array(
-                "Status" => "Recoverd",
-                "Username" => $UserName
-            )));
-            header("Location: https://idea-maker.herokuapp.com/web/", true, 301);
-            exit();
 
-        }else{
-            $logging->write(json_encode(array(
-                "Status" => "SomeThingWrong",
-                "Username" => $UserName
-            )));
+    if ($request->isPost()) {
+    
+        $data = $request->getParsedBody();
+        if (isset($data['option'])){
+            $token          = $data['jwt'];
+            $allowMe        = new Loyal;
+            $AllowData      = $allowMe->isAllow($token);
 
-            $response->write(json_encode(array(
-                "status" => 123,
-                "message" => "SOMETHING WRONG, TRAY AGAIN LATARE"
-            )));
+            if ($AllowData != FALSE){
+                $action = new actions($AllowData->id);  
+                $response->getBody()->write(json_encode(array(
+                    "status" => $action->UpdatePassword(md5($data['password']))
+                )));  
+            }
+
+
+        } else {
+
+            $logging = new  RecoveryLog;
+            
+            $jwt            = $data['jwt'];
+            $recover        = new Recovery('----');
+            
+            $UserName      = $recover->DecodeToken($jwt);
+            if ($UserName  == TRUE){
+                if ($recover->RePassword($UserName, $data['password']) == TRUE ){
+                    
+                    
+                    $logging->write(json_encode(array(
+                        "Status" => "Recoverd",
+                        "Username" => $UserName
+                    )));
+                    header("Location: https://idea-maker.herokuapp.com/web/", true, 301);
+                    exit();
+        
+                }else{
+                    $logging->write(json_encode(array(
+                        "Status" => "SomeThingWrong",
+                        "Username" => $UserName
+                    )));
+        
+                    $response->write(json_encode(array(
+                        "status" => 123,
+                        "message" => "SOMETHING WRONG, TRAY AGAIN LATARE"
+                    )));
+                }
+            }else{
+                $logging->write(json_encode(array(
+                    "Status" => "please do not hack me, I am poor."
+                )));
+        
+                $response->write(json_encode(array(
+                    "status" => 123,
+                    "message" => "This link died, ask for new one and end the opration with 60 seconds"
+                )));
+            }
+
         }
-    }else{
-        $logging->write(json_encode(array(
-            "Status" => "please do not hack me, I am poor."
-        )));
-
-        $response->write(json_encode(array(
-            "status" => 123,
-            "message" => "This link died, ask for new one and end the opration with 60 seconds"
-        )));
-    }
+    } 
+   
      
 });
 
 // ------------- HOME -------------------
-$app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $response, $argc){
+$app->map(['GET', 'PUT', 'POST'], '/home/[{user_id}/{username}]', function($request, $response, $argc){
 
 
     if ($request->isPost()) {
@@ -290,9 +312,14 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{op}/{value}]', function($request, $re
             exit();
         }
     
-    } elseif ($request->isPut()) {
-        $opt = $argc['opt'];
-        $value = $argc['value'];
+    } 
+    elseif ($request->isGet()) {
+
+        $profile = new retriveHome;
+        $profile->user_id = $argc['user_id'];
+        $profile->username = $argc['username'];
+        $profile->__GetHeader();
+        $response->write($profile->home);
     }
      
 });

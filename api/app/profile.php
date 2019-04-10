@@ -455,6 +455,19 @@ class actions extends retrieveProfile {
 
     }
 
+    public function UpdatePassword($pwd){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            
+            $dlp = $this->conn->prepare("UPDATE users SET pwHash = '$pwd' WHERE  (user_id =  '$this->user_id')");
+            $dlp->execute();
+            return true;
+        
+        } catch (PDOException $e){
+            die($e);
+        }
+    }
+
 
 }
     
