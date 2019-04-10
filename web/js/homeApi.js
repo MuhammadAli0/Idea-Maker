@@ -67,10 +67,10 @@ $(document).ready(function () {
                             setProfilePic(result);
                         }
 
-                        if (result['msg'] != false){
-                            SetMsgs(result['msg']);
-                        }
-                        SetNotification(result['nutf']);
+                        // if (result['msg'] != false){
+                        //     // SetMsgs(result['msg']);
+                        // }
+                        // SetNotification(result['nutf']);
 
                         // ShowAccountUpdateForm();
                     } else {
