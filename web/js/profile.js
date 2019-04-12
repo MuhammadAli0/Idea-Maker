@@ -68,7 +68,7 @@ $(document).ready(function () {
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
-                    // window.location.href = "?login";
+                    window.location.href = "/index.html?login";
                 }
             }
         });
@@ -128,7 +128,7 @@ $(document).ready(function () {
     function setWorkForm(data) {
         if (data['work'] != 'false') {
             html = `											
-        <h4>`+ data['work']['position'] + `<a href="#" title=""><i class="fa fa-pencil"></i></a></h4>
+        <h4>`+ data['work']['position'] + `</h4>
         <h5 >at `+ data['work']['work_name'] + `</h5>
         <span>`+ data['work']['started_date'] + ` - ` + data['work']['end_date'] + `</span>
 

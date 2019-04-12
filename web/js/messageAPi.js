@@ -73,6 +73,7 @@ $(document).ready(function () {
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
                     // window.location.href = "?login";
+                    window.location.href = "/index.html?login";
                     console.log(err);
                 }
             }
