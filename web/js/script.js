@@ -312,13 +312,13 @@ $(window).on("load", function() {
         return "";
     }
 
-    // setInterval(function(){ Update(); }, 5000);
-
     window.jwt = getCookie("jwt");
-    Update();
+
+    setInterval(function(){ Update(); }, 10000);
+
+    // Update();
 
     function Update(){
-        console.log(jwt);
         var form_data = JSON.stringify({
             "option": 500,
             "jwt": jwt
@@ -331,13 +331,28 @@ $(window).on("load", function() {
                 var rresult = $.parseJSON(this.responseText);
                 try {
                     if (rresult) {
+                        console.log(rresult);
                         
                         if (rresult['msgs'] != false){
+                            $(".MessagesCounter").html(rresult['msgs'].length );
+                            $(".MessagesCounter").show();
                             SetMsgs(rresult['msgs']);
                         }
-                        if ($("#NutfList").length < 2){
-                            SetNotification(rresult['nutf']);
+                        
+                        if (rresult['nutf']['likes'] != false  || rresult['nutf']['comments'] != false){
+
+                            var commentsCounter = (rresult['nutf']['comments'] != false) ? rresult['nutf']['comments'].length  : 0 ;
+                            var LikesCounter    = (rresult['nutf']['likes'] != false) ? rresult['nutf']['likes'].length  : 0 ;
+
+                            var curent = ($(".notificationCounter").html() === " ") ?  0 : parseInt($(".notificationCounter").html()) ;
+                            if ( (commentsCounter + LikesCounter) > curent ){
+                                $("#NutfList").html("");
+                                SetNotification(rresult['nutf']);
+                            }
+
+                            
                         }
+                        
                         
 
                     } else {
@@ -482,11 +497,15 @@ $(window).on("load", function() {
     };
 
     function SetNotification(NotificationData){
+        
+        
         var nutification = [];
         if (NotificationData['likes'] != false){
+            $(".notificationCounter").show();
+            $(".notificationCounter").html(NotificationData['likes'].length);
 
             if (NotificationData['likes'].length > 1 ){
-                for (i in NotificationData['likes']){
+                for (var i in NotificationData['likes']){
                     AppendLikeNutfication(NotificationData['likes'][i]);
                 }
             } else {
@@ -494,9 +513,12 @@ $(window).on("load", function() {
             }
         }
         if (NotificationData['comments'] != false){
+            $(".notificationCounter").show();
+            var counter = (NotificationData['likes'] != false) ? NotificationData['likes'].length  : 0 ;
+            $(".notificationCounter").html( counter + NotificationData['comments'].length);
             if (NotificationData['comments'].length > 1 ){
-                for (i in NotificationData['comments']){
-                    AppendCommentNutfication(NotificationData['comments'][i]);
+                for (var x in NotificationData['comments']){
+                    AppendCommentNutfication(NotificationData['comments'][x]);
                 }
             } else {
                 AppendCommentNutfication(NotificationData['comments'][0]);
