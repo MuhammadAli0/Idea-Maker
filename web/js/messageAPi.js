@@ -24,7 +24,7 @@ $(document).ready(function () {
         return "";
     }
 
-    function parseJwt (token) {
+    function parseJwt(token) {
         var base64Url = token.split('.')[1];
         var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         return JSON.parse(window.atob(base64));
@@ -86,23 +86,23 @@ $(document).ready(function () {
         return false;
     }
 
-    function setResultToPage(result){
-        if (result['msges'] != false){
-            for (i in result['msges']){
+    function setResultToPage(result) {
+        if (result['msges'] != false) {
+            for (i in result['msges']) {
                 $('#messageButton').append(`
                 <li class="active" >
-                <a href="#" class="msdg"  name="`+result['msges'][i]['user_id']+`">
+                <a href="#" class="msdg"  name="`+ result['msges'][i]['user_id'] + `">
                 <div class="usr-msg-details">
                     <div class="usr-ms-img">
-                        <img src="`+ ((result['msges'][i]['profile_picture_url'] != null) ? result['msges'][i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') +`" alt="">
+                        <img src="`+ ((result['msges'][i]['profile_picture_url'] != null) ? result['msges'][i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
                         <span class="msg-status"></span>
                     </div>
                     <div class="usr-mg-info">
-                        <h3>`+ result['msges'][i]['fname'] + " " + result['msges'][i]['lname']  +`</h3>
-                        <p id="lastMsdgOfUserID`+ result['msges'][i]['user_id'] +`'"> ... </p>
+                        <h3>`+ result['msges'][i]['fname'] + " " + result['msges'][i]['lname'] + `</h3>
+                        <p id="lastMsdgOfUserID`+ result['msges'][i]['user_id'] + `'"> ... </p>
                     </div><!--usr-mg-info end-->
                     <span class="posted_time">00:00 PM</span>
-                    <span class="msg-notifc" id='ButOfUserID`+ result['msges'][i]['user_id'] +`'>0</span>
+                    <span class="msg-notifc" id='ButOfUserID`+ result['msges'][i]['user_id'] + `'>0</span>
                 </div><!--usr-msg-details end-->
                 </a>
             </li>
@@ -114,17 +114,17 @@ $(document).ready(function () {
     }
 
 
-    function CreateMsdgForm(user_Data){
+    function CreateMsdgForm(user_Data) {
         var msdgTemplateHtml = `		
-        <div id="FormXChat`+user_Data['user_id']+`" class="col-lg-8 col-md-12 pd-right-none pd-left-none" style="display: none;">
+        <div id="FormXChat`+ user_Data['user_id'] + `" class="col-lg-8 col-md-12 pd-right-none pd-left-none" style="display: none;">
         <div class="main-conversation-box">
             <div class="message-bar-head">
                 <div class="usr-msg-details">
                     <div class="usr-ms-img">
-                        <img src="`+ ((user_Data['profile_picture_url'] != null) ? user_Data['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') +`" alt="">
+                        <img src="`+ ((user_Data['profile_picture_url'] != null) ? user_Data['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
                     </div>
                     <div class="usr-mg-info">
-                        <h3> `+ user_Data['fname'] +' '+ user_Data['lname'] +` </h3>
+                        <h3> `+ user_Data['fname'] + ' ' + user_Data['lname'] + ` </h3>
                         <p>Online</p>
                     </div><!--usr-mg-info end-->
                 </div>
@@ -132,12 +132,12 @@ $(document).ready(function () {
             </div><!--message-bar-head end-->
 			<div class="messages-line mCustomScrollbar _mCS_1">
 
-            <div id="mCSB_1" class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside" style="max-height: none; overflow:auto; overflow-x:hidden;"
+            <div id="mCSB_`+ user_Data['user_id'] + `" class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside" style="max-height: none; overflow:auto; overflow-x:hidden;"
             tabindex="0">
             <div id="mCSB_1_container" class="mCSB_container" style="position: relative; top: -60px; left: 0px;margin-top: 145px;"
                 dir="ltr">
 
-            <div id="msgBox`+user_Data['user_id']+`"> </div>
+            <div id="msgBox`+ user_Data['user_id'] + `"> </div>
 
             </div>
 
@@ -159,7 +159,7 @@ $(document).ready(function () {
             <div class="message-send-area">
                 <form id="SendMsg">
                     <div class="mf-field">
-                        <input type="hidden" name="target_id" value="`+ user_Data['user_id'] +`">
+                        <input type="hidden" name="target_id" value="`+ user_Data['user_id'] + `">
                         <input type="text" name="message" required="" placeholder="Type a message here">
                         <button type="submit">Send</button>
                     </div>
@@ -173,61 +173,61 @@ $(document).ready(function () {
         </div><!--main-conversation-box end-->
     </div>`;
         $('#msdgForm').append(msdgTemplateHtml);
-        setTimeout(function(){ GetMassegs(user_Data['user_id'], ((user_Data['profile_picture_url'] != null) ? user_Data['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg')); }, 1000); 
-        
+        setTimeout(function () { GetMassegs(user_Data['user_id'], ((user_Data['profile_picture_url'] != null) ? user_Data['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg')); }, 1000);
+
 
     }
 
-    function LoadMassges(data, user_id, Target_profile_pic){
+    function LoadMassges(data, user_id, Target_profile_pic) {
         var myID = parseJwt(getCookie('jwt'))['data']['id'];
-        for (i in data){
-            if (data[i]['user_id_from'] === myID){
+        for (i in data) {
+            if (data[i]['user_id_from'] === myID) {
                 var myMsg = `
                 <div class="main-message-box ta-right">
                 <div class="message-dt" style="float: right;">
                     <div class="message-inner-dt">
-                        <p>`+ data[i]['content'] +`</p>
+                        <p>`+ data[i]['content'] + `</p>
                     </div> <!--message-inner-dt end-->
-                    <span>`+ data[i]['date_created'] +`</span>
+                    <span>`+ data[i]['date_created'] + `</span>
                 </div><!--message-dt end-->
                 <div class="messg-usr-img">
-                    <img src="`+myProfilePic+`" alt="">
+                    <img src="`+ myProfilePic + `" alt="">
                 </div><!--messg-usr-img end-->
             </div><!--main-message-box end-->
 
 
 
                 `;
-                $("#msgBox"+user_id).append(myMsg);
-                
-                
+                $("#msgBox" + user_id).append(myMsg);
+
+
 
             } else {
                 var hisMsg = `
                 <div class="main-message-box st3">
                     <div class="message-dt st3">
                         <div class="message-inner-dt">
-                            <p> `+ data[i]['content'] +` </p>
+                            <p> `+ data[i]['content'] + ` </p>
                         </div><!--message-inner-dt end-->
-                        <span>`+ data[i]['date_created'] +`</span>
+                        <span>`+ data[i]['date_created'] + `</span>
                     </div><!--message-dt end-->
                     <div class="messg-usr-img">
-                        <img src="`+ Target_profile_pic +`" alt="">
+                        <img src="`+ Target_profile_pic + `" alt="">
                     </div><!--messg-usr-img end-->
                 </div><!--main-message-box end-->
                 `;
-                $("#msgBox"+user_id).append(hisMsg);
+                $("#msgBox" + user_id).append(hisMsg);
 
             }
         }
 
-        
-       
+
+
 
     }
 
 
-    function GetMassegs(id, link){
+    function GetMassegs(id, link) {
         jwt = getCookie('jwt');
 
         var form_data = JSON.stringify({
@@ -262,7 +262,7 @@ $(document).ready(function () {
     }
 
 
-    function SetRedToMsdges(id){
+    function SetRedToMsdges(id) {
         jwt = getCookie('jwt');
 
         var form_data = JSON.stringify({
@@ -279,7 +279,7 @@ $(document).ready(function () {
                 try {
                     if (rresult) {
                         console.log(rresult);
-                        
+
 
                     } else {
                     }
@@ -296,21 +296,21 @@ $(document).ready(function () {
         return false;
     }
 
-    function SetUpdate(data){
-        if (data['msgs'] != false){
-            if (data['msgs'].length > 0 ){
-                $('#ButOfUserID'+data['msgs'][i]['user_id_from']).html(data['msgs'].length);
+    function SetUpdate(data) {
+        if (data['msgs'] != false) {
+            if (data['msgs'].length > 0) {
+                $('#ButOfUserID' + data['msgs'][i]['user_id_from']).html(data['msgs'].length);
             }
 
-            for (i in data['msgs']){
-                if ($('#msgBox'+data['msgs'][i]['user_id_from']).length > 0 ){
+            for (i in data['msgs']) {
+                if ($('#msgBox' + data['msgs'][i]['user_id_from']).length > 0) {
                     var hisMsg = `
                 <div class="main-message-box st3">
                     <div class="message-dt st3">
                         <div class="message-inner-dt">
-                            <p> `+ data['msgs'][i]['content'] +` </p>
+                            <p> `+ data['msgs'][i]['content'] + ` </p>
                         </div><!--message-inner-dt end-->
-                        <span>`+ data['msgs'][i]['date_created'] +`</span>
+                        <span>`+ data['msgs'][i]['date_created'] + `</span>
                     </div><!--message-dt end-->
                     <div class="messg-usr-img">
                         <img src="" alt="">
@@ -318,20 +318,23 @@ $(document).ready(function () {
                 </div><!--main-message-box end-->
                 `;
 
-                    $('#msgBox'+data['msgs'][i]['user_id_from']).append(hisMsg);
+                    $('#msgBox' + data['msgs'][i]['user_id_from']).append(hisMsg);
                     console.log(data['msgs']);
+                    $('#mCSB_' + data['msgs'][i]['user_id_from']).animate({ scrollTop:  $('#mCSB_' + data['msgs'][i]['user_id_from']).height() * 3 + 139 }, 1000);
+
                     SetRedToMsdges(data['msgs'][i]['user_id_from']);
+                    
                 }
-                
+
                 // $('#lastMsdgOfUserID'+data['msgs'][i]['user_id_from']).html(data['msgs'][i]['date_created']);
-                
+
             }
         }
         console.log(data);
         return false;
     }
 
-    function Update(){
+    function Update() {
         jwt = getCookie('jwt');
 
         var form_data = JSON.stringify({
@@ -362,22 +365,32 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     }
-    
-    setInterval(function(){ Update(); }, 5000);
 
-    $(document).on('click', '.msdg', function (){
+
+
+
+    setInterval(function () { Update(); }, 5000);
+
+
+
+    $(document).on('click', '.msdg', function () {
         var form = $(this);
         var id = form[0]['name'];
 
-        console.log(form);
 
         var link = form[0].firstElementChild.firstElementChild.firstElementChild['src'];
-        
+
+        $(window).load();
         SetRedToMsdges(id);
-        $("#FormXChat"+id).css("display", "block");
-        
+        $('.col-lg-8').hide();
+
+        $("#FormXChat" + id).css("display", "block");
+
+        $('#mCSB_' + id).animate({ scrollTop:  $('#mCSB_' + id).height() * 3 + 139 }, 1000);
+
         return false;
     });
+
 
 
     $(document).on('submit', '#SendMsg', function () {
@@ -396,6 +409,9 @@ $(document).ready(function () {
             "msg": update_account_form_obj['message']
 
         });
+        var msgText = update_account_form[0][1]["value"] ;
+        update_account_form[0][1]["value"] = "";
+
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.addEventListener("readystatechange", function () {
@@ -409,17 +425,18 @@ $(document).ready(function () {
                 <div class="main-message-box ta-right">
                 <div class="message-dt" style="float: right;">
                     <div class="message-inner-dt">
-                        <p>`+ update_account_form_obj['message'] +`</p>
+                        <p>`+ update_account_form_obj['message'] + `</p>
                     </div><!--message-inner-dt end-->
                     <span>NOW</span>
                 </div><!--message-dt end-->
                 <div class="messg-usr-img">
-                    <img src="`+myProfilePic+`" alt="">
+                    <img src="`+ myProfilePic + `" alt="">
                 </div><!--messg-usr-img end-->
             </div><!--main-message-box end-->
                 `;
-                    $("#msgBox"+update_account_form_obj['target_id']).append(myMsg);
-                    update_account_form[0][1]["value"] = ""; 
+                        $("#msgBox" + update_account_form_obj['target_id']).append(myMsg);
+                        $('#mCSB_' + update_account_form_obj['target_id']).animate({ scrollTop:  $('#mCSB_' + update_account_form_obj['target_id']).height() * 3 + 139}, 1000);
+
 
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
 
@@ -431,6 +448,8 @@ $(document).ready(function () {
                 }
                 catch (err) {
                     console.log(err);
+                    update_account_form[0][1]["value"] = msgText;
+
                     // on error/fail, tell the user he needs to login to show the account page
                     // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
                     // window.location.href = "?login";
@@ -444,7 +463,7 @@ $(document).ready(function () {
         return false;
     });
 
-    
+
 
 });
 
