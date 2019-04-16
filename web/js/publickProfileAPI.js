@@ -335,7 +335,7 @@ $(document).ready(function () {
 
                                                     
 
-                                <h3> <a href="profile.html?id=`+ Comment['user_id'] + `&username=` + rresult['name']['username'] + `">` + name + `</a></h3>
+                                <h3> <a href="profile.html?user_id=`+ Comment['user_id'] + `&username=` + rresult['name']['username'] + `">` + name + `</a></h3>
                                 <span><img src="images/clock.png" alt=""> `+ time + ` </span>
                                 <p>`+ body + ` </p>
                                 
@@ -473,11 +473,12 @@ $(document).ready(function () {
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.addEventListener("readystatechange", function () {
+            
             if (this.readyState === 4) {
 
                 try {
+                    console.log(this.responseText);
                     result = $.parseJSON(this.responseText);
-                    console.log(result);
                     if (result['msges'] === true) {
                         $(".bbbnotify").toggleClass("CMVactive");
                         $("#notifyType").toggleClass("success");

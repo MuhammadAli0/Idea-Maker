@@ -456,7 +456,7 @@ $(document).ready(function () {
 
                                                     
 
-                                <h3> <a href="profile.html?id=`+ Comment['user_id'] + `&username=` + rresult['name']['username'] + `">` + name + `</a></h3>
+                                <h3> <a href="profile.html?user_id=`+ Comment['user_id'] + `&username=` + rresult['name']['username'] + `">` + name + `</a></h3>
                                 <span><img src="images/clock.png" alt=""> `+ time + ` </span>
                                 <p>`+ body + ` </p>
                                 
