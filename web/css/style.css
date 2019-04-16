@@ -851,6 +851,7 @@ main {
 
 
 
+
 /* ============== tags-sec ============= */
 
 .tags-sec {
@@ -1221,6 +1222,12 @@ main {
 	width: 100%;
 	padding: 15px 20px;
 }
+
+/* ============== liked-sec ============= */
+.unlike{
+	color: #e44d3a !important;
+}
+
 .like-com {
 	float: left;
 }
@@ -5345,3 +5352,4 @@ input[type="checkbox"]:before{
 input:checked[type="checkbox"]:before{
 	left:30px;
 }
+

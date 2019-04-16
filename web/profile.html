@@ -17,6 +17,8 @@
     <link rel="stylesheet" type="text/css" href="lib/slick/slick-theme.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/responsive.css">
+
+    
 </head>
 
 
@@ -35,10 +37,7 @@
                             </div>
                             <!--logo end-->
                             <div class="search-bar">
-                                <form>
-                                    <input type="text" name="search" placeholder="Search...">
-                                    <button type="submit"><i class="la la-search"></i></button>
-                                </form>
+        
                             </div>
                             <!--search-bar end-->
                             <nav>
@@ -67,7 +66,6 @@
                                         <div class="notification-box msg">
                                             <div class="nt-title">
                                                 <h4>Setting</h4>
-                                                <a href="#" title="">Clear all</a>
                                             </div>
                                             <div class="nott-list">
                                                 <div id="navMsgs"> No New Messages Avalibale</div>
@@ -90,7 +88,7 @@
                                         <div class="notification-box">
                                             <div class="nt-title">
                                                 <h4>Setting</h4>
-                                                <a href="#" title="">Clear all</a>
+                                                <a id="Clear-Nut" href="#" title="">Clear all</a>
                                             </div>
         
         
@@ -132,7 +130,7 @@
                         <!--header-data end-->
                     </div>
                 </header>
-                <!--header end-->
+        
 
 
         <section class="cover-sec">
@@ -155,9 +153,7 @@
                                         <!--user-pro-img end-->
                                         <div class="user_pro_status">
                                             <ul class="flw-hr">
-                                                <li><a href="#" title="" class="flww"><i class="la la-plus"
-                                                            id="accType"></i></a></li>
-
+                                                <li class="flww"><i class="la la-plus" id="accType"></i></li>
                                             </ul>
 
                                         </div>
@@ -172,9 +168,10 @@
                             <div class="col-lg-6">
                                 <div class="main-ws-sec">
                                     <div class="user-tab-sec">
-                                        <h3 id="name">John Doe</h3>
+                                        <h3 id="name">.. ..</h3>
+
                                         <div class="star-descp">
-                                            <span></span>
+                                            <span id="title"></span>
 
                                         </div>
                                         <!--star-descp end-->
@@ -248,12 +245,95 @@
                                 </div>
                                 <!--main-ws-sec end-->
                             </div>
+
+                            <style>
+                                .modal .modal-dialog {
+                                    width: 400px;
+                                }
+                        
+                                .bbbnotify {
+                                    position: absolute;
+                                    top: 0px;
+                                    width: 100%;
+                                    height: 0;
+                                    box-sizing: border-box;
+                                    color: white;
+                                    text-align: center;
+                                    background: rgba(0, 0, 0, .6);
+                                    overflow: hidden;
+                                    box-sizing: border-box;
+                                    transition: height .2s;
+                                }
+
+                        
+                                #notifyType:before {
+                                    display: block;
+                                    margin-top: 15px;
+                        
+                                }
+                        
+                                .CMVactive {
+                                    height: 50px;
+                                }
+                        
+                                .success:before {
+                                    Content: "Message  Sent :)";
+                                }
+                        
+                                .failure:before {
+                                    Content: "Oh no! Something didn't go as planned :(";
+                                }
+                            </style>
+
+
+
+                            <div id="modal" class="modal">
+                                <div class="modal-dialog animated">
+                                    <div class="modal-content">
+                                        <form class="form-horizontal" id="messageForm">
+                                            <div class="modal-header">
+                                                <strong>You're On Your Way To Send a Message.</strong>
+                                            </div>
+                                            <div class="bbbnotify"><span id="notifyType" class=""></span></div>
+
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <div class="input-group col-xs-7">
+
+                                                            <textarea required="" type="text" name="msg" id="msg"  class="form-control" placeholder="Hi, Whats Gooing On!!         Enter Your Message Here."></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default" type="button"
+                                                    onclick="CloseModal()">Close</button>
+                                                <button class="btn btn-primary" type="submit">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+
                             <div class="col-lg-3">
                                 <div class="right-sidebar">
                                     <div class="message-btn">
+                                        <button class="btn btn-success fa fa-envelope" type="button"
+                                            onclick="showModal()"> Message</button>
 
-                                        <a href="#" title=""><i class="fa fa-envelope"></i> Message</a>
+
                                     </div>
+                                    <div class="col-lg-12">
+                                    </div>
+                                    <script>
+                                        function showModal() {
+                                            $('#modal').show();
+                                        }
+                                        function CloseModal() {
+                                            $('#modal').hide();
+                                        }
+                                    </script>
                                     <!--widget-portfolio end-->
                                 </div>
                                 <!--right-sidebar end-->

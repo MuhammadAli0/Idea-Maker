@@ -1,3 +1,7 @@
+ErrorDocument 404 /web/unvalidLink.html
+ErrorDocument 500 /web/SomeThingWrong.html
+
+
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html
     AddOutputFilterByType DEFLATE text/css
@@ -24,6 +28,8 @@
     BrowserMatch ^Mozilla/4 gzip-only-text/html
     BrowserMatch ^Mozilla/4\.0[678] no-gzip
     BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+    
 </IfModule>
 <IfModule mod_expires.c>
   ExpiresActive On
@@ -49,4 +55,6 @@
   ExpiresByType application/pdf "access plus 1 month"
   ExpiresByType application/x-shockwave-flash "access plus 1 month"
 </IfModule>
+
+
 

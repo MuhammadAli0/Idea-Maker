@@ -670,7 +670,7 @@ class DataHandeler extends Register
     // private $host = '127.0.0.1';
     // private $MySqlUsername = 'root';
     // private $MySqlPassword = '23243125';
-    // private $DBname        = 'mydb';
+    // private $DBname        = 'idea';
 
     private $host = 'sql2.freemysqlhosting.net';
     private $MySqlUsername = 'sql2286394';

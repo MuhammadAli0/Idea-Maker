@@ -3,10 +3,10 @@ date_default_timezone_set('Africa/Cairo');
 
 
 class homeDB{
-    // private $host = 'localhost';
+    // private $host = '127.0.0.1';
     // private $MySqlUsername = 'root';
     // private $MySqlPassword = '23243125';
-    // private $DBname        = 'mydb';
+    // private $DBname        = 'idea';
 
     // private $host = 'db4free.net';
     // private $MySqlUsername = 'ideamakeruser';
@@ -93,7 +93,9 @@ class GetData{
     public function GetPosts($user_id){
         if ($user_id != FALSE)
         {
-            $dlb = $this->conn->prepare("SELECT * FROM Posts WHERE user_id = '$user_id'");
+            $dlb = $this->conn->prepare("SELECT b.*,count(b.post_id) FROM Likes a 
+            left join Posts b on a.post_id and b.post_id WHERE b.user_id = '$user_id' group by b.post_id
+            ");
             $dlb->execute();
             if($dlb->rowCount() > 0){
                 $data     = $dlb->fetchAll();
@@ -114,7 +116,7 @@ class GetData{
     }
 
     public function GetLikes($user_id){
-        $dlb = $this->conn->prepare("SELECT * FROM Likes WHERE user_id = '$user_id'");
+        $dlb = $this->conn->prepare("SELECT * FROM Likes WHERE user_id = '$user_id' OR post_id in (SELECT post_id FROM Posts WHERE user_id = '$user_id')");
         $dlb->execute();
         if($dlb->rowCount() > 0){
             $data     = $dlb->fetchAll();
@@ -348,7 +350,7 @@ class userActions extends retriveHome {
 
     public function delComment ($comment_id){
         try{
-            $this->conn->exec("DELETE FROM Comments WHERE comment_id = '$comment_id'");
+            $this->conn->exec("DELETE FROM Comments WHERE comment_id = '$comment_id' and user_id = '$this->user_id'");
             return TRUE;
         } catch (PDOException $e){
             die($e->getMessage());

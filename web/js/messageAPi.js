@@ -88,13 +88,13 @@ $(document).ready(function () {
 
     function setResultToPage(result) {
         if (result['msges'] != false) {
-            for (i in result['msges']) {
+            for (var i in result['msges']) {
                 $('#messageButton').append(`
                 <li class="active" >
                 <a href="#" class="msdg"  name="`+ result['msges'][i]['user_id'] + `">
                 <div class="usr-msg-details">
                     <div class="usr-ms-img">
-                        <img src="`+ ((result['msges'][i]['profile_picture_url'] != null) ? result['msges'][i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+                        <img style="height: 50px;width: 50px;" src="`+ ((result['msges'][i]['profile_picture_url'] != null) ? result['msges'][i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
                         <span class="msg-status"></span>
                     </div>
                     <div class="usr-mg-info">
@@ -102,7 +102,7 @@ $(document).ready(function () {
                         <p id="lastMsdgOfUserID`+ result['msges'][i]['user_id'] + `'"> ... </p>
                     </div><!--usr-mg-info end-->
                     <span class="posted_time">00:00 PM</span>
-                    <span class="msg-notifc" id='ButOfUserID`+ result['msges'][i]['user_id'] + `'>0</span>
+                    <span class="msg-notifc" style="display: none;" id='ButOfUserID`+ result['msges'][i]['user_id'] + `'>0</span>
                 </div><!--usr-msg-details end-->
                 </a>
             </li>
@@ -121,11 +121,10 @@ $(document).ready(function () {
             <div class="message-bar-head">
                 <div class="usr-msg-details">
                     <div class="usr-ms-img">
-                        <img src="`+ ((user_Data['profile_picture_url'] != null) ? user_Data['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+                        <img style="height: 50px;width: 50px;" src="`+ ((user_Data['profile_picture_url'] != null) ? user_Data['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
                     </div>
                     <div class="usr-mg-info">
                         <h3> `+ user_Data['fname'] + ' ' + user_Data['lname'] + ` </h3>
-                        <p>Online</p>
                     </div><!--usr-mg-info end-->
                 </div>
                 <a href="#" title=""><i class="fa fa-ellipsis-v"></i></a>
@@ -180,7 +179,7 @@ $(document).ready(function () {
 
     function LoadMassges(data, user_id, Target_profile_pic) {
         var myID = parseJwt(getCookie('jwt'))['data']['id'];
-        for (i in data) {
+        for (var i in data) {
             if (data[i]['user_id_from'] === myID) {
                 var myMsg = `
                 <div class="main-message-box ta-right">
@@ -191,7 +190,7 @@ $(document).ready(function () {
                     <span>`+ data[i]['date_created'] + `</span>
                 </div><!--message-dt end-->
                 <div class="messg-usr-img">
-                    <img src="`+ myProfilePic + `" alt="">
+                    <img style="height: 50px;width: 50px;" style="height: 50px;width: 50px;" src="`+ myProfilePic + `" alt="">
                 </div><!--messg-usr-img end-->
             </div><!--main-message-box end-->
 
@@ -212,7 +211,7 @@ $(document).ready(function () {
                         <span>`+ data[i]['date_created'] + `</span>
                     </div><!--message-dt end-->
                     <div class="messg-usr-img">
-                        <img src="`+ Target_profile_pic + `" alt="">
+                        <img style="height: 50px;width: 50px;" src="`+ Target_profile_pic + `" alt="">
                     </div><!--messg-usr-img end-->
                 </div><!--main-message-box end-->
                 `;
@@ -299,10 +298,11 @@ $(document).ready(function () {
     function SetUpdate(data) {
         if (data['msgs'] != false) {
             if (data['msgs'].length > 0) {
+                $('#ButOfUserID' + data['msgs'][i]['user_id_from']).show();
                 $('#ButOfUserID' + data['msgs'][i]['user_id_from']).html(data['msgs'].length);
             }
 
-            for (i in data['msgs']) {
+            for (var i in data['msgs']) {
                 if ($('#msgBox' + data['msgs'][i]['user_id_from']).length > 0) {
                     var hisMsg = `
                 <div class="main-message-box st3">
@@ -320,10 +320,10 @@ $(document).ready(function () {
 
                     $('#msgBox' + data['msgs'][i]['user_id_from']).append(hisMsg);
                     console.log(data['msgs']);
-                    $('#mCSB_' + data['msgs'][i]['user_id_from']).animate({ scrollTop:  $('#mCSB_' + data['msgs'][i]['user_id_from']).height() * 3 + 139 }, 1000);
+                    $('#mCSB_' + data['msgs'][i]['user_id_from']).animate({ scrollTop: $('#mCSB_' + data['msgs'][i]['user_id_from']).height() * 3 + 139 }, 1000);
 
                     SetRedToMsdges(data['msgs'][i]['user_id_from']);
-                    
+
                 }
 
                 // $('#lastMsdgOfUserID'+data['msgs'][i]['user_id_from']).html(data['msgs'][i]['date_created']);
@@ -386,7 +386,7 @@ $(document).ready(function () {
 
         $("#FormXChat" + id).css("display", "block");
 
-        $('#mCSB_' + id).animate({ scrollTop:  $('#mCSB_' + id).height() * 3 + 139 }, 1000);
+        $('#mCSB_' + id).animate({ scrollTop: $('#mCSB_' + id).height() * 3 + 139 }, 1000);
 
         return false;
     });
@@ -409,7 +409,7 @@ $(document).ready(function () {
             "msg": update_account_form_obj['message']
 
         });
-        var msgText = update_account_form[0][1]["value"] ;
+        var msgText = update_account_form[0][1]["value"];
         update_account_form[0][1]["value"] = "";
 
         var xhr = new XMLHttpRequest();
@@ -430,12 +430,12 @@ $(document).ready(function () {
                     <span>NOW</span>
                 </div><!--message-dt end-->
                 <div class="messg-usr-img">
-                    <img src="`+ myProfilePic + `" alt="">
+                    <img style="height: 50px;width: 50px;" src="`+ myProfilePic + `" alt="">
                 </div><!--messg-usr-img end-->
             </div><!--main-message-box end-->
                 `;
                         $("#msgBox" + update_account_form_obj['target_id']).append(myMsg);
-                        $('#mCSB_' + update_account_form_obj['target_id']).animate({ scrollTop:  $('#mCSB_' + update_account_form_obj['target_id']).height() * 3 + 139}, 1000);
+                        $('#mCSB_' + update_account_form_obj['target_id']).animate({ scrollTop: $('#mCSB_' + update_account_form_obj['target_id']).height() * 3 + 139 }, 1000);
 
 
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
@@ -462,6 +462,16 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     });
+
+
+
+
+
+
+
+
+
+
 
 
 

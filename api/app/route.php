@@ -175,7 +175,6 @@ $app->post('/recovery/password/', function($request, $response){
 
         } else {
 
-            $logging = new  RecoveryLog;
             
             $jwt            = $data['jwt'];
             $recover        = new Recovery('----');
@@ -185,18 +184,11 @@ $app->post('/recovery/password/', function($request, $response){
                 if ($recover->RePassword($UserName, $data['password']) == TRUE ){
                     
                     
-                    $logging->write(json_encode(array(
-                        "Status" => "Recoverd",
-                        "Username" => $UserName
-                    )));
                     header("Location: https://idea-maker.herokuapp.com/web/", true, 301);
                     exit();
         
                 }else{
-                    $logging->write(json_encode(array(
-                        "Status" => "SomeThingWrong",
-                        "Username" => $UserName
-                    )));
+
         
                     $response->write(json_encode(array(
                         "status" => 123,
@@ -204,9 +196,7 @@ $app->post('/recovery/password/', function($request, $response){
                     )));
                 }
             }else{
-                $logging->write(json_encode(array(
-                    "Status" => "please do not hack me, I am poor."
-                )));
+
         
                 $response->write(json_encode(array(
                     "status" => 123,
@@ -237,7 +227,7 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{user_id}/{username}]', function($requ
                 $action = new  userActions($AllowData->id);
 
                 if ($opt == 2 ){
-                    if ($action->like($data['data']['post_id'])){
+                    if ($action->like($data['post_id'])){
                         $response->write(json_encode(array(
                             "status" => 200
                         )));
@@ -265,7 +255,7 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{user_id}/{username}]', function($requ
                     }
 
                 } elseif ($opt ==  150 ) {
-                    if ($action->unLike($data['data']['post_id'])){
+                    if ($action->unLike($data['post_id'])){
                         $response->write(json_encode(array(
                             "status" => 200
                         )));
@@ -278,7 +268,7 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{user_id}/{username}]', function($requ
                     }
                 } elseif ($opt == 250) {
                     $svData = new GetData;
-                    $rvData = $svData->GetComments($data['data']['post_id']);
+                    $rvData = $svData->GetComments($data['post_id']);
                     if ($rvData){
                         $response->write(json_encode(array(
                             "status" => 200,
@@ -609,6 +599,10 @@ $app->post('/action', function($request, $response){
                 "msgs" => $GetDataX->GetUnReadedMessages($AllowData->id),
                 "nutf" => $GetDataX->GetNuotification($AllowData->id)
                 ))); 
+            }elseif ($opt == 600){
+                $response->getBody()->write(json_encode(array(
+                    "status" => $action->SetReadToNtuf()
+                )));
             }
              else {
 

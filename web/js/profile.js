@@ -59,7 +59,13 @@ $(document).ready(function () {
                     if (result) {
                         console.log(result);
                         setResultToPage(result);
-                        setPosts(result);
+                        if (result['accType'] === "idea-maker"){
+                            setPosts(result);
+                        } else {
+                            $('.tab-feed').hide();
+                            $('#info').click();
+                        }
+                        
                         // ShowAccountUpdateForm();
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
@@ -141,7 +147,7 @@ $(document).ready(function () {
         }
     }
 
-    function SetMyPosts(i, result) { 
+    function SetMyPosts(i, result) {
         var owner = result['posts'][i]['user_id'];
         var postID = result['posts'][i]['post_id'];
         var title = result['posts'][i]['title'];
@@ -157,7 +163,7 @@ $(document).ready(function () {
         var name = result['personal']['fname'] + ' ' + result['personal']['lname'];
 
         html = `
-    <div class="post-bar" id="post_`+ postID +`">
+    <div class="post-bar" id="post_`+ postID + `">
     <div class="post_topbar">
         <div class="usy-dt">
             <img style="width: 60px;
@@ -189,27 +195,24 @@ $(document).ready(function () {
     </div>
     <div class="job-status-bar">
         <ul class="like-com">
+
+
             <li>
-                <form id="LikeForm">
-                <input type="hidden"  name="post_id" value="`+ postID + `"> 
-                <input type="hidden" id="`+ postID + `50S50"  name="action" value="2"> 
-                <button type="submit" name="like" value="1" id="`+ postID + `"><i class="la la-heart"></i><div id="` + postID + `like">Like</div></button> 
-                </form>
-                
-                
-            </li> 
+                <a id="`+ postID + `" class="like" href="#" data-text-swap="Unlike" ><i class="la la-heart"></i> Like</a>
+            </li>
+
+
             <li>
-            <form id="GetComments">
-            <input type="hidden"  name="post_id" value="`+ postID + `"> 
-            <button type="submit" name="comment"  id="`+ postID + `comm"><i title="" class="com"><img src="images/com.png"> </i> <div> Comment </div> </button> 
-            </form>
-            </li> 
+                <a id="`+ postID + `" href="#" title="" class="com"><img src="images/com.png" alt=""> Comment </a></li>
+            <li>
+
+
 
         </ul>
        <!-- <a><i class="la la-eye"></i>Views 50</a> -->
 
     </div>
-    <div class="comment-section" id="`+ postID + `commentSec"  style="visibility: hidden;">
+    <div class="comment-section" id="`+ postID + `commentSec"  style="display: none;">
 <div class="plus-ic">
 </div>
 
@@ -238,8 +241,11 @@ $(document).ready(function () {
         $('#feed-dd').append(html);
         if (result['likes'] != 'false') {
             for (w in result['likes']) {
-                $("#" + result['likes'][w]['post_id'] + "50S50").val(150);
-                $("#" + result['likes'][w]['post_id'] + "like").html("Un Like");
+                if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id']){
+                    $("#" + result['likes'][w]['post_id']).html( '<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
+                    $("#" + result['likes'][w]['post_id']).removeClass( "like" ).addClass( "unlike" );
+                    $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap = "like";
+                }
 
             }
         }
@@ -267,7 +273,7 @@ $(document).ready(function () {
         }
     }
 
-    function setComments(Comment, update_account_form_obj) {
+    function setComments(Comment, post_id) {
         jwt = getCookie('jwt');
         var body = Comment['content'];
         var time = Comment['date_created'];
@@ -287,18 +293,35 @@ $(document).ready(function () {
 
                         var name = rresult['name']['fname'] + ' ' + rresult['name']['lname'];
                         var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
+                        var DeleteComment = "none";
+                        if (Comment['user_id'] === parseJwt(jwt)['data']['id']){
+                            DeleteComment = "block";
+                        }
+
 
                         var commentHTML = `
-                <div class="comment-sec">
+                <div id="`+ Comment['comment_id'] +`" class="comment-sec">
                 <ul>
-                    <li>
+                    <li>     
+                
+                <div class="ed-opts" style="display: `+DeleteComment+`;" >
+                    <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                    <ul class="ed-options" style="width: 75px;padding-left: 10px;padding-right: 10px;">
+                        <li><a id="delete_Comment" data-comment_id="`+ Comment['comment_id'] +`"  href="#" title="">Delete</a></li>
+                    </ul>
+                </div>
+
                         <div class="comment-list">
+                        
                             <div class="bg-img">
-                                <img style="width: 60px;
-                                height: 60px;" src="`+ profile_pic + `" alt="">
+                                <img style="width: 40px;
+                                height: 40px;" src="`+ profile_pic + `" alt="">
                             </div>
                             <div class="comment">
-                                <h3> <a href="profile.html?id=`+ Comment['user_id'] + `">` + name + `</a></h3>
+
+                                                    
+
+                                <h3> <a href="profile.html?id=`+ Comment['user_id'] + `&username=` + rresult['name']['username'] + `">` + name + `</a></h3>
                                 <span><img src="images/clock.png" alt=""> `+ time + ` </span>
                                 <p>`+ body + ` </p>
                                 
@@ -309,7 +332,8 @@ $(document).ready(function () {
             </div>                
         `;
 
-                        $("#" + update_account_form_obj['post_id'] + "comment").append(commentHTML);
+
+                        $("#" + post_id + "comment").append(commentHTML);
 
 
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
@@ -336,46 +360,15 @@ $(document).ready(function () {
 
     }
 
-    function GetUnReadedMessages(){
-        jwt = getCookie('jwt');
-
-        var form_data = JSON.stringify({
-            "option": 150,
-            "jwt": jwt,
-        });
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                var rresult = $.parseJSON(this.responseText);
-                try {
-                    if (rresult['status'] === 200) {
-
-
-                        var commentHTML = `
-            
-                        `;
-
-                        // $("#" + update_account_form_obj['post_id'] + "comment").append(commentHTML);
-                        console.log(rresult);
-
-                    } else {
-
-                    }
-                }
-                catch (err) {
-                    console.log(err);
-                }
-            }
-        });
-        xhr.open("POST", "/api/index.php/home/");
-        xhr.setRequestHeader("content-type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.send(form_data);
-
-        return false;
+    function custom_sort(a, b) {
+        return new Date(a.date_created).getTime() - new Date(b.date_created).getTime();
     }
+
+    function parseJwt (token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(window.atob(base64));
+    };
     
 
     $(document).on('submit', '#registrationForm', function () {
@@ -665,66 +658,11 @@ $(document).ready(function () {
     });
 
 
-    $(document).on('submit', '#LikeForm', function () {
-        var update_account_form = $(this);
-        var jwt = getCookie('jwt');
-        var update_account_form_obj = update_account_form.serializeObject()
-        // add jwt on the object
-        update_account_form_obj.jwt = jwt;
-        // convert object to json string
-
-
-        var form_data = JSON.stringify({
-            "option": update_account_form_obj['action'],
-            "jwt": update_account_form_obj.jwt,
-            "data": update_account_form_obj
-        });
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                result = $.parseJSON(this.responseText);
-                console.log(result);
-                try {
-                    if (result['status'] === 200) {
-                        if (update_account_form_obj['action'] == 2) {
-                            // $("#"+ update_account_form_obj['post_id'] +"").attr("disabled", true);
-                            $("#" + update_account_form_obj['post_id'] + "50S50").val(150);
-                            $("#" + update_account_form_obj['post_id'] + "like").html("Un Like");
-
-
-                        } else {
-                            $("#" + update_account_form_obj['post_id'] + "50S50").val(2);
-                            $("#" + update_account_form_obj['post_id'] + "like").html("Like");
-
-                        }
-
-                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
-
-                    } else {
-                        // on error/fail, tell the user he needs to login to show the account page
-                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "?login";
-                    }
-                }
-                catch (err) {
-                    // on error/fail, tell the user he needs to login to show the account page
-                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "?login";
-                }
-            }
-        });
-        xhr.open("POST", "/api/index.php/home/");
-        xhr.setRequestHeader("content-type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.send(form_data);
-        return false;
-    });
-
     $(document).on('submit', '#CommentsForm', function () {
         var update_account_form = $(this);
         var jwt = getCookie('jwt');
         var update_account_form_obj = update_account_form.serializeObject()
+        update_account_form[0][0].value = "";
         // add jwt on the object
         update_account_form_obj.jwt = jwt;
         // convert object to json string
@@ -752,7 +690,8 @@ $(document).ready(function () {
                         <li>
                             <div class="comment-list">
                                 <div class="bg-img">
-                                    <img src="images/resources/bg-img1.png" alt="">
+                                    <img style="width: 40px;
+                                    height: 40px;" src="`+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
                                 </div>
                                 <div class="comment">
                                     <h3>`+ result['personal']['fname'] + ' ' + result['personal']['lname'] + `</h3>
@@ -767,57 +706,6 @@ $(document).ready(function () {
                         `;
 
                         $("#" + update_account_form_obj['post_id'] + "comment").append(commentHTML);
-
-
-                    } else {
-                        // on error/fail, tell the user he needs to login to show the account page
-                        // window.location.href = "?login";
-                    }
-                }
-                catch (err) {
-                    // on error/fail, tell the user he needs to login to show the account page
-                    // window.location.href = "?login";
-                }
-            }
-        });
-        xhr.open("POST", "/api/index.php/home/");
-        xhr.setRequestHeader("content-type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.send(form_data);
-        return false;
-    });
-
-    $(document).on('submit', '#GetComments', function () {
-        var update_account_form = $(this);
-        var jwt = getCookie('jwt');
-        var update_account_form_obj = update_account_form.serializeObject()
-        // add jwt on the object
-        update_account_form_obj.jwt = jwt;
-        // convert object to json string
-        var form_data = JSON.stringify({
-            "option": 250,
-            "jwt": update_account_form_obj.jwt,
-            "data": update_account_form_obj
-        });
-        $("#" + update_account_form_obj['post_id'] + "comm").attr("disabled", true);
-        $("#" + update_account_form_obj['post_id'] + "commentSec").css("visibility", "visible");
-
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                resultx = $.parseJSON(this.responseText);
-                console.log(resultx);
-                try {
-                    if (resultx['status'] === 200) {
-                        var CommentData = resultx['data'];
-                        for (n in CommentData) {
-                            var Comment = CommentData[n];
-                            setComments(Comment, update_account_form_obj);
-                        }
-
-
 
 
                     } else {
@@ -866,7 +754,7 @@ $(document).ready(function () {
         xhr.setRequestHeader("cache-control", "no-cache");
 
         xhr.send(data);
-        location.reload();
+        $(window).load();
         return false;
     });
 
@@ -894,11 +782,9 @@ $(document).ready(function () {
                 var resp = JSON.parse(this.response);
                 if (resp['status'] === 200) {
                     console.log('Server got:', resp);
+                    $(window).load();
+                    loadPage();
                 }
-                // console.log('Server got:', resp);
-                // var image = document.createElement('img');
-                // image.src = resp.dataUrl;
-                // document.body.appendChild(image);
             };
         };
         xhr.send(fd);
@@ -918,6 +804,196 @@ $(document).ready(function () {
         DeletePost(post_id);
         return false;
     });
+
+    $(document).on('click', '#delete_Comment', function(){
+        var jwt = getCookie('jwt');
+        var object = $(this);
+
+        var form_data = JSON.stringify({
+            "option": 200,
+            "jwt": jwt,
+            "comment_id": object.data('comment_id')
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                var rresult = $.parseJSON(this.responseText);
+                try {
+                    if (rresult) {
+                        console.log(rresult);
+                        $("#"+ object.data('comment_id')).remove();
+
+                    } else {
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
+
+    $(document).on('click', '.com', function () {
+        var update_account_form = $(this);
+        var post_id = parseInt(update_account_form[0].id);
+        var jwt = getCookie('jwt');
+        // add jwt on the object
+        // convert object to json string
+        var form_data = JSON.stringify({
+            "option": 250,
+            "jwt": jwt,
+            "post_id" : post_id
+        });
+        update_account_form.attr("disabled", true);
+        $("#" + post_id + "commentSec").show();
+
+        update_account_form.click(false);
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                resultx = $.parseJSON(this.responseText);
+                console.log(resultx);
+                try {
+                    if (resultx['status'] === 200) {
+                        var CommentData = resultx['data'].sort(custom_sort);
+
+                        for (n in CommentData) {
+                            var Comment = CommentData[n];
+                            setComments(Comment, post_id);
+                        }
+
+                    } else {
+                        // on error/fail, tell the user he needs to login to show the account page
+                        // window.location.href = "?login";
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                    // on error/fail, tell the user he needs to login to show the account page
+                    // window.location.href = "?login";
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
+
+    $(document).on('click', '.like', function () {
+        var object = $(this);
+        var post_id = object[0].id;
+        var jwt = getCookie('jwt');
+        // add jwt on the object
+        // convert object to json string
+
+
+        var form_data = JSON.stringify({
+            "option": 2,
+            "jwt": jwt,
+            "post_id": post_id
+        });
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                result = $.parseJSON(this.responseText);
+                console.log(result);
+                try {
+                    if (result['status'] === 200) {
+
+                        object.html('<i class="la la-heart"></i>' +  object[0].dataset.textSwap);
+
+                        object.removeClass( "like" ).addClass( "unlike" );
+                        object[0].dataset.textSwap = "like";
+
+                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
+
+                    } else {
+                        // on error/fail, tell the user he needs to login to show the account page
+                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                        // window.location.href = "?login";
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                    // on error/fail, tell the user he needs to login to show the account page
+                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                    // window.location.href = "?login";
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
+
+    $(document).on('click', '.unlike', function () {
+        var object = $(this);
+        var post_id = object[0].id;
+        var jwt = getCookie('jwt');
+        // add jwt on the object
+        // convert object to json string
+
+
+        var form_data = JSON.stringify({
+            "option": 150,
+            "jwt": jwt,
+            "post_id": post_id
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                result = $.parseJSON(this.responseText);
+                console.log(result);
+                try {
+                    if (result['status'] === 200) {
+
+                        object.html('<i class="la la-heart"></i>' +  object[0].dataset.textSwap);
+                        object.removeClass( "unlike" ).addClass( "like" );
+                        object[0].dataset.textSwap = "Unlike";
+
+
+                        
+                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
+
+                    } else {
+                        // on error/fail, tell the user he needs to login to show the account page
+                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                        // window.location.href = "?login";
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                    // on error/fail, tell the user he needs to login to show the account page
+                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                    // window.location.href = "?login";
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
+
+
+
 
     function DeletePost(id){
         jwt = getCookie('jwt');
@@ -951,6 +1027,7 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     }
+
 
 
 });

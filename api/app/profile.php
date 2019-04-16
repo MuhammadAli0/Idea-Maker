@@ -13,7 +13,7 @@ class profileDB
     // private $host = '127.0.0.1';
     // private $MySqlUsername = 'root';
     // private $MySqlPassword = '23243125';
-    // private $DBname        = 'mydb';
+    // private $DBname        = 'idea';
 
     private $host = 'sql2.freemysqlhosting.net';
     private $MySqlUsername = 'sql2286394';
@@ -468,6 +468,23 @@ class actions extends retrieveProfile {
         }
     }
 
+    public function SetReadToNtuf(){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            
+            $dlp = $this->conn->prepare("UPDATE Likes SET seen = '$curentDate'
+            WHERE post_id  in (SELECT post_id from Posts WHERE user_id = '$this->user_id') and seen IS NULL;
+            
+            UPDATE Comments SET seen = '$curentDate'
+            WHERE post_id  in (SELECT post_id from Posts WHERE user_id = '$this->user_id') and seen IS NULL;
+            ");
+            $dlp->execute();
+            return true;
+        
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+    }
 
 }
     

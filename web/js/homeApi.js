@@ -41,6 +41,13 @@ $(document).ready(function () {
         return o;
     };
 
+    function parseJwt (token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(window.atob(base64));
+    };
+
+
     function loadPage() {
         // validate jwt to verify access
         var jwt = getCookie('jwt');
@@ -65,12 +72,6 @@ $(document).ready(function () {
                     if (result['profile_pic'] != null) {
                         setProfilePic(result);
                     }
-
-                    // if (result['msg'] != false){
-                    //     // SetMsgs(result['msg']);
-                    // }
-                    // SetNotification(result['nutf']);
-
 
                 }
                 catch (err) {
@@ -99,37 +100,6 @@ $(document).ready(function () {
         if (result['accType'] === "idea-maker") {
             $('#Post_button').html('<li><a class="post_project" href="#" title="">Post a Project</a></li>');
         }
-
-
-
-
-
-        // document.getElementById("phone").value = result['personal']['contact']['phone'];
-        // document.getElementById("email").value = result['personal']['contact']['email'];
-        // document.getElementById("country").value = result['personal']['country'];
-        // document.getElementById("town").value = result['personal']['town'];
-        // document.getElementById("gender").value = result['personal']['gender'];
-        // document.getElementById("summary1").value = result['personal']['summary'];
-        // document.getElementById("date").value = result['personal']['date'];
-
-        // if (result['work'] != 'false') {
-        //     document.getElementById("work_name").value = result['work']['work_name'];
-        //     document.getElementById("position").value = result['work']['position'];
-        //     document.getElementById("exp_year").value = result['work']['exp_Years'];
-        //     document.getElementById("start_work").value = result['work']['started_date'];
-        //     document.getElementById("end_work").value = result['work']['end_date'];
-        //     document.getElementById("summary2").value = result['work']['summary'];
-        // }
-
-        // if (result['University'] != 'false') {
-        //     document.getElementById("university_name").value = result['University']['uni_name'];
-        //     document.getElementById("college_degree").value = result['University']['study_field'];
-        //     document.getElementById("year").value = result['University']['year'];
-        //     document.getElementById("start_study").value = result['University']['startDate'];
-        //     document.getElementById("end_study").value = result['University']['endDate'];
-        //     document.getElementById("summary3").value = result['University']['summary'];
-        // }
-
 
     }
 
@@ -210,27 +180,24 @@ $(document).ready(function () {
     </div>
     <div class="job-status-bar">
         <ul class="like-com">
+
+
             <li>
-                <form id="LikeForm">
-                <input type="hidden"  name="post_id" value="`+ postID + `"> 
-                <input type="hidden" id="`+ postID + `50S50"  name="action" value="2"> 
-                <button type="submit" name="like" value="1" id="`+ postID + `"><i class="la la-heart"></i><div id="` + postID + `like">Like</div></button> 
-                </form>
-                
-                
-            </li> 
+                <a id="`+ postID + `" class="like" href="#" data-text-swap="Unlike" ><i class="la la-heart"></i> Like</a>
+            </li>
+
+
             <li>
-            <form id="GetComments">
-            <input type="hidden"  name="post_id" value="`+ postID + `"> 
-            <button type="submit" name="comment"  id="`+ postID + `comm"><i title="" class="com"><img src="images/com.png"> </i> <div> Comment </div> </button> 
-            </form>
-            </li> 
+                <a id="`+ postID + `" href="#" title="" class="com"><img src="images/com.png" alt=""> Comment </a></li>
+            <li>
+
+
 
         </ul>
        <!-- <a><i class="la la-eye"></i>Views 50</a> -->
 
     </div>
-    <div class="comment-section" id="`+ postID + `commentSec"  style="visibility: hidden;">
+    <div class="comment-section" id="`+ postID + `commentSec"  style="display: none;">
 <div class="plus-ic">
 </div>
 
@@ -259,8 +226,11 @@ $(document).ready(function () {
         $('#Posts_list').append(html);
         if (result['likes'] != 'false') {
             for (w in result['likes']) {
-                $("#" + result['likes'][w]['post_id'] + "50S50").val(150);
-                $("#" + result['likes'][w]['post_id'] + "like").html("Un Like");
+                if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id']){
+                    $("#" + result['likes'][w]['post_id']).html( '<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
+                    $("#" + result['likes'][w]['post_id']).removeClass( "like" ).addClass( "unlike" );
+                    $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap = "like";
+                }
 
             }
         }
@@ -332,14 +302,14 @@ $(document).ready(function () {
           
         function closeForm() {
             document.getElementById("`+ postID + `msg").style.display = "none";
-            document.getElementById("OpenMsgBut`+ postID + `").style.display = "block";
+            document.getElementById("OpenMsgBut`+ postID + `").style.display = "contents";
 
         } 
         </script>
 
         <div class="epi-sec">					
             <ul class="bk-links">
-            <button id="OpenMsgBut`+ postID + `" onclick="openForm()">Send a Message</button>
+            <button  style="background-color: rgb(255, 255, 255); display: contents;"  id="OpenMsgBut`+ postID + `" onclick="openForm()"><li><i class="la la-envelope"></i></li></button>
             <div id="`+ postID + `msg" style="display: none; border: 3px solid #f1f1f1; z-index: 9;">	
             <button id="CloseMsgBut`+ postID + `" onclick="closeForm()">Close</button>
             <form id="message">
@@ -366,27 +336,23 @@ $(document).ready(function () {
         </div>
         <div class="job-status-bar">
             <ul class="like-com">
-                <li>
-                    <form id="LikeForm">
-                    <input type="hidden"  name="post_id" value="`+ postID + `"> 
-                    <input type="hidden" id="`+ postID + `50S50"  name="action" value="2"> 
-                    <button type="submit" name="like" value="1" id="`+ postID + `"><i class="la la-heart"></i><div id="` + postID + `like">Like</div></button> 
-                    </form>
-                    
-                    
-                </li> 
-                <li>
-                <form id="GetComments">
-                <input type="hidden"  name="post_id" value="`+ postID + `"> 
-                <button type="submit" name="comment"  id="`+ postID + `comm"><i title="" class="com"><img src="images/com.png"> </i> <div> Comment </div> </button> 
-                </form>
-                </li> 
+
+            <li>
+            <a id="`+ postID + `" class="like" href="#" data-text-swap="Unlike"><i class="la la-heart"></i> Like</a>
+        </li>
+
+
+        <li>
+            <a id="`+ postID + `" href="#" title="" class="com"><img src="images/com.png" alt=""> Comment </a></li>
+        <li>
+
+
 
             </ul>
            <!-- <a><i class="la la-eye"></i>Views 50</a> -->
 
         </div>
-        <div class="comment-section" id="`+ postID + `commentSec"  style="visibility: hidden;">
+        <div class="comment-section" id="`+ postID + `commentSec"  style="display: none;">
 <div class="plus-ic">
 </div>
 
@@ -415,8 +381,9 @@ $(document).ready(function () {
                         $('#Posts_list').append(html);
                         if (result['likes'] != null) {
                             for (w in result['likes']) {
-                                $("#" + result['likes'][w]['post_id'] + "50S50").val(150);
-                                $("#" + result['likes'][w]['post_id'] + "like").html("Un Like");
+                                $("#" + result['likes'][w]['post_id']).html( '<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
+                                $("#" + result['likes'][w]['post_id']).removeClass( "like" ).addClass( "unlike" );
+                                $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap = "like";
 
                             }
                         }
@@ -441,7 +408,7 @@ $(document).ready(function () {
         return false;
     }
 
-    function setComments(Comment, update_account_form_obj) {
+    function setComments(Comment, post_id) {
         jwt = getCookie('jwt');
         var body = Comment['content'];
         var time = Comment['date_created'];
@@ -461,17 +428,34 @@ $(document).ready(function () {
 
                         var name = rresult['name']['fname'] + ' ' + rresult['name']['lname'];
                         var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
+                        var DeleteComment = "none";
+                        if (Comment['user_id'] === parseJwt(jwt)['data']['id']){
+                            DeleteComment = "block";
+                        }
+
 
                         var commentHTML = `
-                <div class="comment-sec">
+                <div id="`+ Comment['comment_id'] +`" class="comment-sec">
                 <ul>
-                    <li>
+                    <li>     
+                
+                <div class="ed-opts" style="display: `+DeleteComment+`;" >
+                    <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                    <ul class="ed-options" style="width: 75px;padding-left: 10px;padding-right: 10px;">
+                        <li><a id="delete_Comment" data-comment_id="`+ Comment['comment_id'] +`"  href="#" title="">Delete</a></li>
+                    </ul>
+                </div>
+
                         <div class="comment-list">
+                        
                             <div class="bg-img">
                                 <img style="width: 40px;
                                 height: 40px;" src="`+ profile_pic + `" alt="">
                             </div>
                             <div class="comment">
+
+                                                    
+
                                 <h3> <a href="profile.html?id=`+ Comment['user_id'] + `&username=` + rresult['name']['username'] + `">` + name + `</a></h3>
                                 <span><img src="images/clock.png" alt=""> `+ time + ` </span>
                                 <p>`+ body + ` </p>
@@ -483,7 +467,8 @@ $(document).ready(function () {
             </div>                
         `;
 
-                        $("#" + update_account_form_obj['post_id'] + "comment").append(commentHTML);
+
+                        $("#" + post_id + "comment").append(commentHTML);
 
 
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
@@ -510,264 +495,6 @@ $(document).ready(function () {
 
     }
 
-    function SetMsgs(msgs) {
-
-        $("#navMsgs").html("");
-
-        var msgsUsersUsed = [];
-        // msgsUsersUsed.push("n506070");
-
-        if (msgs['user_id_from']) {
-            AddMsgs(msgs[i]);
-            msgsUsersUsed.push(msgs[i]['user_id_from']);
-        } else {
-
-            for (i in msgs) {
-                if (SortMsgs(msgs, i, msgsUsersUsed) != false) {
-                    var msgDataHtml = `                                
-                    <p>`+ msgs[i]['content'] + `</p>
-                    `;
-
-                    var id = "#msgBody" + msgs[i]['user_id_from'] + "";
-                    setTimeout(function () { $(id).append(msgDataHtml); }, 1000);
-
-                } else {
-                    AddMsgs(msgs[i]);
-                    msgsUsersUsed.push(msgs[i]['user_id_from']);
-                }
-
-
-
-            }
-        }
-    }
-
-    function SortMsgs(msgsX, n, msgsUsersUsed) {
-        for (x in msgsUsersUsed) {
-            if (msgsX[n]['user_id_from'] === msgsUsersUsed[x]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function AddMsgs(MsgData) {
-        jwt = getCookie('jwt');
-
-        var form_data = JSON.stringify({
-            "option": 300,
-            "jwt": jwt,
-            "user_id": MsgData['user_id_from']
-        });
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                var rresult = $.parseJSON(this.responseText);
-                try {
-                    if (rresult['status'] === 200) {
-
-                        var name = rresult['name']['fname'] + ' ' + rresult['name']['lname'];
-                        var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
-
-                        var msgHTML = `
-                        <div class="notfication-details">
-                        <div class="noty-user-img">
-                            <img src="`+ profile_pic + `" alt="">
-                        </div>
-                        <div class="notification-info">
-                            <h3><a href="messages.html?user=`+ MsgData['user_id_from'] + `" title="">` + name + `</a> </h3>
-                            
-
-                                <p>`+ MsgData['content'] + `</p>
-                                <span>`+ MsgData['date_created'] + `</span>
-                                <div id="msgBody`+ MsgData['user_id_from'] + `"> </div>
-
-                        </div>
-                        <!--notification-info -->
-                    </div>
-
-        `;
-
-
-
-                        $("#navMsgs").append(msgHTML);
-
-                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
-                    } else {
-                        // on error/fail, tell the user he needs to login to show the account page
-                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "?login";
-                    }
-                }
-                catch (err) {
-                    console.log(err);
-                    // on error/fail, tell the user he needs to login to show the account page
-                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "?login";
-                }
-            }
-        });
-        xhr.open("POST", "/api/index.php/home/");
-        xhr.setRequestHeader("content-type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.send(form_data);
-        return false;
-    }
-
-    function SetNotification(NotificationData) {
-        var nutification = [];
-        if (NotificationData['likes'] != false) {
-
-            if (NotificationData['likes'].length > 1) {
-                for (i in NotificationData['likes']) {
-                    AppendLikeNutfication(NotificationData['likes'][i]);
-                }
-            } else {
-                AppendLikeNutfication(NotificationData['likes'][0]);
-            }
-        }
-        if (NotificationData['comments'] != false) {
-            if (NotificationData['comments'].length > 1) {
-                for (i in NotificationData['comments']) {
-                    AppendCommentNutfication(NotificationData['comments'][i]);
-                }
-            } else {
-                AppendCommentNutfication(NotificationData['comments'][0]);
-            }
-        }
-
-    }
-
-    function AppendCommentNutfication(comment) {
-        jwt = getCookie('jwt');
-
-        var form_data = JSON.stringify({
-            "option": 300,
-            "jwt": jwt,
-            "user_id": comment['user_id']
-        });
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                var rresult = $.parseJSON(this.responseText);
-                try {
-                    if (rresult['status'] === 200) {
-
-                        var name = rresult['name']['fname'] + ' ' + rresult['name']['lname'];
-                        var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
-
-                        var CommentHtml = `
-                        <div class="notfication-details">
-                        <div class="noty-user-img">
-                            <img src="`+ profile_pic + `" alt="">
-                        </div>
-                        <div class="notification-info">
-                            <h3><a href="profile.html?user_id=`+ comment['user_id'] + `&username=` + rresult['name']['username'] + `" title="">` + name + `</a> Comment on your project.
-                            <p> `+ comment['content'] + ` </p>
-                            </h3><br/>
-                            <span>`+ comment['date_created'] + `</span>
-                        </div>
-                        <!--notification-info -->
-                    
-                    
-                    
-                    </div>
-
-        `;
-
-
-
-                        $("#NutfList").append(CommentHtml);
-
-                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
-                    } else {
-                        // on error/fail, tell the user he needs to login to show the account page
-                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "?login";
-                    }
-                }
-                catch (err) {
-                    console.log(err);
-                    // on error/fail, tell the user he needs to login to show the account page
-                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "?login";
-                }
-            }
-        });
-        xhr.open("POST", "/api/index.php/home/");
-        xhr.setRequestHeader("content-type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.send(form_data);
-        return false;
-    }
-
-    function AppendLikeNutfication(like) {
-        jwt = getCookie('jwt');
-
-        var form_data = JSON.stringify({
-            "option": 300,
-            "jwt": jwt,
-            "user_id": like['user_id']
-        });
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                var rresult = $.parseJSON(this.responseText);
-                try {
-                    if (rresult['status'] === 200) {
-
-                        var name = rresult['name']['fname'] + ' ' + rresult['name']['lname'];
-                        var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
-
-                        var LikeHtml = `
-                        <div class="notfication-details">
-                        <div class="noty-user-img">
-                            <img src="`+ profile_pic + `" alt="">
-                        </div>
-                        <div class="notification-info">
-                            <h3><a href="profile.html?user_id=`+ like['user_id'] + `&username=` + rresult['name']['username'] + `" title="">` + name + `</a> Liked your project. .
-                            </h3>
-                            <span>`+ like['date_created'] + `</span>
-                        </div>
-                        <!--notification-info -->
-                    
-                    
-                    
-                    </div>
-
-        `;
-
-
-
-                        $("#NutfList").append(LikeHtml);
-
-                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
-                    } else {
-                        // on error/fail, tell the user he needs to login to show the account page
-                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "?login";
-                    }
-                }
-                catch (err) {
-                    console.log(err);
-                    // on error/fail, tell the user he needs to login to show the account page
-                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "?login";
-                }
-            }
-        });
-        xhr.open("POST", "/api/index.php/home/");
-        xhr.setRequestHeader("content-type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.send(form_data);
-        return false;
-    }
 
     function custom_sort(a, b) {
         return new Date(a.date_created).getTime() - new Date(b.date_created).getTime();
@@ -816,20 +543,20 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     });
+    
 
-    $(document).on('submit', '#LikeForm', function () {
-        var update_account_form = $(this);
+    $(document).on('click', '.like', function () {
+        var object = $(this);
+        var post_id = object[0].id;
         var jwt = getCookie('jwt');
-        var update_account_form_obj = update_account_form.serializeObject()
         // add jwt on the object
-        update_account_form_obj.jwt = jwt;
         // convert object to json string
 
 
         var form_data = JSON.stringify({
-            "option": update_account_form_obj['action'],
-            "jwt": update_account_form_obj.jwt,
-            "data": update_account_form_obj
+            "option": 2,
+            "jwt": jwt,
+            "post_id": post_id
         });
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -839,17 +566,11 @@ $(document).ready(function () {
                 console.log(result);
                 try {
                     if (result['status'] === 200) {
-                        if (update_account_form_obj['action'] == 2) {
-                            // $("#"+ update_account_form_obj['post_id'] +"").attr("disabled", true);
-                            $("#" + update_account_form_obj['post_id'] + "50S50").val(150);
-                            $("#" + update_account_form_obj['post_id'] + "like").html("Un Like");
 
+                        object.html('<i class="la la-heart"></i>' +  object[0].dataset.textSwap);
 
-                        } else {
-                            $("#" + update_account_form_obj['post_id'] + "50S50").val(2);
-                            $("#" + update_account_form_obj['post_id'] + "like").html("Like");
-
-                        }
+                        object.removeClass( "like" ).addClass( "unlike" );
+                        object[0].dataset.textSwap = "like";
 
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
 
@@ -860,6 +581,7 @@ $(document).ready(function () {
                     }
                 }
                 catch (err) {
+                    console.log(err);
                     // on error/fail, tell the user he needs to login to show the account page
                     // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
                     // window.location.href = "?login";
@@ -872,6 +594,60 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     });
+
+
+    $(document).on('click', '.unlike', function () {
+        var object = $(this);
+        var post_id = object[0].id;
+        var jwt = getCookie('jwt');
+        // add jwt on the object
+        // convert object to json string
+
+
+        var form_data = JSON.stringify({
+            "option": 150,
+            "jwt": jwt,
+            "post_id": post_id
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                result = $.parseJSON(this.responseText);
+                console.log(result);
+                try {
+                    if (result['status'] === 200) {
+
+                        object.html('<i class="la la-heart"></i>' +  object[0].dataset.textSwap);
+                        object.removeClass( "unlike" ).addClass( "like" );
+                        object[0].dataset.textSwap = "Unlike";
+
+
+                        
+                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
+
+                    } else {
+                        // on error/fail, tell the user he needs to login to show the account page
+                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                        // window.location.href = "?login";
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                    // on error/fail, tell the user he needs to login to show the account page
+                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                    // window.location.href = "?login";
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
+
 
     $(document).on('submit', '#CommentsForm', function () {
         var update_account_form = $(this);
@@ -941,21 +717,22 @@ $(document).ready(function () {
         return false;
     });
 
-    $(document).on('submit', '#GetComments', function () {
+
+    $(document).on('click', '.com', function () {
         var update_account_form = $(this);
+        var post_id = parseInt(update_account_form[0].id);
         var jwt = getCookie('jwt');
-        var update_account_form_obj = update_account_form.serializeObject()
         // add jwt on the object
-        update_account_form_obj.jwt = jwt;
         // convert object to json string
         var form_data = JSON.stringify({
             "option": 250,
-            "jwt": update_account_form_obj.jwt,
-            "data": update_account_form_obj
+            "jwt": jwt,
+            "post_id" : post_id
         });
-        $("#" + update_account_form_obj['post_id'] + "comm").attr("disabled", true);
-        $("#" + update_account_form_obj['post_id'] + "commentSec").css("visibility", "visible");
+        update_account_form.attr("disabled", true);
+        $("#" + post_id + "commentSec").show();
 
+        update_account_form.click(false);
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -969,11 +746,8 @@ $(document).ready(function () {
 
                         for (n in CommentData) {
                             var Comment = CommentData[n];
-                            setComments(Comment, update_account_form_obj);
+                            setComments(Comment, post_id);
                         }
-
-
-
 
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
@@ -981,6 +755,7 @@ $(document).ready(function () {
                     }
                 }
                 catch (err) {
+                    console.log(err);
                     // on error/fail, tell the user he needs to login to show the account page
                     // window.location.href = "?login";
                 }
@@ -992,6 +767,8 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     });
+
+
 
     $(document).on('submit', '#message', function () {
         var update_account_form = $(this);
@@ -1088,6 +865,41 @@ $(document).ready(function () {
         return false;
     });
 
+    $(document).on('click', '#delete_Comment', function(){
+        var jwt = getCookie('jwt');
+        var object = $(this);
+
+        var form_data = JSON.stringify({
+            "option": 200,
+            "jwt": jwt,
+            "comment_id": object.data('comment_id')
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                var rresult = $.parseJSON(this.responseText);
+                try {
+                    if (rresult) {
+                        console.log(rresult);
+                        $("#"+ object.data('comment_id')).remove();
+
+                    } else {
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
+
     function DeletePost(id) {
         jwt = getCookie('jwt');
 
@@ -1120,6 +932,9 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     }
+
+    
+
 
     //////// *******
 
