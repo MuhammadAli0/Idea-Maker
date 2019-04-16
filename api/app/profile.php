@@ -323,6 +323,18 @@ class UpdateProfile extends retrieveProfile
         }
     }
 
+    public function SetCoverLinkToDb($link){
+     
+        try{
+            $dlp = $this->conn->prepare(" UPDATE users set cover_pic = '$link' WHERE user_id = '$this->user_id'");
+            $dlp->execute();
+            return true;
+        
+        } catch (ERROR $Er){
+            return FALSE;
+        }
+    }
+
 }
 
 class actions extends retrieveProfile {

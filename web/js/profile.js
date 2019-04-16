@@ -211,31 +211,31 @@ $(document).ready(function () {
         </ul>
        <!-- <a><i class="la la-eye"></i>Views 50</a> -->
 
-    </div>
-    <div class="comment-section" id="`+ postID + `commentSec"  style="display: none;">
-<div class="plus-ic">
-</div>
+            </div>
+            <div class="comment-section" id="`+ postID + `commentSec"  style="display: none;">
+        <div class="plus-ic">
+        </div>
 
-<div class="post-comment">
-<div id="`+ postID + `comment"> </div>
+        <div class="post-comment">
+        <div id="`+ postID + `comment"> </div>
 
-<div class="cm_img">
-    <img style="width: 40px;
-    height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
-</div>
+        <div class="cm_img">
+            <img style="width: 40px;
+            height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+        </div>
 
-<div class="comment_box">
-    <form id="CommentsForm">
-        <input type="text" name="form" placeholder="Post a comment"  required="" >
-        <input type="hidden"  name="post_id" value="`+ postID + `">
-        <button type="submit">Send</button>
-    </form>
-</div>
-</div>    
-<!--post-comment end-->
-</div>
-</div><!--post-bar end-->
-    `;
+        <div class="comment_box">
+            <form id="CommentsForm">
+                <input type="text" name="form" placeholder="Post a comment"  required="" >
+                <input type="hidden"  name="post_id" value="`+ postID + `">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+        </div>    
+        <!--post-comment end-->
+        </div>
+        </div><!--post-bar end-->
+            `;
 
 
         $('#feed-dd').append(html);
@@ -790,12 +790,41 @@ $(document).ready(function () {
         xhr.send(fd);
     }, false);
 
+    document.querySelector('#cover_pic').addEventListener('change', function (e) {
+        var file = this.files[0];
+        var fd = new FormData();
+        var jwt = getCookie('jwt');
+
+        fd.append("profile_pic", file);
+        fd.append("jwt", jwt);
+        fd.append("option", 700);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "/api/index.php/upload", true);
+
+        xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable) {
+                var percentComplete = (e.loaded / e.total) * 100;
+                console.log(percentComplete + '% uploaded');
+            }
+        };
+        xhr.onload = function () {
+            if (this.status == 200) {
+                console.log(this.response);
+                var resp = JSON.parse(this.response);
+                if (resp['status'] === 200) {
+                    console.log('Server got:', resp);
+                    $(window).load();
+                    loadPage();
+                }
+            };
+        };
+        xhr.send(fd);
+    }, false);
 
     $(document).on('click', '.ed-opts-open', function (){
         $(this).next(".ed-options").toggleClass("active");
         return false;
     });
-
 
     $(document).on('click', '.Delete-Post', function (){
         

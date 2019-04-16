@@ -489,23 +489,26 @@ $app->post('/upload', function( $request,  $response) {
                             )));
                         } 
                     }
+                } elseif ($opt == 700){
+                    $directory = $this->get('upload_directory2');
+                    $uploadedFiles = $request->getUploadedFiles();
 
-
-                    // // handle multiple inputs with the same key
-                    // foreach ($uploadedFiles['example2'] as $uploadedFile) {
-                    //     if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-                    //         $filename = moveUploadedFile($directory, $uploadedFile);
-                    //         $response->write('uploaded ' . $filename . '<br/>');
-                    //     }
-                    // }
-
-                    // handle single input with multiple file uploads
-                    // foreach ($uploadedFiles['example3'] as $uploadedFile) {
-                    //     if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-                    //         $filename = moveUploadedFile($directory, $uploadedFile);
-                    //         $response->write('uploaded ' . $filename . '<br/>');
-                    //     }
-                    // }
+                    // handle single input with single file upload
+                    $uploadedFile = $uploadedFiles['cover_pic'];
+                    if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                        // $filename = moveUploadedFile($directory, $uploadedFile);
+                        $extension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
+                        $basename = bin2hex(random_bytes(8));
+                        $filename = sprintf('%s.%0.8s', md5($AllowData->id), $extension);
+                        $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+                        if ($action->SetCoverLinkToDb('/web/images/cover/' . $filename)){
+                            $link = '/web/images/cover/' . $filename;
+                            $response->write(json_encode(array(
+                            'status' => 200,
+                            'link' => $link
+                            )));
+                        } 
+                    }
 
                 }
             }

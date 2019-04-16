@@ -353,6 +353,8 @@ $(window).on("load", function () {
 
     Update();
     setInterval(function () { Update(); }, 10000);
+    window.counterA = null ;
+    window.counterB = null ;
 
     function Update() {
         var form_data = JSON.stringify({
@@ -370,10 +372,21 @@ $(window).on("load", function () {
                         console.log(rresult);
 
                         if (rresult['msgs'] != false) {
-                            $(".MessagesCounter").html(rresult['msgs'].length);
-                            $(".MessagesCounter").show();
-                            SetMsgs(rresult['msgs']);
+                            var curentmsgs = ($(".MessagesCounter").html() === " ") ? 0 : parseInt($(".MessagesCounter").html());
+                            if (rresult['msgs'].length > curentmsgs) {
+
+                                if (counterA != null ){
+                                    var x = document.getElementById("myAudio");
+                                    x.play();
+                                }
+                                $(".MessagesCounter").html(rresult['msgs'].length);
+                                $(".MessagesCounter").show();
+                                SetMsgs(rresult['msgs']);
+                            }
+                           
                         }
+                        counterA = 1 ;
+
 
                         if (rresult['nutf']['likes'] != false || rresult['nutf']['comments'] != false) {
 
@@ -383,11 +396,21 @@ $(window).on("load", function () {
                             var curent = ($(".notificationCounter").html() === " ") ? 0 : parseInt($(".notificationCounter").html());
                             if ((commentsCounter + LikesCounter) > curent) {
                                 $("#NutfList").html("");
+
+                                if (counterB != null ){
+                                    var y = document.getElementById("myAudioGlasyNtuf");
+                                    y.play();
+
+                                }
+                                
+
+
                                 SetNotification(rresult['nutf']);
                             }
 
 
                         }
+                        counterB = 1 ;
 
 
 
@@ -723,6 +746,7 @@ $(window).on("load", function () {
         xhr.send(form_data);
         return false;
     };
+
 
 
 

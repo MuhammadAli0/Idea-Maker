@@ -23,6 +23,7 @@ $config = ['settings' => [
 $app = new \Slim\App($config);
 $container = $app->getContainer();
 $container['upload_directory'] = __DIR__ . '/../../web/images/profile';
+$container['upload_directory2'] = __DIR__ . '/../../web/images/cover';
 
 
 date_default_timezone_set('Africa/Cairo');

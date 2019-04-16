@@ -298,13 +298,17 @@ $(document).ready(function () {
     function SetUpdate(data) {
         if (data['msgs'] != false) {
             if (data['msgs'].length > 0) {
-                $('#ButOfUserID' + data['msgs'][i]['user_id_from']).show();
-                $('#ButOfUserID' + data['msgs'][i]['user_id_from']).html(data['msgs'].length);
-            }
 
-            for (var i in data['msgs']) {
-                if ($('#msgBox' + data['msgs'][i]['user_id_from']).length > 0) {
-                    var hisMsg = `
+
+                for (var i in data['msgs']) {
+                    var x = document.getElementById("myAudio");
+                    x.play();
+
+                    $('#ButOfUserID' + data['msgs'][i]['user_id_from']).show();
+                    $('#ButOfUserID' + data['msgs'][i]['user_id_from']).html(data['msgs'].length);
+    
+                    if ($('#msgBox' + data['msgs'][i]['user_id_from']).length > 0) {
+                        var hisMsg = `
                 <div class="main-message-box st3">
                     <div class="message-dt st3">
                         <div class="message-inner-dt">
@@ -318,16 +322,17 @@ $(document).ready(function () {
                 </div><!--main-message-box end-->
                 `;
 
-                    $('#msgBox' + data['msgs'][i]['user_id_from']).append(hisMsg);
-                    console.log(data['msgs']);
-                    $('#mCSB_' + data['msgs'][i]['user_id_from']).animate({ scrollTop: $('#mCSB_' + data['msgs'][i]['user_id_from']).height() * 3 + 139 }, 1000);
+                        $('#msgBox' + data['msgs'][i]['user_id_from']).append(hisMsg);
+                        console.log(data['msgs']);
+                        $('#mCSB_' + data['msgs'][i]['user_id_from']).animate({ scrollTop: $('#mCSB_' + data['msgs'][i]['user_id_from']).height() * 3 + 139 }, 1000);
 
-                    SetRedToMsdges(data['msgs'][i]['user_id_from']);
+                        SetRedToMsdges(data['msgs'][i]['user_id_from']);
+
+                    }
+
+                    // $('#lastMsdgOfUserID'+data['msgs'][i]['user_id_from']).html(data['msgs'][i]['date_created']);
 
                 }
-
-                // $('#lastMsdgOfUserID'+data['msgs'][i]['user_id_from']).html(data['msgs'][i]['date_created']);
-
             }
         }
         console.log(data);
@@ -421,6 +426,9 @@ $(document).ready(function () {
                 result = $.parseJSON(this.responseText);
                 try {
                     if (result) {
+                        var u = document.getElementById("myAudioSENDMSG");
+                        u.play();
+
                         var myMsg = `
                 <div class="main-message-box ta-right">
                 <div class="message-dt" style="float: right;">
