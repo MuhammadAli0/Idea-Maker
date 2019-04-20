@@ -47,6 +47,35 @@ $(document).ready(function () {
         return o;
     };
 
+    function timeSince(date) {
+
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = Math.floor(seconds / 31536000);
+
+        if (interval > 1) {
+            return interval + " years";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+    };
+
+
     function loadPage() {
         // validate jwt to verify access
         var jwt = getCookie('jwt');
@@ -187,7 +216,7 @@ $(document).ready(function () {
                     <div class="message-inner-dt">
                         <p>`+ data[i]['content'] + `</p>
                     </div> <!--message-inner-dt end-->
-                    <span>`+ data[i]['date_created'] + `</span>
+                    <span>`+ timeSince(new Date( data[i]['date_created'] )) + `</span>
                 </div><!--message-dt end-->
                 <div class="messg-usr-img">
                     <img style="height: 50px;width: 50px;" style="height: 50px;width: 50px;" src="`+ myProfilePic + `" alt="">
@@ -208,7 +237,7 @@ $(document).ready(function () {
                         <div class="message-inner-dt">
                             <p> `+ data[i]['content'] + ` </p>
                         </div><!--message-inner-dt end-->
-                        <span>`+ data[i]['date_created'] + `</span>
+                        <span>`+ timeSince(new Date( data[i]['date_created'] )) + `</span>
                     </div><!--message-dt end-->
                     <div class="messg-usr-img">
                         <img style="height: 50px;width: 50px;" src="`+ Target_profile_pic + `" alt="">
@@ -314,7 +343,7 @@ $(document).ready(function () {
                         <div class="message-inner-dt">
                             <p> `+ data['msgs'][i]['content'] + ` </p>
                         </div><!--message-inner-dt end-->
-                        <span>`+ data['msgs'][i]['date_created'] + `</span>
+                        <span>`+ timeSince(new Date( data['msgs'][i]['date_created'] )) + `</span>
                     </div><!--message-dt end-->
                     <div class="messg-usr-img">
                         <img src="" alt="">
@@ -374,7 +403,7 @@ $(document).ready(function () {
 
 
 
-    setInterval(function () { Update(); }, 5000);
+    setInterval(function () { Update(); }, 500);
 
 
 

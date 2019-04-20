@@ -57,42 +57,11 @@ $(window).on("load", function () {
         return false;
     });
 
-    //  ============= POST JOB POPUP FUNCTION =========
 
-    $(".post-jb").on("click", function () {
-        $(".post-popup.job_post").addClass("active");
-        $(".wrapper").addClass("overlay");
-        return false;
-    });
-    $(".post-project > a").on("click", function () {
-        $(".post-popup.job_post").removeClass("active");
-        $(".wrapper").removeClass("overlay");
-        return false;
-    });
 
-    //  ============= SIGNIN CONTROL FUNCTION =========
 
-    $('.sign-control li').on("click", function () {
-        var tab_id = $(this).attr('data-tab');
-        $('.sign-control li').removeClass('current');
-        $('.sign_in_sec').removeClass('current');
-        $(this).addClass('current animated fadeIn');
-        $("#" + tab_id).addClass('current animated fadeIn');
-        return false;
-    });
 
-    //  ============= SIGNIN TAB FUNCTIONALITY =========
-
-    $('.signup-tab ul li').on("click", function () {
-        var tab_id = $(this).attr('data-tab');
-        $('.signup-tab ul li').removeClass('current');
-        $('.dff-tab').removeClass('current');
-        $(this).addClass('current animated fadeIn');
-        $("#" + tab_id).addClass('current animated fadeIn');
-        return false;
-    });
-
-    //  ============= SIGNIN SWITCH TAB FUNCTIONALITY =========
+    //  ============= INFO SWITCH TAB FUNCTIONALITY =========
 
     $('.tab-feed ul li').on("click", function () {
         var tab_id = $(this).attr('data-tab');
@@ -103,12 +72,7 @@ $(window).on("load", function () {
         return false;
     });
 
-    //  ============= COVER GAP FUNCTION =========
 
-    var gap = $(".container").offset().left;
-    $(".cover-sec > a, .chatbox-list").css({
-        "right": gap
-    });
 
     //  ============= OVERVIEW EDIT FUNCTION =========
 
@@ -175,70 +139,9 @@ $(window).on("load", function () {
         return false;
     });
 
-    //  ============= ESTABLISH EDIT FUNCTION =========
-
-    $(".esp-bx-open").on("click", function () {
-        $("#establish-box").addClass("open");
-        $(".wrapper").addClass("overlay");
-        return false;
-    });
-    $(".close-box").on("click", function () {
-        $("#establish-box").removeClass("open");
-        $(".wrapper").removeClass("overlay");
-        return false;
-    });
-
-    //  ============= CREATE PORTFOLIO FUNCTION =========
-
-    $(".gallery_pt > a").on("click", function () {
-        $("#create-portfolio").addClass("open");
-        $(".wrapper").addClass("overlay");
-        return false;
-    });
-    $(".close-box").on("click", function () {
-        $("#create-portfolio").removeClass("open");
-        $(".wrapper").removeClass("overlay");
-        return false;
-    });
-
-    //  ============= EMPLOYEE EDIT FUNCTION =========
-
-    $(".emp-open").on("click", function () {
-        $("#total-employes").addClass("open");
-        $(".wrapper").addClass("overlay");
-        return false;
-    });
-    $(".close-box").on("click", function () {
-        $("#total-employes").removeClass("open");
-        $(".wrapper").removeClass("overlay");
-        return false;
-    });
-
-    //  =============== Ask a Question Popup ============
-
-    $(".ask-question").on("click", function () {
-        $("#question-box").addClass("open");
-        $(".wrapper").addClass("overlay");
-        return false;
-    });
-    $(".close-box").on("click", function () {
-        $("#question-box").removeClass("open");
-        $(".wrapper").removeClass("overlay");
-        return false;
-    });
 
 
-    //  ============== ChatBox ============== 
 
-
-    $(".chat-mg").on("click", function () {
-        $(this).next(".conversation-box").toggleClass("active");
-        return false;
-    });
-    $(".close-chat").on("click", function () {
-        $(".conversation-box").removeClass("active");
-        return false;
-    });
 
     //  ================== Edit Options Function =================
 
@@ -261,6 +164,45 @@ $(window).on("load", function () {
 
     $(".not-box-open").on("click", function () {
         $(this).next(".notification-box").toggleClass("active");
+        $(".notificationCounter").hide();
+        setCookie("notification-read-counter", parseInt($(".notificationCounter").html()), 1);
+        var form_data = JSON.stringify({
+            "option": 650,
+            "jwt": jwt
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log(this.responseText);
+                var rresult = $.parseJSON(this.responseText);
+                try {
+                    if (rresult['status'] === true) {
+                        $(".notificationCounter").hide();
+                        $(".notificationCounter").html('0');
+                    } else {
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/action");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
+
+
+
+    //  ============ Messages Open =============
+
+    $(".msg-box-open").on("click", function () {
+        $(this).next(".notification-box").toggleClass("active");
+
     });
 
     // ============= User Account Setting Open ===========
@@ -347,14 +289,86 @@ $(window).on("load", function () {
         return "";
     }
 
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function timeSince(date) {
+
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = Math.floor(seconds / 31536000);
+
+        if (interval > 1) {
+            return interval + " years";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+    };
+
     window.jwt = getCookie("jwt");
 
-    
 
-    Update();
-    setInterval(function () { Update(); }, 10000);
-    window.counterA = null ;
-    window.counterB = null ;
+    GetOldNutfication()
+    setInterval(function () { Update(); }, 3000);
+
+
+    function GetOldNutfication() {
+        var form_data = JSON.stringify({
+            "option": 700,
+            "jwt": jwt
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                try {
+                    if (this.responseText.length > 1) {
+                        var notification = $.parseJSON(this.responseText);
+                        console.log(notification);
+                        notification = notification.sort(custom_sort);
+                        for (var xn = notification.length - 1; xn >= 0; xn--) {
+                            if (notification[xn]['comment_id'] != null) {
+                                AppendOldCommentNutfication(notification[xn]);
+                            } else {
+                                AppendOldLikeNutfication(notification[xn]);
+                            }
+                        }
+                    }
+
+
+                }
+                catch (err) {
+                    console.log(err);
+
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/action");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    }
 
     function Update() {
         var form_data = JSON.stringify({
@@ -375,17 +389,15 @@ $(window).on("load", function () {
                             var curentmsgs = ($(".MessagesCounter").html() === " ") ? 0 : parseInt($(".MessagesCounter").html());
                             if (rresult['msgs'].length > curentmsgs) {
 
-                                if (counterA != null ){
-                                    var x = document.getElementById("myAudio");
-                                    x.play();
-                                }
+                                var x = document.getElementById("myAudio");
+                                x.play();
+
                                 $(".MessagesCounter").html(rresult['msgs'].length);
                                 $(".MessagesCounter").show();
                                 SetMsgs(rresult['msgs']);
                             }
-                           
+
                         }
-                        counterA = 1 ;
 
 
                         if (rresult['nutf']['likes'] != false || rresult['nutf']['comments'] != false) {
@@ -395,14 +407,12 @@ $(window).on("load", function () {
 
                             var curent = ($(".notificationCounter").html() === " ") ? 0 : parseInt($(".notificationCounter").html());
                             if ((commentsCounter + LikesCounter) > curent) {
-                                $("#NutfList").html("");
+                                // $("#NutfList").html("");
 
-                                if (counterB != null ){
-                                    var y = document.getElementById("myAudioGlasyNtuf");
-                                    y.play();
+                                var y = document.getElementById("myAudioGlasyNtuf");
+                                y.play();
 
-                                }
-                                
+
 
 
                                 SetNotification(rresult['nutf']);
@@ -410,7 +420,6 @@ $(window).on("load", function () {
 
 
                         }
-                        counterB = 1 ;
 
 
 
@@ -428,6 +437,7 @@ $(window).on("load", function () {
         xhr.send(form_data);
         return false;
     }
+
 
     function parseJwt(token) {
         var base64Url = token.split('.')[1];
@@ -520,7 +530,7 @@ $(window).on("load", function () {
                             
 
                                 <p>`+ MsgData['content'] + `</p>
-                                <span>`+ MsgData['date_created'] + `</span>
+                                <span>`+ timeSince(new Date(MsgData['date_created'])) + `</span>
                                 <div id="msgBody`+ MsgData['user_id_from'] + `"> </div>
 
                         </div>
@@ -554,6 +564,7 @@ $(window).on("load", function () {
         xhr.send(form_data);
         return false;
     };
+
 
     function SetNotification(NotificationData) {
 
@@ -592,9 +603,8 @@ $(window).on("load", function () {
         var data = nutification.sort(custom_sort);
         $(".notificationCounter").show();
         $(".notificationCounter").html(data.length);
-
+        $("#newNutfList").html('');
         for (var n = data.length - 1; n >= 0; n--) {
-
 
             if (data[n][4] != null) {
                 AppendCommentNutfication(data[n]);
@@ -607,7 +617,6 @@ $(window).on("load", function () {
 
         return false;
     };
-
 
     function AppendCommentNutfication(comment) {
         jwt = getCookie('jwt');
@@ -630,7 +639,7 @@ $(window).on("load", function () {
                         var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
 
                         var CommentHtml = `
-                        <div class="notfication-details">
+                        <div style="background-color: #edf2fa;" class="notfication-details">
                         <div class="noty-user-img">
                             <img src="`+ profile_pic + `" alt="">
                         </div>
@@ -638,7 +647,145 @@ $(window).on("load", function () {
                             <h3><a href="profile.html?user_id=`+ comment['user_id'] + `&username=` + rresult['name']['username'] + `" title="">` + name + `</a> Comment on your project.
                             <p> `+ comment['content'] + ` </p>
                             </h3><br/>
-                            <span>`+ comment['date_created'] + `</span>
+                            <span>`+ timeSince(new Date(comment['date_created'])) + `</span>
+                        </div>
+                        <!--notification-info -->
+                    
+                    
+                    
+                    </div>
+
+        `;
+
+
+
+                        $("#newNutfList").append(CommentHtml);
+                        // nutification.push({
+                        //     "data" :  CommentHtml,
+                        //     "date_created" : comment['date_created'] 
+                        // });
+
+                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
+                    } else {
+                        // on error/fail, tell the user he needs to login to show the account page
+                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                        // window.location.href = "?login";
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                    // on error/fail, tell the user he needs to login to show the account page
+                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                    // window.location.href = "?login";
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    };
+
+    function AppendOldLikeNutfication(like) {
+        jwt = getCookie('jwt');
+
+        var form_data = JSON.stringify({
+            "option": 300,
+            "jwt": jwt,
+            "user_id": like['user_id']
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                var rresult = $.parseJSON(this.responseText);
+                try {
+                    if (rresult['status'] === 200) {
+
+                        var name = rresult['name']['fname'] + ' ' + rresult['name']['lname'];
+                        var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
+
+                        var LikeHtml = `
+                        <div  class="notfication-details">
+                        <div class="noty-user-img">
+                            <img src="`+ profile_pic + `" alt="">
+                        </div>
+                        <div class="notification-info">
+                            <h3><a href="profile.html?user_id=`+ like['user_id'] + `&username=` + rresult['name']['username'] + `" title="">` + name + `</a> Liked your project. .
+                            </h3>
+                            <span>`+ timeSince(new Date(like['date_created'])) + `</span>
+                        </div>
+                        <!--notification-info -->
+                    
+                    
+                    
+                    </div>
+
+        `;
+
+
+
+                        $("#NutfList").append(LikeHtml);
+                        // nutification.push({
+                        //     "data" :  LikeHtml,
+                        //     "date_created" : like['date_created']
+                        // });
+
+
+                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
+                    } else {
+                        // on error/fail, tell the user he needs to login to show the account page
+                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                        // window.location.href = "?login";
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                    // on error/fail, tell the user he needs to login to show the account page
+                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                    // window.location.href = "?login";
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    };
+
+    function AppendOldCommentNutfication(comment) {
+        jwt = getCookie('jwt');
+
+        var form_data = JSON.stringify({
+            "option": 300,
+            "jwt": jwt,
+            "user_id": comment['user_id']
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                var rresult = $.parseJSON(this.responseText);
+                try {
+                    if (rresult['status'] === 200) {
+
+                        var name = rresult['name']['fname'] + ' ' + rresult['name']['lname'];
+                        var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
+
+                        var CommentHtml = `
+                        <div  class="notfication-details">
+                        <div class="noty-user-img">
+                            <img src="`+ profile_pic + `" alt="">
+                        </div>
+                        <div class="notification-info">
+                            <h3><a href="profile.html?user_id=`+ comment['user_id'] + `&username=` + rresult['name']['username'] + `" title="">` + name + `</a> Comment on your project.
+                            <p> `+ comment['content'] + ` </p>
+                            </h3><br/>
+                            <span>`+ timeSince(new Date(comment['date_created'])) + `</span>
                         </div>
                         <!--notification-info -->
                     
@@ -699,14 +846,14 @@ $(window).on("load", function () {
                         var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
 
                         var LikeHtml = `
-                        <div class="notfication-details">
+                        <div style="background-color: #edf2fa;" class="notfication-details">
                         <div class="noty-user-img">
                             <img src="`+ profile_pic + `" alt="">
                         </div>
                         <div class="notification-info">
                             <h3><a href="profile.html?user_id=`+ like['user_id'] + `&username=` + rresult['name']['username'] + `" title="">` + name + `</a> Liked your project. .
                             </h3>
-                            <span>`+ like['date_created'] + `</span>
+                            <span>`+ timeSince(new Date(like['date_created'])) + `</span>
                         </div>
                         <!--notification-info -->
                     
@@ -718,7 +865,7 @@ $(window).on("load", function () {
 
 
 
-                        $("#NutfList").append(LikeHtml);
+                        $("#newNutfList").append(LikeHtml);
                         // nutification.push({
                         //     "data" :  LikeHtml,
                         //     "date_created" : like['date_created']

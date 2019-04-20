@@ -129,7 +129,9 @@ $(document).ready(function () {
         if (result['profile_pic'] != null) {
             $("#usr-pic-main").attr('src', result['profile_pic'].slice(1))
             $("#usr-pic-nav").attr('src', result['profile_pic'].slice(1))
-
+        }
+        if (result['cover_pic'] != null) {
+            $("#MyCoverPic").attr('src', result['cover_pic']);
         }
     }
 
@@ -139,6 +141,7 @@ $(document).ready(function () {
         var title = result['posts'][i]['title'];
         var body = result['posts'][i]['caption'];
         var date_created = result['posts'][i]['date_created'];
+        date_created = timeSince(new Date(date_created));
         var status = result['posts'][i]['p_status'];
         var skills = result['posts'][i]['skills'];
         var skillsHTML = ``;
@@ -226,24 +229,28 @@ $(document).ready(function () {
             <!-- <a><i class="la la-eye"></i>Views 50</a> -->
 
             </div>
-            <div class="comment-section" id="`+ postID + `commentSec"  style="display: none;">
-            <div class="plus-ic">
-            </div>
+            <div class="comment-section">
+
+
+    
+
 
             <div class="post-comment">
+            <div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
             <div id="`+ postID + `comment"> </div>
-
+            </div>
+            
             <div class="cm_img">
             <img style="width: 40px;
-            height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+            height: 40px;"  src="images/profile/unkown.jpeg" alt="">
             </div>
-
+            
             <div class="comment_box">
-            <form id="CommentsForm">
-            <input type="text" name="form" placeholder="Post a comment"  required="" >
-            <input type="hidden"  name="post_id" value="`+ postID + `">
-            <button type="submit">Send</button>
-            </form>
+                <form id="CommentsForm">
+                    <input type="text" name="form" placeholder="Post a comment"  required="" >
+                    <input type="hidden"  name="post_id" value="`+ postID + `">
+                    <button type="submit">Send</button>
+                </form>
             </div>
             </div>    
             <!--post-comment end-->
@@ -291,6 +298,8 @@ $(document).ready(function () {
         jwt = getCookie('jwt');
         var body = Comment['content'];
         var time = Comment['date_created'];
+        time = timeSince(new Date(time));
+
         var form_data = JSON.stringify({
             "option": 300,
             "jwt": jwt,
@@ -373,6 +382,34 @@ $(document).ready(function () {
         return false;
 
     }
+
+    function timeSince(date) {
+
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = Math.floor(seconds / 31536000);
+
+        if (interval > 1) {
+            return interval + " years";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+    };
 
 
 

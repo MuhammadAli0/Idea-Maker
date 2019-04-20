@@ -604,12 +604,20 @@ $app->post('/action', function($request, $response){
                 ))); 
             }elseif ($opt == 600){
                 $response->getBody()->write(json_encode(array(
+                    "status" => $action->SetRemoveToNtuf()
+                )));
+            }elseif ($opt == 650){
+                $response->getBody()->write(json_encode(array(
                     "status" => $action->SetReadToNtuf()
                 )));
+            }elseif ($opt == 700){
+                $response->getBody()->write($action->GetOldNutf());
+            }elseif ($opt == 800){
+                $response->getBody()->write(json_encode(array(
+                    "status" => $action->ReportPost($data['post_id'], $data['owner_id'])
+                )));
             }
-             else {
-
-            }
+             
     
         } else {
             $action->__prepare();

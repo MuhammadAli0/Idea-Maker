@@ -10,15 +10,15 @@ class profileDB
     // private $DBname        = 'ideamakerdb';
 
     
-    // private $host = '127.0.0.1';
-    // private $MySqlUsername = 'root';
-    // private $MySqlPassword = '23243125';
-    // private $DBname        = 'idea';
+    private $host = '127.0.0.1';
+    private $MySqlUsername = 'root';
+    private $MySqlPassword = '23243125';
+    private $DBname        = 'idea';
 
-    private $host = 'sql2.freemysqlhosting.net';
-    private $MySqlUsername = 'sql2286394';
-    private $MySqlPassword = 'wY5*fC5*';
-    private $DBname        = 'sql2286394';
+    // private $host = 'sql2.freemysqlhosting.net';
+    // private $MySqlUsername = 'sql2286394';
+    // private $MySqlPassword = 'wY5*fC5*';
+    // private $DBname        = 'sql2286394';
 
     public $conn;
 
@@ -83,6 +83,7 @@ class retrieveProfile {
             "user_id" => $data['user_id'],
             "username" => $this->username,
             "profile_pic" => $data['profile_picture_url'],
+            "cover_pic" => $data['cover_pic'],
             "skills" => $data['skills'],
             "personal" => array(
                 "fname"     => $data['fname'],
@@ -480,6 +481,24 @@ class actions extends retrieveProfile {
         }
     }
 
+    public function SetRemoveToNtuf(){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            
+            $dlp = $this->conn->prepare("UPDATE Likes SET removed = '$curentDate'
+            WHERE post_id  in (SELECT post_id from Posts WHERE user_id = '$this->user_id') and removed IS NULL;
+            
+            UPDATE Comments SET removed = '$curentDate'
+            WHERE post_id  in (SELECT post_id from Posts WHERE user_id = '$this->user_id') and removed IS NULL;
+            ");
+            $dlp->execute();
+            return true;
+        
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+    }
+
     public function SetReadToNtuf(){
         try{
             $curentDate = date('Y-m-d H:i:s');
@@ -497,6 +516,71 @@ class actions extends retrieveProfile {
             die($e->getMessage());
         }
     }
+
+    public function ReportPost($post_id, $owner){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            
+            $dlp = $this->conn->prepare("INSERT INTO  PostReports ( post_id, post_owner, report_user, report_Time )
+            SELECT * FROM (SELECT 	
+                    '$post_id',
+                    '$owner',
+                    '$this->user_id',
+                    '$curentDate'
+                ) AS tmp
+                    WHERE NOT EXISTS 
+                    (SELECT * FROM PostReports 
+                        WHERE report_user =  '$$this->user_id'
+                            and post_id = (SELECT post_id FROM Posts WHERE post_id = '$post_id'))
+            ");
+
+            $dlp->execute();
+            return $dlb;
+        
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+    }
+
+    private function GetCommentsNTUF(){
+        $dlb = $this->conn->prepare("SELECT * FROM Comments 
+        WHERE removed IS NULL AND post_id IN 
+            (select post_id from Posts WHERE user_id = '$this->user_id');
+        ");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+
+            return  ( $data );
+            
+        }else{
+            return FALSE;
+        }
+    }
+
+    public function GetOldNutf(){
+        $dlb = $this->conn->prepare("SELECT * FROM Likes 
+            WHERE removed IS NULL AND post_id in 
+                (SELECT post_id FROM Posts WHERE user_id = '$this->user_id');
+        ");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $comments = $this->GetCommentsNTUF();
+            if ($comments != null){
+                $data     = array_merge( $dlb->fetchall() ,  $comments);
+                return  json_encode( $data );
+            } 
+            
+            return  json_encode( $dlb->fetchall() );
+            
+        }else{
+            $comments = $this->GetCommentsNTUF();
+            if ($comments != null){
+                return  json_encode( $comments );
+            } 
+        }
+    }
+    
 
 }
     

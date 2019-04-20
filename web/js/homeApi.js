@@ -2,6 +2,7 @@
 $(document).ready(function () {
 
     try {
+        window.jwt = getCookie('jwt');
         loadPage();
     } catch (error) {
         console.log(error);
@@ -41,10 +42,38 @@ $(document).ready(function () {
         return o;
     };
 
-    function parseJwt (token) {
+    function parseJwt(token) {
         var base64Url = token.split('.')[1];
         var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         return JSON.parse(window.atob(base64));
+    };
+
+    function timeSince(date) {
+
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = Math.floor(seconds / 31536000);
+
+        if (interval > 1) {
+            return interval + " years";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
     };
 
 
@@ -125,19 +154,25 @@ $(document).ready(function () {
                 else {
 
                     SetOtherPost(i, result);
-                    console.log("errd");
-
                 }
             }
         }
     }
+
+    function parseJwt(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(window.atob(base64));
+    };
+
 
     function SetMyPosts(i, result) {
         var owner = result['posts'][i]['user_id'];
         var postID = result['posts'][i]['post_id'];
         var title = result['posts'][i]['title'];
         var body = result['posts'][i]['caption'];
-        var date_created = result['posts'][i]['date_created'];
+        var date_created =  result['posts'][i]['date_created'];
+        date_created = timeSince(new Date(date_created));
         var status = result['posts'][i]['p_status'];
         var skills = result['posts'][i]['skills'];
         var skillsHTML = ``;
@@ -197,12 +232,16 @@ $(document).ready(function () {
        <!-- <a><i class="la la-eye"></i>Views 50</a> -->
 
     </div>
-    <div class="comment-section" id="`+ postID + `commentSec"  style="display: none;">
-<div class="plus-ic">
-</div>
+    <div class="comment-section">
+
+
+    
+
 
 <div class="post-comment">
+<div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
 <div id="`+ postID + `comment"> </div>
+</div>
 
 <div class="cm_img">
     <img style="width: 40px;
@@ -225,13 +264,13 @@ $(document).ready(function () {
 
         $('#Posts_list').append(html);
         if (result['likes'] != 'false') {
-            for (w in result['likes']) {
-                if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id']){
-                    $("#" + result['likes'][w]['post_id']).html( '<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
-                    $("#" + result['likes'][w]['post_id']).removeClass( "like" ).addClass( "unlike" );
+            for (var w in result['likes']) {
+                if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id'] && result['likes'][w]['post_id'] === postID) {
+                    $("#" + result['likes'][w]['post_id']).html('<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
                     $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap = "like";
-                }
+                    $("#" + result['likes'][w]['post_id']).removeClass("like").addClass("unlike");
 
+                }
             }
         }
         return false;
@@ -244,6 +283,7 @@ $(document).ready(function () {
         var title = result['posts'][i]['title'];
         var body = result['posts'][i]['caption'];
         var date_created = result['posts'][i]['date_created'];
+        date_created = timeSince(new Date(date_created));
         var status = result['posts'][i]['p_status'];
         var skills = result['posts'][i]['skills'];
         var skillsHTML = ``;
@@ -275,118 +315,126 @@ $(document).ready(function () {
 
 
                         html = `
-        <div class="post-bar">
-        <div class="post_topbar">
-            <div class="usy-dt">
-                <img style="width: 60px;
-                height: 60px;" src="`+ profile_pic + `" alt="">
-                <div class="usy-name">
-                    <h3> <a href="profile.html?user_id=`+ owner + `&username=` + rrresult['name']['username'] + `">` + name + `</a></h3>
-                    <span><img src="images/clock.png" alt="">`+ date_created + `</span>
+                <div class="post-bar">
+                <div class="post_topbar">
+                    <div class="usy-dt">
+                        <img style="width: 60px;
+                        height: 60px;" src="`+ profile_pic + `" alt="">
+                        <div class="usy-name">
+                            <h3> <a href="profile.html?user_id=`+ owner + `&username=` + rrresult['name']['username'] + `">` + name + `</a></h3>
+                            <span><img src="images/clock.png" alt="">`+ date_created + `</span>
+                        </div>
+                    </div>
+                    <div class="ed-opts">
+                        <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                        <ul class="ed-options">
+                            <li><a class="report" data-post_id="`+ postID + `" data-owner_id="` + owner + `"  href="#" title="">Report Post</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="ed-opts">
-                <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
-                <ul class="ed-options">
-                    <!-- <li><a href="#" title="">Edit Post</a></li> -->
-                </ul>
-            </div>
-        </div>
 
-        <script>
-        function openForm() {
-            document.getElementById("`+ postID + `msg").style.display = "block";
-            document.getElementById("OpenMsgBut`+ postID + `").style.display = "none";
+                <script>
+                function openForm() {
+                    document.getElementById("`+ postID + `msg").style.display = "block";
+                    document.getElementById("OpenMsgBut`+ postID + `").style.display = "none";
 
-        }
-          
-        function closeForm() {
-            document.getElementById("`+ postID + `msg").style.display = "none";
-            document.getElementById("OpenMsgBut`+ postID + `").style.display = "contents";
+                }
+                
+                function closeForm() {
+                    document.getElementById("`+ postID + `msg").style.display = "none";
+                    document.getElementById("OpenMsgBut`+ postID + `").style.display = "contents";
 
-        } 
-        </script>
+                } 
+                </script>
 
-        <div class="epi-sec">					
-            <ul class="bk-links">
-            <button  style="background-color: rgb(255, 255, 255); display: contents;"  id="OpenMsgBut`+ postID + `" onclick="openForm()"><li><i class="la la-envelope"></i></li></button>
-            <div id="`+ postID + `msg" style="display: none; border: 3px solid #f1f1f1; z-index: 9;">	
-            <button id="CloseMsgBut`+ postID + `" onclick="closeForm()">Close</button>
-            <form id="message">
-                <input type="hidden"  name="post_id" value="`+ postID + `">
-                <input type="hidden"  name="target_id" value="`+ owner + `">
-                <textarea placeholder="Type a message here" name="msg"></textarea>
-                <button type="submit"  class="la la-envelope"> </button> 
-            </form>
-			</ul>
-        </div>
+                <div class="epi-sec">					
+                    <ul class="bk-links">
+                    <button  style="background-color: rgb(255, 255, 255); display: contents;"  id="OpenMsgBut`+ postID + `" onclick="openForm()"><li><i class="la la-envelope"></i></li></button>
+                    <div id="`+ postID + `msg" style="display: none; border: 3px solid #f1f1f1; z-index: 9;">	
+                    <button id="CloseMsgBut`+ postID + `" onclick="closeForm()">Close</button>
+                    <form id="message">
+                        <input type="hidden"  name="post_id" value="`+ postID + `">
+                        <input type="hidden"  name="target_id" value="`+ owner + `">
+                        <textarea placeholder="Type a message here" name="msg"></textarea>
+                        <button type="submit"  class="la la-envelope"> </button> 
+                    </form>
+                    </ul>
+                </div>
 
-                                                
-        
-        <div class="job_descp">
-            <h3>`+ title + `</h3>
-            <ul class="job-dt">
-                <li><a href="#" title="">`+ status + `</a></li>
-               <!-- <li><span>$30 / hr</span></li> -->
-            </ul>
-            <p>`+ body + `</p>
-            <ul class="skill-tags">
-            `+ skillsHTML + `
-            </ul>
-        </div>
-        <div class="job-status-bar">
-            <ul class="like-com">
+                                                        
+                
+                <div class="job_descp">
+                    <h3>`+ title + `</h3>
+                    <ul class="job-dt">
+                        <li><a href="#" title="">`+ status + `</a></li>
+                    <!-- <li><span>$30 / hr</span></li> -->
+                    </ul>
+                    <p>`+ body + `</p>
+                    <ul class="skill-tags">
+                    `+ skillsHTML + `
+                    </ul>
+                </div>
+                <div class="job-status-bar">
+                    <ul class="like-com">
 
-            <li>
-            <a id="`+ postID + `" class="like" href="#" data-text-swap="Unlike"><i class="la la-heart"></i> Like</a>
-        </li>
+                    <li>
+                    <a id="`+ postID + `"  class="like"  href="#" data-text-swap="Unlike"><i class="la la-heart"></i> Like</a>
+                </li>
 
 
-        <li>
-            <a id="`+ postID + `" href="#" title="" class="com"><img src="images/com.png" alt=""> Comment </a></li>
-        <li>
+                <li>
+                    <a id="`+ postID + `" href="#" title="" class="com"><img src="images/com.png" alt=""> Comment </a></li>
+                <li>
 
 
 
-            </ul>
-           <!-- <a><i class="la la-eye"></i>Views 50</a> -->
+                    </ul>
+                <!-- <a><i class="la la-eye"></i>Views 50</a> -->
 
-        </div>
-        <div class="comment-section" id="`+ postID + `commentSec"  style="display: none;">
-<div class="plus-ic">
-</div>
+                </div>
+                
+                <div class="comment-section">
 
-<div class="post-comment">
-<div id="`+ postID + `comment"> </div>
 
-    <div class="cm_img">
-        <img style="width: 40px;
-        height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
-    </div>
+    
 
-    <div class="comment_box">
-        <form id="CommentsForm">
-            <input type="text" name="form" placeholder="Post a comment"  required="" >
-            <input type="hidden"  name="post_id" value="`+ postID + `">
-            <button type="submit">Send</button>
-        </form>
-    </div>
-</div>    
-<!--post-comment end-->
-</div>
-    </div><!--post-bar end-->
+
+                <div class="post-comment">
+                <div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
+                <div id="`+ postID + `comment"> </div>
+                </div>
+                
+                <div class="cm_img">
+                    <img style="width: 40px;
+                    height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+                </div>
+                
+                <div class="comment_box">
+                    <form id="CommentsForm">
+                        <input type="text" name="form" placeholder="Post a comment"  required="" >
+                        <input type="hidden"  name="post_id" value="`+ postID + `">
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+                </div>    
+                <!--post-comment end-->
+                </div>
+                </div><!--post-bar end-->
         `;
 
 
                         $('#Posts_list').append(html);
-                        if (result['likes'] != null) {
-                            for (w in result['likes']) {
-                                $("#" + result['likes'][w]['post_id']).html( '<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
-                                $("#" + result['likes'][w]['post_id']).removeClass( "like" ).addClass( "unlike" );
-                                $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap = "like";
+                        if (result['likes'] != 'false') {
+                            for (var w in result['likes']) {
+                                if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id'] && result['likes'][w]['post_id'] === postID) {
+                                    $("#" + result['likes'][w]['post_id']).html('<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
+                                    $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap = "like";
+                                    $("#" + result['likes'][w]['post_id']).removeClass("like").addClass("unlike");
 
+                                }
                             }
                         }
+
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
@@ -412,6 +460,8 @@ $(document).ready(function () {
         jwt = getCookie('jwt');
         var body = Comment['content'];
         var time = Comment['date_created'];
+        time = timeSince(new Date(time));
+
         var form_data = JSON.stringify({
             "option": 300,
             "jwt": jwt,
@@ -429,20 +479,20 @@ $(document).ready(function () {
                         var name = rresult['name']['fname'] + ' ' + rresult['name']['lname'];
                         var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
                         var DeleteComment = "none";
-                        if (Comment['user_id'] === parseJwt(jwt)['data']['id']){
+                        if (Comment['user_id'] === parseJwt(jwt)['data']['id']) {
                             DeleteComment = "block";
                         }
 
 
                         var commentHTML = `
-                <div id="`+ Comment['comment_id'] +`" class="comment-sec">
+                <div id="`+ Comment['comment_id'] + `" class="comment-sec">
                 <ul>
                     <li>     
                 
-                <div class="ed-opts" style="display: `+DeleteComment+`;" >
+                <div class="ed-opts" style="display: `+ DeleteComment + `;" >
                     <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
                     <ul class="ed-options" style="width: 75px;padding-left: 10px;padding-right: 10px;">
-                        <li><a id="delete_Comment" data-comment_id="`+ Comment['comment_id'] +`"  href="#" title="">Delete</a></li>
+                        <li><a id="delete_Comment" data-comment_id="`+ Comment['comment_id'] + `"  href="#" title="">Delete</a></li>
                     </ul>
                 </div>
 
@@ -543,7 +593,7 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     });
-    
+
 
     $(document).on('click', '.like', function () {
         var object = $(this);
@@ -567,9 +617,9 @@ $(document).ready(function () {
                 try {
                     if (result['status'] === 200) {
 
-                        object.html('<i class="la la-heart"></i>' +  object[0].dataset.textSwap);
+                        object.html('<i class="la la-heart"></i>' + object[0].dataset.textSwap);
 
-                        object.removeClass( "like" ).addClass( "unlike" );
+                        object.removeClass("like").addClass("unlike");
                         object[0].dataset.textSwap = "like";
 
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
@@ -619,12 +669,12 @@ $(document).ready(function () {
                 try {
                     if (result['status'] === 200) {
 
-                        object.html('<i class="la la-heart"></i>' +  object[0].dataset.textSwap);
-                        object.removeClass( "unlike" ).addClass( "like" );
+                        object.html('<i class="la la-heart"></i>' + object[0].dataset.textSwap);
+                        object.removeClass("unlike").addClass("like");
                         object[0].dataset.textSwap = "Unlike";
 
 
-                        
+
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
 
                     } else {
@@ -727,7 +777,7 @@ $(document).ready(function () {
         var form_data = JSON.stringify({
             "option": 250,
             "jwt": jwt,
-            "post_id" : post_id
+            "post_id": post_id
         });
         update_account_form.attr("disabled", true);
         $("#" + post_id + "commentSec").show();
@@ -865,7 +915,7 @@ $(document).ready(function () {
         return false;
     });
 
-    $(document).on('click', '#delete_Comment', function(){
+    $(document).on('click', '#delete_Comment', function () {
         var jwt = getCookie('jwt');
         var object = $(this);
 
@@ -883,7 +933,7 @@ $(document).ready(function () {
                 try {
                     if (rresult) {
                         console.log(rresult);
-                        $("#"+ object.data('comment_id')).remove();
+                        $("#" + object.data('comment_id')).remove();
 
                     } else {
                     }
@@ -933,11 +983,46 @@ $(document).ready(function () {
         return false;
     }
 
-    
+    $(document).on('click', '.report', function () {
+        var jwt = getCookie('jwt');
+        var object = $(this);
+
+        var form_data = JSON.stringify({
+            "option": 800,
+            "jwt": jwt,
+            "post_id": object.data('post_id'),
+            "owner_id": object.data('owner_id')
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                try {
+                    var data = $.parseJSON(this.responseText);
+                    object.click(false);
+                    object[0].innerHTML = "Reported";
+                    console.log(data);
+
+
+                } catch (error) {
+                    object.click(false);
+                    object[0].innerHTML = "Already Reported";
+                    console.log(this.responseText);
+
+                }
+
+            }
+        });
+        xhr.open("POST", "/api/index.php/action");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
 
 
     //////// *******
-
 
 
 

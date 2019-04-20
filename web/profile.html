@@ -37,8 +37,7 @@
                     <source src="audio/chimes-glassy.mp3" type="audio/mpeg">
                 </audio>
         
-
-            <header>
+                <header>
                     <div class="container">
                         <div class="header-data">
                             <div class="logo">
@@ -68,7 +67,7 @@
                                     </li>
         
                                     <li>
-                                        <a href="#" title="" class="not-box-open">
+                                        <a href="#" title="" class="msg-box-open">
                                             <span><img src="images/icon6.png" alt=""></span>
                                                                                 <span class="MessagesCounter" style="top: -5px; left: 50%; height: 18px; line-height: 14px; background-color: rgb(209, 17, 36); border: 2px solid rgb(40, 62, 74); border-radius: 14px; z-index: 1; position: absolute; font-size: 12px; font-weight: 400; text-align: center; padding: 0px 4px; min-width: 14px;margin-top: 10px; display: none;" > </span>
                                                                                 Messages
@@ -102,8 +101,11 @@
                                             </div>
         
         
-                                            <div class="nott-list" id="NutfList">
-                                                
+                                            <div class="nott-list" id="NutfList" style="overflow: auto;overflow-x: hidden;max-height: 500px;">
+                                                <div id="newNutfList"> </div>
+                                                <!-- <div class="view-all-nots">
+                                                    <a href="#" id="viewOldNutfication" title="">View Old</a>
+                                                </div> -->
                                                 
         
         
@@ -144,7 +146,7 @@
 
 
         <section class="cover-sec">
-            <img src="images/cover/cover-img.jpg" alt="">
+            <img id="MyCoverPic" src="images/cover/cover-img.jpg" alt="">
         </section>
 
 

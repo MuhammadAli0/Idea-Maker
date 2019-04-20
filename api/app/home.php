@@ -3,20 +3,20 @@ date_default_timezone_set('Africa/Cairo');
 
 
 class homeDB{
-    // private $host = '127.0.0.1';
-    // private $MySqlUsername = 'root';
-    // private $MySqlPassword = '23243125';
-    // private $DBname        = 'idea';
+    private $host = '127.0.0.1';
+    private $MySqlUsername = 'root';
+    private $MySqlPassword = '23243125';
+    private $DBname        = 'idea';
 
     // private $host = 'db4free.net';
     // private $MySqlUsername = 'ideamakeruser';
     // private $MySqlPassword = '23243125';
     // private $DBname        = 'ideamakerdb';
 
-    private $host = 'sql2.freemysqlhosting.net';
-    private $MySqlUsername = 'sql2286394';
-    private $MySqlPassword = 'wY5*fC5*';
-    private $DBname        = 'sql2286394';
+    // private $host = 'sql2.freemysqlhosting.net';
+    // private $MySqlUsername = 'sql2286394';
+    // private $MySqlPassword = 'wY5*fC5*';
+    // private $DBname        = 'sql2286394';
 
     public $conn;
 
@@ -214,6 +214,7 @@ class retriveHome {
             "user_id" => $data['user_id'],
             "username" => $this->username,
             "profile_pic" => $data['profile_picture_url'],
+            "cover_pic" => $data['cover_pic'],
             "personal" => array(
                 "fname"     => $data['fname'],
                 "lname"     => $data['lname'],

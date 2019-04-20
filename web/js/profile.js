@@ -59,13 +59,13 @@ $(document).ready(function () {
                     if (result) {
                         console.log(result);
                         setResultToPage(result);
-                        if (result['accType'] === "idea-maker"){
+                        if (result['accType'] === "idea-maker") {
                             setPosts(result);
                         } else {
                             $('.tab-feed').hide();
                             $('#info').click();
                         }
-                        
+
                         // ShowAccountUpdateForm();
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
@@ -212,38 +212,42 @@ $(document).ready(function () {
        <!-- <a><i class="la la-eye"></i>Views 50</a> -->
 
             </div>
-            <div class="comment-section" id="`+ postID + `commentSec"  style="display: none;">
-        <div class="plus-ic">
-        </div>
+            <div class="comment-section">
 
-        <div class="post-comment">
-        <div id="`+ postID + `comment"> </div>
 
-        <div class="cm_img">
-            <img style="width: 40px;
-            height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
-        </div>
+    
 
-        <div class="comment_box">
-            <form id="CommentsForm">
-                <input type="text" name="form" placeholder="Post a comment"  required="" >
-                <input type="hidden"  name="post_id" value="`+ postID + `">
-                <button type="submit">Send</button>
-            </form>
-        </div>
-        </div>    
-        <!--post-comment end-->
-        </div>
-        </div><!--post-bar end-->
+
+            <div class="post-comment">
+            <div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
+            <div id="`+ postID + `comment"> </div>
+            </div>
+            
+            <div class="cm_img">
+                <img style="width: 40px;
+                height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+            </div>
+            
+            <div class="comment_box">
+                <form id="CommentsForm">
+                    <input type="text" name="form" placeholder="Post a comment"  required="" >
+                    <input type="hidden"  name="post_id" value="`+ postID + `">
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+            </div>    
+            <!--post-comment end-->
+            </div>
+            </div><!--post-bar end-->
             `;
 
 
         $('#feed-dd').append(html);
         if (result['likes'] != 'false') {
             for (w in result['likes']) {
-                if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id']){
-                    $("#" + result['likes'][w]['post_id']).html( '<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
-                    $("#" + result['likes'][w]['post_id']).removeClass( "like" ).addClass( "unlike" );
+                if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id']) {
+                    $("#" + result['likes'][w]['post_id']).html('<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
+                    $("#" + result['likes'][w]['post_id']).removeClass("like").addClass("unlike");
                     $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap = "like";
                 }
 
@@ -271,6 +275,9 @@ $(document).ready(function () {
             $("#usr-pic-nav").attr('src', result['profile_pic'].slice(1))
 
         }
+        if (result['cover_pic'] != null) {
+            $("#MyCoverPic").attr('src', result['cover_pic']);
+        }
     }
 
     function setComments(Comment, post_id) {
@@ -294,20 +301,20 @@ $(document).ready(function () {
                         var name = rresult['name']['fname'] + ' ' + rresult['name']['lname'];
                         var profile_pic = ((rresult['name']['profile_picture_url'] != null) ? rresult['name']['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
                         var DeleteComment = "none";
-                        if (Comment['user_id'] === parseJwt(jwt)['data']['id']){
+                        if (Comment['user_id'] === parseJwt(jwt)['data']['id']) {
                             DeleteComment = "block";
                         }
 
 
                         var commentHTML = `
-                <div id="`+ Comment['comment_id'] +`" class="comment-sec">
+                <div id="`+ Comment['comment_id'] + `" class="comment-sec">
                 <ul>
                     <li>     
                 
-                <div class="ed-opts" style="display: `+DeleteComment+`;" >
+                <div class="ed-opts" style="display: `+ DeleteComment + `;" >
                     <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
                     <ul class="ed-options" style="width: 75px;padding-left: 10px;padding-right: 10px;">
-                        <li><a id="delete_Comment" data-comment_id="`+ Comment['comment_id'] +`"  href="#" title="">Delete</a></li>
+                        <li><a id="delete_Comment" data-comment_id="`+ Comment['comment_id'] + `"  href="#" title="">Delete</a></li>
                     </ul>
                 </div>
 
@@ -364,12 +371,12 @@ $(document).ready(function () {
         return new Date(a.date_created).getTime() - new Date(b.date_created).getTime();
     }
 
-    function parseJwt (token) {
+    function parseJwt(token) {
         var base64Url = token.split('.')[1];
         var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         return JSON.parse(window.atob(base64));
     };
-    
+
 
     $(document).on('submit', '#registrationForm', function () {
         var update_account_form = $(this);
@@ -630,7 +637,7 @@ $(document).ready(function () {
                         $('#SkillsForm').html("<div class='alert alert-success'>Account Updated Succsefully.</div>");
                         var skills = update_account_form_obj['skills'].split(";");
                         $('#skills_list').html("");
-                        for (i in  skills) {
+                        for (i in skills) {
                             $('#skills_list').append(`
                         <li><a href="#" title="">`+ skills[i] + `</a></li>
             
@@ -656,7 +663,6 @@ $(document).ready(function () {
         xhr.send(form_data);
         return false;
     });
-
 
     $(document).on('submit', '#CommentsForm', function () {
         var update_account_form = $(this);
@@ -726,39 +732,6 @@ $(document).ready(function () {
         return false;
     });
 
-    $(document).on('submit', '#profilePictureForm', function () {
-        update_account_form = $(this);
-        var jwt = getCookie('jwt');
-        // var update_account_form_obj = update_account_form.serializeObject()
-
-        var data = new FormData();
-        // data.append("profile_pic", update_account_form[0][0]['value']);
-        data.append("profile_pic", "/home/bow/Downloads/stgob1p27bed959rgllnknfli7580879-final.jpg");
-
-        data.append("jwt", jwt);
-        data.append("option", "600");
-
-        console.log(data);
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                console.log(this.responseText);
-                
-            }
-        });
-
-        xhr.open("POST", "http://localhost/api/index.php/upload");
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-
-        xhr.send(data);
-        $(window).load();
-        return false;
-    });
-
-
     document.querySelector('#profile_pic').addEventListener('change', function (e) {
         var file = this.files[0];
         var fd = new FormData();
@@ -769,7 +742,6 @@ $(document).ready(function () {
         fd.append("option", 600);
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "/api/index.php/upload", true);
-
         xhr.upload.onprogress = function (e) {
             if (e.lengthComputable) {
                 var percentComplete = (e.loaded / e.total) * 100;
@@ -777,16 +749,15 @@ $(document).ready(function () {
             }
         };
         xhr.onload = function () {
-            if (this.status == 200) {
-                console.log(this.response);
-                var resp = JSON.parse(this.response);
+            if (this.readyState === 400) {
+                var resp = JSON.parse(this.responseText);
                 if (resp['status'] === 200) {
                     console.log('Server got:', resp);
-                    $(window).load();
-                    loadPage();
-                }
+                    location.reload(); 
+                };
             };
-        };
+        };        
+        
         xhr.send(fd);
     }, false);
 
@@ -795,7 +766,7 @@ $(document).ready(function () {
         var fd = new FormData();
         var jwt = getCookie('jwt');
 
-        fd.append("profile_pic", file);
+        fd.append("cover_pic", file);
         fd.append("jwt", jwt);
         fd.append("option", 700);
         var xhr = new XMLHttpRequest();
@@ -809,32 +780,28 @@ $(document).ready(function () {
         };
         xhr.onload = function () {
             if (this.status == 200) {
-                console.log(this.response);
-                var resp = JSON.parse(this.response);
-                if (resp['status'] === 200) {
-                    console.log('Server got:', resp);
-                    $(window).load();
-                    loadPage();
-                }
+                var resp = JSON.parse(this.responseText);
+                console.log('Server got:', resp);
+                location.reload(); 
             };
         };
         xhr.send(fd);
     }, false);
 
-    $(document).on('click', '.ed-opts-open', function (){
+    $(document).on('click', '.ed-opts-open', function () {
         $(this).next(".ed-options").toggleClass("active");
         return false;
     });
 
-    $(document).on('click', '.Delete-Post', function (){
-        
+    $(document).on('click', '.Delete-Post', function () {
+
         var post_id = $(this)[0].offsetParent.childNodes[1]["value"];
         console.log(post_id);
         DeletePost(post_id);
         return false;
     });
 
-    $(document).on('click', '#delete_Comment', function(){
+    $(document).on('click', '#delete_Comment', function () {
         var jwt = getCookie('jwt');
         var object = $(this);
 
@@ -852,7 +819,7 @@ $(document).ready(function () {
                 try {
                     if (rresult) {
                         console.log(rresult);
-                        $("#"+ object.data('comment_id')).remove();
+                        $("#" + object.data('comment_id')).remove();
 
                     } else {
                     }
@@ -878,7 +845,7 @@ $(document).ready(function () {
         var form_data = JSON.stringify({
             "option": 250,
             "jwt": jwt,
-            "post_id" : post_id
+            "post_id": post_id
         });
         update_account_form.attr("disabled", true);
         $("#" + post_id + "commentSec").show();
@@ -941,9 +908,9 @@ $(document).ready(function () {
                 try {
                     if (result['status'] === 200) {
 
-                        object.html('<i class="la la-heart"></i>' +  object[0].dataset.textSwap);
+                        object.html('<i class="la la-heart"></i>' + object[0].dataset.textSwap);
 
-                        object.removeClass( "like" ).addClass( "unlike" );
+                        object.removeClass("like").addClass("unlike");
                         object[0].dataset.textSwap = "like";
 
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
@@ -992,12 +959,12 @@ $(document).ready(function () {
                 try {
                     if (result['status'] === 200) {
 
-                        object.html('<i class="la la-heart"></i>' +  object[0].dataset.textSwap);
-                        object.removeClass( "unlike" ).addClass( "like" );
+                        object.html('<i class="la la-heart"></i>' + object[0].dataset.textSwap);
+                        object.removeClass("unlike").addClass("like");
                         object[0].dataset.textSwap = "Unlike";
 
 
-                        
+
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
 
                     } else {
@@ -1022,9 +989,7 @@ $(document).ready(function () {
     });
 
 
-
-
-    function DeletePost(id){
+    function DeletePost(id) {
         jwt = getCookie('jwt');
 
         var form_data = JSON.stringify({
@@ -1041,7 +1006,7 @@ $(document).ready(function () {
                 try {
                     if (rresult) {
                         console.log(rresult);
-                        $("#post_"+id).remove();
+                        $("#post_" + id).remove();
                     } else {
                     }
                 }
