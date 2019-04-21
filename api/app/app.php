@@ -671,15 +671,15 @@ class DataHandeler extends Register
     // private $DBname        = 'ideamakerdb';
 
     
-    private $host = '127.0.0.1';
-    private $MySqlUsername = 'root';
-    private $MySqlPassword = '23243125';
-    private $DBname        = 'idea';
+    // private $host = '127.0.0.1';
+    // private $MySqlUsername = 'root';
+    // private $MySqlPassword = '23243125';
+    // private $DBname        = 'idea';
 
-    // private $host = 'sql2.freemysqlhosting.net';
-    // private $MySqlUsername = 'sql2286394';
-    // private $MySqlPassword = 'wY5*fC5*';
-    // private $DBname        = 'sql2286394';
+    private $host = 'sql2.freemysqlhosting.net';
+    private $MySqlUsername = 'sql2286394';
+    private $MySqlPassword = 'wY5*fC5*';
+    private $DBname        = 'sql2286394';
 
 
     public $conn;
