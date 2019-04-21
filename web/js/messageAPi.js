@@ -191,11 +191,7 @@ $(document).ready(function () {
                         <input type="text" name="message" required="" placeholder="Type a message here">
                         <button type="submit">Send</button>
                     </div>
-                    <ul>
-                        <li><a href="#" title=""><i class="fa fa-smile-o"></i></a></li>
-                        <li><a href="#" title=""><i class="fa fa-camera"></i></a></li>
-                        <li><a href="#" title=""><i class="fa fa-paperclip"></i></a></li>
-                    </ul>
+
                 </form>
             </div><!--message-send-area end-->
         </div><!--main-conversation-box end-->

@@ -6,57 +6,8 @@ $(window).on("load", function () {
     });
 
     $("#Clear-Nut").on("click", function () {
-        var form_data = JSON.stringify({
-            "option": 600,
-            "jwt": jwt
-        });
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                console.log(this.responseText);
-                var rresult = $.parseJSON(this.responseText);
-                try {
-                    if (rresult['status'] === true) {
-                        $(".notificationCounter").hide();
-                        $(".notificationCounter").html('0');
-                        $("#NutfList").html("");
-
-                    } else {
-                    }
-                }
-                catch (err) {
-                    console.log(err);
-                }
-            }
-        });
-        xhr.open("POST", "/api/index.php/action");
-        xhr.setRequestHeader("content-type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.send(form_data);
-        return false;
-
-        $(".notificationCounter").hide();
-        $(".notificationCounter").html('0');
+        SetRemovedToNutification();
     });
-
-
-    //  ============= POST PROJECT POPUP FUNCTION =========
-
-    $(".post_project").on("click", function () {
-        $(".post-popup.pst-pj").addClass("active");
-        $(".wrapper").addClass("overlay");
-        return false;
-    });
-
-
-    $(".post-project > a").on("click", function () {
-        $(".post-popup.pst-pj").removeClass("active");
-        $(".wrapper").removeClass("overlay");
-        return false;
-    });
-
 
 
 
@@ -166,34 +117,7 @@ $(window).on("load", function () {
         $(this).next(".notification-box").toggleClass("active");
         $(".notificationCounter").hide();
         setCookie("notification-read-counter", parseInt($(".notificationCounter").html()), 1);
-        var form_data = JSON.stringify({
-            "option": 650,
-            "jwt": jwt
-        });
-
-        var xhr = new XMLHttpRequest();
-        xhr.withCredentials = true;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                console.log(this.responseText);
-                var rresult = $.parseJSON(this.responseText);
-                try {
-                    if (rresult['status'] === true) {
-                        $(".notificationCounter").hide();
-                        $(".notificationCounter").html('0');
-                    } else {
-                    }
-                }
-                catch (err) {
-                    console.log(err);
-                }
-            }
-        });
-        xhr.open("POST", "/api/index.php/action");
-        xhr.setRequestHeader("content-type", "application/json");
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.send(form_data);
-        return false;
+        SetRedToNutifcation();
     });
 
 
@@ -270,7 +194,7 @@ $(window).on("load", function () {
 
     function custom_sort(a, b) {
         return new Date(a.date_created).getTime() - new Date(b.date_created).getTime();
-    }
+    };
 
     function getCookie(cname) {
         var name = cname + "=";
@@ -287,14 +211,14 @@ $(window).on("load", function () {
             }
         }
         return "";
-    }
+    };
 
     function setCookie(cname, cvalue, exdays) {
         var d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         var expires = "expires=" + d.toUTCString();
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    }
+    };
 
     function timeSince(date) {
 
@@ -322,6 +246,70 @@ $(window).on("load", function () {
             return interval + " minutes";
         }
         return Math.floor(seconds) + " seconds";
+    };
+
+    function SetRedToNutifcation() {
+        var form_data = JSON.stringify({
+            "option": 650,
+            "jwt": jwt
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log(this.responseText);
+                var rresult = $.parseJSON(this.responseText);
+                try {
+                    if (rresult['status'] === true) {
+                        $(".notificationCounter").hide();
+                        $(".notificationCounter").html('0');
+                    } else {
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/action");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    };
+
+    function SetRemovedToNutification() {
+        var form_data = JSON.stringify({
+            "option": 600,
+            "jwt": jwt
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log(this.responseText);
+                var rresult = $.parseJSON(this.responseText);
+                try {
+                    if (rresult['status'] === true) {
+                        $(".notificationCounter").hide();
+                        $(".notificationCounter").html('0');
+                        $("#NutfList").html("");
+
+                    } else {
+                    }
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/action");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
     };
 
     window.jwt = getCookie("jwt");
@@ -368,7 +356,7 @@ $(window).on("load", function () {
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
         return false;
-    }
+    };
 
     function Update() {
         var form_data = JSON.stringify({
@@ -436,7 +424,7 @@ $(window).on("load", function () {
         xhr.setRequestHeader("cache-control", "no-cache");
         xhr.send(form_data);
         return false;
-    }
+    };
 
 
     function parseJwt(token) {

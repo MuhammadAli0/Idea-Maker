@@ -50,6 +50,7 @@ $(document).ready(function () {
         }
     };
 
+    window.jwt = getCookie('jwt');
 
     function setResultToPage(result) {
         // document.getElementById("username").innerHTML = result['username'];
