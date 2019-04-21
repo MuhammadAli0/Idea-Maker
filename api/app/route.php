@@ -7,6 +7,8 @@ require __DIR__ .  '/app.php';
 // Define app routes
 // ------------- REGISTER -------------------
 $app->post('/register', function($request, $response){
+     $GLOBALS['HostNameUrl'] = substr($request->getUri()->getBaseUrl(), 0,-14);
+
     $data=$request->getParsedBody();
     $inputData = [];
     $inputData['username']  = filter_var($data['username'], FILTER_SANITIZE_STRING);
@@ -71,11 +73,14 @@ $app->post('/login', function($request, $response){
 });
 
 // ------------- ACTIVATION -------------------
-$app->get('/register/code/{username}/{code}', function($request, $response, $argc){
+$app->get('/register/code/[{username}/{code}]', function($request, $response, $argc){
+    $GLOBALS['HostNameUrl'] = substr($request->getUri()->getBaseUrl(), 0,-14);
+
     // $data=$request->getParsedBody();
     $user = $argc['username'];
     $code = $argc['code'];
 
+    echo $user.$code;
     $logging = new ActivationLog;
 
 
@@ -86,7 +91,7 @@ $app->get('/register/code/{username}/{code}', function($request, $response, $arg
             "username" => $user,
             "code" => $code
         )));
-        header("Location: https://idea-maker.herokuapp.com/index.html?login", true, 301);
+        header("Location: ".$GLOBALS['HostNameUrl'] ."/index.html?login", true, 301);
         exit();
     }else{
         $logging->write(json_encode(array(
@@ -94,7 +99,7 @@ $app->get('/register/code/{username}/{code}', function($request, $response, $arg
             "username" => $user,
             "code" => $code
         )));
-        header("Location: https://idea-maker.herokuapp.com/web/SomeThingWrong.html", true, 301);
+        header("Location: ".$GLOBALS['HostNameUrl'] ."/web/SomeThingWrong.html", true, 301);
         exit();
     }
 
@@ -102,7 +107,8 @@ $app->get('/register/code/{username}/{code}', function($request, $response, $arg
 
 // ------------- Passowrd Recovery 1st -------------------
 $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $response, $argc){
-    
+    $GLOBALS['HostNameUrl'] = substr($request->getUri()->getBaseUrl(), 0,-14);
+
     $logging = new  RecoveryLog;
 
     if($request->isPut()){
@@ -135,7 +141,7 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
                 "Code" =>$code
             )));
 
-            header("Location: https://idea-maker.herokuapp.com/web/passwordRecov.html?".$token, true, 301);
+            header("Location: ".$GLOBALS['HostNameUrl'] ."/web/passwordRecov.html?".$token, true, 301);
             exit();
             // $response->write( $token );
         }else{
@@ -145,7 +151,7 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
                 "Code" =>$code
             )));
 
-            header("Location: https://idea-maker.herokuapp.com/web/unvalidLink.html", true, 301);
+            header("Location: ".$GLOBALS['HostNameUrl'] ."/web/unvalidLink.html", true, 301);
             exit();
         }
         
@@ -154,7 +160,8 @@ $app->map(['PUT', 'GET'], '/recovery/{value1}/[{code}]', function($request, $res
 });
 
 // ------------- Passowrd Recovery 2nd -------------------
-$app->post('/recovery/password/', function($request, $response){
+$app->post('/recovery/password', function($request, $response){
+    $GLOBALS['HostNameUrl'] = substr($request->getUri()->getBaseUrl(), 0,-14);
 
 
     if ($request->isPost()) {
@@ -184,7 +191,7 @@ $app->post('/recovery/password/', function($request, $response){
                 if ($recover->RePassword($UserName, $data['password']) == TRUE ){
                     
                     
-                    header("Location: https://idea-maker.herokuapp.com/web/", true, 301);
+                    header("Location: ".$GLOBALS['HostNameUrl'] ."/web/", true, 301);
                     exit();
         
                 }else{
@@ -298,7 +305,7 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{user_id}/{username}]', function($requ
                 $response->write($home->home);
             }
         } else {
-            header("Location: https://idea-maker.herokuapp.com/index.html?login", true, 301);
+            header("Location: ".$GLOBALS['HostNameUrl'] ."/index.html?login", true, 301);
             exit();
         }
     
@@ -433,7 +440,7 @@ $app->map(['GET', 'PUT', 'POST'], '/profile/[{user_id}/{username}]', function($r
             }
 
         } else {
-            header("Location: https://idea-maker.herokuapp.com/index.html?login", true, 301);
+            header("Location: ".$GLOBALS['HostNameUrl'] ."/index.html?login", true, 301);
             exit();
         }
     
@@ -519,6 +526,7 @@ $app->post('/upload', function( $request,  $response) {
 
 // ------------- Contact Us -------------------
 $app->post('/contactus', function($request, $response){
+
     $data=$request->getParsedBody();
     $inputData = [];
 
@@ -628,6 +636,13 @@ $app->post('/action', function($request, $response){
 
     
     
+});
+
+
+$app->post('/test', function($request, $response){
+    $GLOBALS['HostNameUrl'] = substr($request->getUri()->getBaseUrl(), 0,-14);
+
+    $response->getBody()->write( $GLOBALS['HostNameUrl'] );
 });
 
 

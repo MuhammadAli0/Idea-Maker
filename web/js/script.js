@@ -112,12 +112,15 @@ $(window).on("load", function () {
 
 
     //  ============ Notifications Open =============
-
+    var ClickCounter = 0;
     $(".not-box-open").on("click", function () {
         $(this).next(".notification-box").toggleClass("active");
-        $(".notificationCounter").hide();
-        setCookie("notification-read-counter", parseInt($(".notificationCounter").html()), 1);
-        SetRedToNutifcation();
+        if (ClickCounter % 2 === 0){
+            $(".notificationCounter").hide();
+            setCookie("notification-read-counter", parseInt($(".notificationCounter").html()), 1);
+            SetRedToNutifcation();
+        }
+        ClickCounter = ClickCounter + 1 ;
     });
 
 
@@ -315,7 +318,9 @@ $(window).on("load", function () {
     window.jwt = getCookie("jwt");
 
 
-    GetOldNutfication()
+    GetOldNutfication();
+    Update();
+    var PlaySound = false;
     setInterval(function () { Update(); }, 3000);
 
 
@@ -371,14 +376,15 @@ $(window).on("load", function () {
                 var rresult = $.parseJSON(this.responseText);
                 try {
                     if (rresult) {
-                        console.log(rresult);
 
                         if (rresult['msgs'] != false) {
                             var curentmsgs = ($(".MessagesCounter").html() === " ") ? 0 : parseInt($(".MessagesCounter").html());
                             if (rresult['msgs'].length > curentmsgs) {
+                                if (PlaySound != false){
+                                    var x = document.getElementById("myAudio");
+                                    x.play();
+                                }
 
-                                var x = document.getElementById("myAudio");
-                                x.play();
 
                                 $(".MessagesCounter").html(rresult['msgs'].length);
                                 $(".MessagesCounter").show();
@@ -389,19 +395,17 @@ $(window).on("load", function () {
 
 
                         if (rresult['nutf']['likes'] != false || rresult['nutf']['comments'] != false) {
-
                             var commentsCounter = (rresult['nutf']['comments'] != false) ? rresult['nutf']['comments'].length : 0;
                             var LikesCounter = (rresult['nutf']['likes'] != false) ? rresult['nutf']['likes'].length : 0;
 
                             var curent = ($(".notificationCounter").html() === " ") ? 0 : parseInt($(".notificationCounter").html());
+
                             if ((commentsCounter + LikesCounter) > curent) {
                                 // $("#NutfList").html("");
-
-                                var y = document.getElementById("myAudioGlasyNtuf");
-                                y.play();
-
-
-
+                                if (PlaySound != false){
+                                    var y = document.getElementById("myAudioGlasyNtuf");
+                                    y.play();       
+                                }
 
                                 SetNotification(rresult['nutf']);
                             }
@@ -417,6 +421,7 @@ $(window).on("load", function () {
                 catch (err) {
                     console.log(err);
                 }
+                PlaySound = true;
             }
         });
         xhr.open("POST", "/api/index.php/action");

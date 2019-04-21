@@ -49,7 +49,7 @@ $(document).ready(function () {
 
     function timeSince(date) {
 
-        var seconds = Math.floor((new Date() - date) / 1000);
+        var seconds = Math.floor((new Date() - date) / 900);
 
         var interval = Math.floor(seconds / 31536000);
 
@@ -88,7 +88,6 @@ $(document).ready(function () {
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 try {
-                    console.log(this.responseText);
 
                     result = $.parseJSON(this.responseText)
                     if (result) {
@@ -158,9 +157,9 @@ $(document).ready(function () {
                 </div>
                 <a href="#" title=""><i class="fa fa-ellipsis-v"></i></a>
             </div><!--message-bar-head end-->
-			<div class="messages-line mCustomScrollbar _mCS_1">
+			<div id="mCSB_`+ user_Data['user_id'] + `" class="messages-line mCustomScrollbar _mCS_1" style="overflow:auto; overflow-x:hidden;">
 
-            <div id="mCSB_`+ user_Data['user_id'] + `" class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside" style="max-height: none; overflow:auto; overflow-x:hidden;"
+            <div class="mCustomScrollBox mCS-light mCSB_vertical mCSB_inside" style="max-height: auto;"
             tabindex="0">
             <div id="mCSB_1_container" class="mCSB_container" style="position: relative; top: -60px; left: 0px;margin-top: 145px;"
                 dir="ltr">
@@ -267,7 +266,6 @@ $(document).ready(function () {
                 var rresult = $.parseJSON(this.responseText);
                 try {
                     if (rresult) {
-                        console.log(rresult);
                         LoadMassges(rresult['msges'], id, link);
 
                     } else {
@@ -302,7 +300,6 @@ $(document).ready(function () {
                 var rresult = $.parseJSON(this.responseText);
                 try {
                     if (rresult) {
-                        console.log(rresult);
 
 
                     } else {
@@ -348,8 +345,7 @@ $(document).ready(function () {
                 `;
 
                         $('#msgBox' + data['msgs'][i]['user_id_from']).append(hisMsg);
-                        console.log(data['msgs']);
-                        $('#mCSB_' + data['msgs'][i]['user_id_from']).animate({ scrollTop: $('#mCSB_' + data['msgs'][i]['user_id_from']).height() * 3 + 139 }, 1000);
+                        $('#mCSB_' + data['msgs'][i]['user_id_from']).animate({ scrollTop: $('#mCSB_' + data['msgs'][i]['user_id_from']).html().length / 9 }, 1000);
 
                         SetRedToMsdges(data['msgs'][i]['user_id_from']);
 
@@ -360,7 +356,6 @@ $(document).ready(function () {
                 }
             }
         }
-        console.log(data);
         return false;
     }
 
@@ -415,9 +410,7 @@ $(document).ready(function () {
         $('.col-lg-8').hide();
 
         $("#FormXChat" + id).css("display", "block");
-
-        $('#mCSB_' + id).animate({ scrollTop: $('#mCSB_' + id).height() * 3 + 139 }, 1000);
-
+        $('#mCSB_' + id).animate({ scrollTop: $('#mCSB_' + id).html().length / 9 }, 1000);
         return false;
     });
 
@@ -446,8 +439,6 @@ $(document).ready(function () {
         xhr.withCredentials = true;
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                console.log(form_data);
-                console.log(this.responseText);
                 result = $.parseJSON(this.responseText);
                 try {
                     if (result) {
@@ -468,7 +459,7 @@ $(document).ready(function () {
             </div><!--main-message-box end-->
                 `;
                         $("#msgBox" + update_account_form_obj['target_id']).append(myMsg);
-                        $('#mCSB_' + update_account_form_obj['target_id']).animate({ scrollTop: $('#mCSB_' + update_account_form_obj['target_id']).height() * 3 + 139 }, 1000);
+                        $('#mCSB_' + update_account_form_obj['target_id']).animate({ scrollTop: $('#mCSB_' + update_account_form_obj['target_id']).html().length / 9  }, 1000);
 
 
                         // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");

@@ -15,6 +15,8 @@ use Slim\Http\Response;
 use Slim\Http\UploadedFile;
 use \Firebase\JWT\JWT;
 
+$HostNameUrl ;
+
 // Create and configure Slim app
 $config = ['settings' => [
     'addContentLengthHeader' => false,
@@ -64,6 +66,7 @@ class mailer
 
     protected function CreateVerficationMailBody($code, $name, $user)
     {
+        $MyHostNameUrl = $GLOBALS['HostNameUrl'];
         $this->load();
         $MailBody = <<<"EOD"
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -220,7 +223,7 @@ class mailer
                                   <w:anchorlock/>
                                   <center>
                                 <![endif]-->
-                                                        <a href="https://idea-maker.herokuapp.com/api/index.php/register/code/$user/$code" style="background-color:#178f8f;border-radius:4px;color:#ffffff;display:inline-block;font-family:Helvetica, Arial, sans-serif;font-size:16px;font-weight:bold;line-height:50px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">Activate
+                                                        <a href="$MyHostNameUrl/api/index.php/register/code/$user/$code" style="background-color:#178f8f;border-radius:4px;color:#ffffff;display:inline-block;font-family:Helvetica, Arial, sans-serif;font-size:16px;font-weight:bold;line-height:50px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">Activate
                                                             Account!</a>
                                                         <!--[if mso]>
                                   </center>
@@ -829,14 +832,14 @@ class Loyal
 
     protected function createSeection($username, $Email, $name, $user_id)
     {
-        header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com");
+        header("Access-Control-Allow-Origin: ".$GLOBALS['HostNameUrl'] ."");
         header("Content-Type: application/json; charset=UTF-8");
         header("Access-Control-Allow-Methods: POST");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
         $key = $this->private_key;
-        $iss = "https://idea-maker.herokuapp.com/web/";
-        $aud = "https://idea-maker.herokuapp.com/api/";
+        $iss = "".$GLOBALS['HostNameUrl'] ."/web/";
+        $aud = "".$GLOBALS['HostNameUrl'] ."/api/";
         $iat = 1356999524;
         $nbf = 1357000000;
         $exp = 60;
@@ -904,7 +907,7 @@ class _Loyal extends mailer
 
             } catch (\Exception $e) {
      
-                // http_response_code(401);         
+                http_response_code(401);         
                 // return json_encode(array(
                 //     "message" => "Access denied.",
                 //     "error" => $e->getMessage()
@@ -919,18 +922,18 @@ class _Loyal extends mailer
 
     protected function createSeection($username)
     {
-        header("Access-Control-Allow-Origin: https://idea-maker.herokuapp.com/api/index.php/recovery/password/");
+        header("Access-Control-Allow-Origin: ".$GLOBALS['HostNameUrl'] ."/api/index.php/recovery/password/");
         header("Content-Type: application/json; charset=UTF-8");
         header("Access-Control-Allow-Methods: POST");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
         $key = $this->key;
-        $iss = "https://idea-maker.herokuapp.com/api/index.php/recovery/password/";
-        $aud = "https://idea-maker.herokuapp.com/web/passwordRecov.html";
+        $iss = "".$GLOBALS['HostNameUrl'] ."/api/index.php/recovery/password/";
+        $aud = "".$GLOBALS['HostNameUrl'] ."/web/passwordRecov.html";
         // $iat = 1356999524;
         // $nbf = 1357000000;
-        $exp = time() + 60;
+        $exp = time() + 120;
 
         $token = array(
             "iss" => $iss,
@@ -1087,7 +1090,7 @@ class Recovery extends _Loyal
         if ($this->isValidEmail() == true) {
             if ($this->loadData() == true) {
                 if ($this->updateCode() == true) {
-                    $this->link = "https://idea-maker.herokuapp.com/api/index.php/recovery/$this->username/$this->vCode";
+                    $this->link = "".$GLOBALS['HostNameUrl'] ."/api/index.php/recovery/$this->username/$this->vCode";
                     if ($this->sendRecoveryMali() == true) {
                         $this->error['message'] = 'mail sended';
                         return true;
