@@ -321,7 +321,7 @@ $(window).on("load", function () {
     GetOldNutfication();
     Update();
     var PlaySound = false;
-    setInterval(function () { Update(); }, 3000);
+    setInterval(function () { Update(); }, 1000);
 
 
     function GetOldNutfication() {
