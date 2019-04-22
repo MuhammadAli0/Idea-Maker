@@ -72,12 +72,12 @@ $(document).ready(function () {
             setProfilePic(result);
         }
         if (result['accType'] != 'idea-maker') {
-            $('#MainTab').click()
+            $('#info-dd').show()
         } else {
             setPosts(result)
             $('#feedTab').show();
             $('#MainTab').show();
-            $('#feedTab').click();
+            $('#feed-dd').show();
         }
 
 
