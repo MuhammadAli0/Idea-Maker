@@ -747,7 +747,7 @@ $(document).ready(function () {
                         `;
 
                         $("#" + update_account_form_obj['post_id'] + "comment").append(commentHTML);
-
+                        $("#" + update_account_form_obj['post_id'] + "commentSec").scrollTop($("#" + update_account_form_obj['post_id'] + "commentSec >> div").length * 100);
 
                     } else {
                         // on error/fail, tell the user he needs to login to show the account page
