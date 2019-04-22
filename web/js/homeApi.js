@@ -334,13 +334,13 @@ $(document).ready(function () {
                 </div>
 
                 <script>
-                function openForm() {
+                function openForm`+ postID + `() {
                     document.getElementById("`+ postID + `msg").style.display = "block";
                     document.getElementById("OpenMsgBut`+ postID + `").style.display = "none";
 
                 }
                 
-                function closeForm() {
+                function closeForm`+ postID + `() {
                     document.getElementById("`+ postID + `msg").style.display = "none";
                     document.getElementById("OpenMsgBut`+ postID + `").style.display = "contents";
 
@@ -349,9 +349,9 @@ $(document).ready(function () {
 
                 <div class="epi-sec">					
                     <ul class="bk-links">
-                    <button  style="background-color: rgb(255, 255, 255); display: contents;"  id="OpenMsgBut`+ postID + `" onclick="openForm()"><li><i class="la la-envelope"></i></li></button>
+                    <button  style="background-color: rgb(255, 255, 255); display: contents;"  id="OpenMsgBut`+ postID + `" onclick="openForm`+ postID + `()"><li><i class="la la-envelope"></i></li></button>
                     <div id="`+ postID + `msg" style="display: none; border: 3px solid #f1f1f1; z-index: 9;">	
-                    <button id="CloseMsgBut`+ postID + `" onclick="closeForm()">Close</button>
+                    <button id="CloseMsgBut`+ postID + `" onclick="closeForm`+ postID + `()">Close</button>
                     <form id="message">
                         <input type="hidden"  name="post_id" value="`+ postID + `">
                         <input type="hidden"  name="target_id" value="`+ owner + `">
