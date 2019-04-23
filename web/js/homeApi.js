@@ -128,8 +128,8 @@ $(document).ready(function () {
         $("#accType").html(result['accType']);
         if (result['accType'] === "idea-maker") {
             $('#Post_button').html('<li><a class="post_project" href="#" title="">Post a Project</a></li>');
+            $('.post-topbar').show();
         }
-
     }
 
     function setProfilePic(result) {

@@ -937,6 +937,7 @@ main {
 	-o-box-shadow: 0 0 1px rgba(0,0,0,0.24);
 	box-shadow: 0 0 1px rgba(0,0,0,0.24);
 	margin-bottom: 20px;
+	display: none;
 }
 .user-picy {
 	float: left;
