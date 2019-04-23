@@ -130,6 +130,9 @@ $(document).ready(function () {
             $('#Post_button').html('<li><a class="post_project" href="#" title="">Post a Project</a></li>');
             $('.post-topbar').show();
         }
+        setTopUsers(result['topUsers']);
+        // setTopIdeas(result['topPosts']);
+
     }
 
     function setProfilePic(result) {
@@ -574,6 +577,38 @@ $(document).ready(function () {
         return false;
 
     }
+
+    function setTopUsers(usersData){
+        for (var i in usersData){
+            $('#topUsers').append(`
+        <div class="suggestion-usd">
+            <img style="height: 40px;width: 40px;" src="`+((usersData[i]['profile_picture_url'] != null) ? usersData[i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+            <div class="sgt-text">
+                <a href="profile.html?user_id=`+usersData[i]['user_id']+`&username=`+usersData[i]['username']+`"><h4>`+usersData[i]['fname']+` `+usersData[i]['lname']+`</h4></a>
+                <span>`+usersData[i]['uType']+`</span>
+            </div>
+            <span></span>
+        </div> 
+
+            `);
+        } 
+    };
+
+    function setTopIdeas(IdeasData){
+        for (var i in IdeasData){
+            $('#topIdeas').append(`
+        <div class="job-info">
+            <div class="job-details">
+                <h3>`+IdeasData[i]['title']+`</h3>
+                <p>`+IdeasData[i]['skills']+`</p>
+            </div>
+            <div class="hr-rate">
+            </div>
+        </div> 
+
+            `);
+        } 
+    };
 
 
     function custom_sort(a, b) {

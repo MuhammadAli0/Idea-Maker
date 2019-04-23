@@ -649,9 +649,9 @@ $app->post('/action', function($request, $response){
 
 $app->post('/test', function($request, $response){
     $GLOBALS['HostNameUrl'] = substr($request->getUri()->getBaseUrl(), 0,-14);
-    $data = $request->getParsedBody();
-    $res = "\t*--- " . $data['head'] . " ---*<br>". $data['body'] . "<br>With Average Cost\t" .$data['price_from']. "$ to " . $data['price_to'] . "$<br>";
-    $response->getBody()->write( $res );
+    $ab = new GetData();
+    $data = $ab->GetTopPosts();
+    $response->getBody()->write( json_encode( $data ));
 });
 
 

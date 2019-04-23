@@ -213,6 +213,46 @@ class GetData{
         }
     }
 
+    public function GetTopUsers(){
+        $dlb = $this->conn->prepare("SELECT a.user_id , count(a.user_id) as comments,
+        u.username, u.fname , u.lname, u.skills, u.uType, u.profile_picture_url
+            FROM Comments a, users u 
+                where a.user_id  = u.user_id
+                    group by a.user_id , u.username
+                        order by comments DESC 
+                            limit 10    
+        ");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        } 
+    }
+
+    public function GetTopPosts(){
+        $dlb = $this->conn->prepare("SELECT a.post_id , count(a.post_id) as likes,
+        b.user_id as owner,  
+        b.title as title, 
+        b.p_status as stat, 
+        b.skills as skills,
+        b.date_created as created
+            FROM Likes a, Posts b 
+                where a.post_id  = b.post_id 
+                    group by a.post_id 
+                        order by likes DESC 
+                            limit 10    
+        ");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        } 
+    }
+
 
 
 
@@ -255,7 +295,10 @@ class retriveHome {
             "likes" => $GetDataX->GetLikes($this->user_id),
             "msg" => $GetDataX->GetUnReadedMessages($this->user_id),
             "nutf" => $GetDataX->GetNuotification($this->user_id),
-            "requests" => $GetDataX->GetRequests($this->user_id)
+            "requests" => $GetDataX->GetRequests($this->user_id),
+            "topUsers" => $GetDataX->GetTopUsers(),
+            "topPosts" => $GetDataX->GetTopPosts()
+
 
                 ));
     }
