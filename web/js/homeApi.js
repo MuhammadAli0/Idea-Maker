@@ -439,13 +439,13 @@ $(document).ready(function () {
                             switch (status) {
                                 case "Develop":
 
-                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Invest</a>') : console.log("NotAllowdToDevolop"));
+                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
                                     break;
                                 case "Invest":
                                     ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="invest buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
                                     break;
                                 default:
-                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Invest</a>') : console.log("NotAllowdToDevolop"));
+                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
                                     ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="invest  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
                             }
                         }

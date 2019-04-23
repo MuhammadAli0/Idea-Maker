@@ -56,9 +56,10 @@ $(document).ready(function () {
     function setResultToPage(result) {
         // document.getElementById("username").innerHTML = result['username'];
 
-        $("#fname").html(result['personal']['fname']);
+        // $("#fname").html(result['personal']['fname']);
 
         $("#name").html(result['personal']['fname'] + ' ' + result['personal']['lname']);
+        $('#titleName').html(result['personal']['fname'] + ' ' + result['personal']['lname']);
         $("#accType").html(result['accType']);
         $("#summary").html(result['personal']['summary']);
         $("#country").html(result['personal']['country']);
@@ -130,7 +131,8 @@ $(document).ready(function () {
     function setProfilePic(result) {
         if (result['profile_pic'] != null) {
             $("#usr-pic-main").attr('src', result['profile_pic'].slice(1))
-            $("#usr-pic-nav").attr('src', result['profile_pic'].slice(1))
+            var token = parseJwt(jwt);
+            $("#usr-pic-nav").attr('src', (( token["data"]['ProfilePicUrl'] != null )? token["data"]['ProfilePicUrl'].slice(1) : " images/profile/unkown.jpeg" ));
         }
         if (result['cover_pic'] != null) {
             $("#MyCoverPic").attr('src', result['cover_pic']);
@@ -273,13 +275,13 @@ $(document).ready(function () {
             switch (status) {
                 case "Develop":
 
-                    ((parseJwt(jwt)['data']['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Invest</a>') : console.log("NotAllowdToDevolop"));
+                    ((parseJwt(jwt)['data']['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
                     break;
                 case "Invest":
                     ((parseJwt(jwt)['data']['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="invest buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
                     break;
                 default:
-                    ((parseJwt(jwt)['data']['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Invest</a>') : console.log("NotAllowdToDevolop"));
+                    ((parseJwt(jwt)['data']['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
                     ((parseJwt(jwt)['data']['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="invest  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
             }
         }
