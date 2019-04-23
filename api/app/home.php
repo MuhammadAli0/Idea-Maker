@@ -361,6 +361,7 @@ class userActions extends retriveHome {
             $dlb->execute();
         if($dlb->rowCount() > 0){
             $d2 = $this->conn->prepare("DELETE FROM Comments WHERE post_id = '$post_id';
+            DELETE FROM requests WHERE post_id = '$post_id';
             DELETE FROM Likes WHERE post_id = '$post_id';
             DELETE FROM Posts WHERE post_id = '$post_id' AND user_id = '$this->user_id';");
             $d2->execute();
