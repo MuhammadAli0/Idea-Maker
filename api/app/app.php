@@ -486,6 +486,237 @@ EOD;
         $this->body = $MailBody;
     }
 
+    protected function CreateRequestMail($head, $body, $dateTime, $name, $Url ){
+        $this->load();
+        $mailBody = <<<"EOD"
+        <html xmlns="http://www.w3.org/1999/xhtml">
+
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>Neopolitan Confirm Email</title> <!-- Designed by https://github.com/kaytcat -->
+                <!-- Robot header image designed by Freepik.com -->
+                <style type="text/css">
+                    @import url(http://fonts.googleapis.com/css?family=Droid+Sans);
+
+                    /* Take care of image borders and formatting */
+                    img {
+                        max-width: 600px;
+                        outline: none;
+                        text-decoration: none;
+                        -ms-interpolation-mode: bicubic;
+                    }
+
+                    a {
+                        text-decoration: none;
+                        border: 0;
+                        outline: none;
+                        color: #bbbbbb;
+                    }
+
+                    a img {
+                        border: none;
+                    }
+
+                    /* General styling */
+                    td,
+                    h1,
+                    h2,
+                    h3 {
+                        font-family: Helvetica, Arial, sans-serif;
+                        font-weight: 400;
+                    }
+
+                    td {
+                        text-align: center;
+                    }
+
+                    body {
+                        -webkit-font-smoothing: antialiased;
+                        -webkit-text-size-adjust: none;
+                        width: 100%;
+                        height: 100%;
+                        color: #37302d;
+                        background: #ffffff;
+                        font-size: 16px;
+                    }
+
+                    table {
+                        border-collapse: collapse !important;
+                    }
+
+                    .headline {
+                        color: #ffffff;
+                        font-size: 36px;
+                    }
+
+                    .force-full-width {
+                        width: 100% !important;
+                    }
+
+                    .force-width-80 {
+                        width: 80% !important;
+                    }
+                </style>
+                <style type="text/css" media="screen">
+                    @media screen {
+
+                        /*Thanks Outlook 2013! http://goo.gl/XLxpyl*/
+                        td,
+                        h1,
+                        h2,
+                        h3 {
+                            font-family: 'Droid Sans', 'Helvetica Neue', 'Arial', 'sans-serif' !important;
+                        }
+                    }
+                </style>
+                <style type="text/css" media="only screen and (max-width: 480px)">
+                    /* Mobile styles */
+                    @media only screen and (max-width: 480px) {
+                        table[class="w320"] {
+                            width: 320px !important;
+                        }
+
+                        td[class="mobile-block"] {
+                            width: 100% !important;
+                            display: block !important;
+                        }
+                    }
+                </style>
+            </head>
+
+            <body class="body" style="padding:0; margin:0; display:block; background:#ffffff; -webkit-text-size-adjust:none"
+                bgcolor="#ffffff">
+                <table class="force-full-width" height="100%" cellspacing="0" cellpadding="0" align="center">
+                    <tbody>
+                        <tr>
+                            <td width="100%" valign="top" bgcolor="#ffffff" align="center">
+                                <center>
+                                    <table style="margin: 0 auto;" class="w320" width="600" cellspacing="0" cellpadding="0">
+                                        <tbody>
+                                            <tr>
+                                                <td valign="top" align="center">
+                                                    <table style="margin: 0 auto;" class="force-full-width" cellspacing="0"
+                                                        cellpadding="0">
+                                                        <tbody>
+                                                            <tr> </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <table style="margin: 0 auto;" class="force-full-width" cellspacing="0"
+                                                        cellpadding="0" bgcolor="#4dbfbf">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td> <br> <img
+                                                                        src="https://www.filepicker.io/api/file/carctJpuT0exMaN8WUYQ"
+                                                                        alt="robot picture" width="224" height="240"> </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="headline"> Good News! </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <center>
+                                                                        <table style="margin: 0 auto;" width="60%" cellspacing="0"
+                                                                            cellpadding="0">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="color:#187272;"> <br>Hi $name!!<br>
+                                                                                    Yor Idea Got an Request, Check it out. <br> </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </center>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <div>
+                                                                        <!--[if mso]>                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://" style="height:50px;v-text-anchor:middle;width:200px;" arcsize="8%" stroke="f" fillcolor="#178f8f">                            <w:anchorlock/>                            <center>                          <![endif]-->
+                                                                        <a href="$Url/web/messages.html" 
+                                                                        style="background-color:#178f8f;border-radius:4px;color:#ffffff;display:inline-block;font-family:Helvetica, Arial, sans-serif;font-size:16px;font-weight:bold;line-height:50px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">Check
+                                                                            It</a>
+                                                                        <!--[if mso]>                            </center>                          </v:roundrect>                        <![endif]-->
+                                                                    </div> <br> <br>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <table style="margin: 0 auto;" class="force-full-width" cellspacing="0"
+                                                        cellpadding="0" bgcolor="#f5774e">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="background-color:#f5774e;">
+                                                                    <center>
+                                                                        <table style="margin:0 auto;" class="force-width-80"
+                                                                            cellspacing="0" cellpadding="0">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td
+                                                                                        style="text-align:right; vertical-align:top; color:#933f24">
+                                                                                        <br> <br>$dateTime</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <table style="margin:0 auto;" class="force-width-80"
+                                                                            cellspacing="0" cellpadding="0">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td class="mobile-block"> <br> <br>
+                                                                                        <table class="force-full-width"
+                                                                                            cellspacing="0" cellpadding="0">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td
+                                                                                                        style="color:#ffffff; background-color:#ac4d2f; padding: 10px 0px;">$head</td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td
+                                                                                                        style="color:#933f24; padding:10px 0px; background-color: #f7a084;"> $body
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table> <br>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <table style="margin: 0 auto;" class="force-width-80"
+                                                                            cellspacing="0" cellpadding="0">
+                                                                            <tbody>
+                                                                                <tr> </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </center>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <table style="margin: 0 auto;" class="force-full-width" cellspacing="0"
+                                                        cellpadding="0" bgcolor="#414141">
+                                                        <tbody>
+                                                            <tr> </tr>
+                                                            <tr> </tr>
+                                                            <tr> </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </center>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </body>
+
+            </html>
+EOD;
+                                                                
+        $this->body = $mailBody;
+    
+    }
+
     protected function sendMail($target, $tName, $Subject)
     {
         try {
@@ -830,7 +1061,7 @@ class Loyal
     }
 
 
-    protected function createSeection($username, $Email, $name, $user_id)
+    protected function createSeection($username, $Email, $name, $user_id, $AccType, $profile_Pic)
     {
         header("Access-Control-Allow-Origin: ".$GLOBALS['HostNameUrl'] ."");
         header("Content-Type: application/json; charset=UTF-8");
@@ -854,7 +1085,9 @@ class Loyal
                 "id" => $user_id,
                 "username" => $username,
                 "name" => $name,
-                "email" => $Email
+                "email" => $Email,
+                "accType" => $AccType,
+                "ProfilePicUrl" => $profile_Pic
             )
         );
         $jwt = JWT::encode($token, $key);
@@ -975,7 +1208,7 @@ class Login extends Loyal
     public function login()
     {
         $dlb = $this->conn->prepare("SELECT 
-            username, email, user_id, accStatus, fname, lname
+            username, email, user_id, accStatus, fname, lname, uType, profile_picture_url
         FROM users 
             WHERE 
                 username = '$this->valueX' and pwHash = '$this->LoginHash' 
@@ -992,6 +1225,8 @@ class Login extends Loyal
             $this->username = $result['username'];
             $user_id = $result['user_id'];
             $name = $result['fname']. ' ' . $result['lname'];
+            $profile_Pic = $result['profile_picture_url'];
+            $AccType  = $result['uType'];
 
             if ($result['accStatus'] != 'ACTIVATED') {
                 $this->logging->write(json_encode(array(
@@ -1013,7 +1248,7 @@ class Login extends Loyal
                 // $_SESSION["$this->valueX"] = TRUE; 
                 // header('Location: /');
                 // $this->setCookie('username', $this->valueX);
-                return $this->createSeection($this->username, $this->Email, $name, $user_id);
+                return $this->createSeection($this->username, $this->Email, $name, $user_id, $AccType, $profile_Pic);
 
             }
         } else {
@@ -1260,6 +1495,46 @@ class ContactUs extends mailer {
         $this->CreateContactUsResponceMail($this->name, $this->msg);
         $this->sendMail($this->email, $this->name, "Idea-Maker Team");
     }
+
+}
+
+class SendRequestMail extends mailer {
+
+    private $conn;
+
+    function __construct (){
+        $DB = homeDB::getInstance();
+        $this->conn = $DB->conn;
+    }
+    public function sendRequestMail($head, $body, $dateTime, $post_id){
+
+            $data = $this->GetRequre($post_id);
+            if ($data != false){
+                $email = $data['email'];
+                $name = filter_var($data['fname'], FILTER_SANITIZE_EMAIL);
+                $this->CreateRequestMail($head, $body, $dateTime, $data['fname'], $GLOBALS['HostNameUrl']);
+
+                $this->sendMail($email, $name, "Idea-Maker Team");
+            }   
+
+
+    }
+
+
+    private function GetRequre($post_id){
+        
+        $dlb = $this->conn->prepare("SELECT email, fname FROM users WHERE  user_id  = (select user_id from Posts WHERE post_id = '$post_id');");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetch(PDO::FETCH_ASSOC);
+            return $data;
+        }else{
+            return FALSE;
+        }
+    }
+
+
+
 
 }
 

@@ -171,7 +171,7 @@ $(document).ready(function () {
         var postID = result['posts'][i]['post_id'];
         var title = result['posts'][i]['title'];
         var body = result['posts'][i]['caption'];
-        var date_created =  result['posts'][i]['date_created'];
+        var date_created = result['posts'][i]['date_created'];
         date_created = timeSince(new Date(date_created));
         var status = result['posts'][i]['p_status'];
         var skills = result['posts'][i]['skills'];
@@ -222,7 +222,7 @@ $(document).ready(function () {
             </li>
 
 
-            <li>
+            <li class="CommentButton_`+ postID + `">
                 <a id="`+ postID + `" href="#" title="" class="com"><img src="images/com.png" alt=""> Comment </a></li>
             <li>
 
@@ -236,33 +236,40 @@ $(document).ready(function () {
 
 
     
+    <div  id="comment_box`+ postID + `">
 
 
-<div class="post-comment">
-<div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
-<div id="`+ postID + `comment"> </div>
-</div>
+        <div class="post-comment">
+        <div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
+        <div id="`+ postID + `comment"> </div>
+        </div>
 
-<div class="cm_img">
-    <img style="width: 40px;
-    height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
-</div>
+        <div class="cm_img">
+            <img style="width: 40px;
+            height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+        </div>
 
-<div class="comment_box">
-    <form id="CommentsForm">
-        <input type="text" name="form" placeholder="Post a comment"  required="" >
-        <input type="hidden"  name="post_id" value="`+ postID + `">
-        <button type="submit">Send</button>
-    </form>
-</div>
-</div>    
-<!--post-comment end-->
-</div>
-</div><!--post-bar end-->
+        <div class="comment_box">
+            <form id="CommentsForm">
+                <input type="text" name="form" placeholder="Post a comment"  required="" >
+                <input type="hidden"  name="post_id" value="`+ postID + `">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+        </div> 
+    </div>    
+
+        <!--post-comment end-->
+        </div>
+        </div><!--post-bar end-->
     `;
 
 
         $('#Posts_list').append(html);
+        if (status != "Discussions") {
+            $("#comment_box" + postID).remove();
+            $(".CommentButton_" + postID).remove();
+        }
         if (result['likes'] != 'false') {
             for (var w in result['likes']) {
                 if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id'] && result['likes'][w]['post_id'] === postID) {
@@ -349,9 +356,9 @@ $(document).ready(function () {
 
                 <div class="epi-sec">					
                     <ul class="bk-links">
-                    <button  style="background-color: rgb(255, 255, 255); display: contents;"  id="OpenMsgBut`+ postID + `" onclick="openForm`+ postID + `()"><li><i class="la la-envelope"></i></li></button>
+                    <button  style="background-color: rgb(255, 255, 255); display: contents;"  id="OpenMsgBut`+ postID + `" onclick="openForm` + postID + `()"><li><i class="la la-envelope"></i></li></button>
                     <div id="`+ postID + `msg" style="display: none; border: 3px solid #f1f1f1; z-index: 9;">	
-                    <button id="CloseMsgBut`+ postID + `" onclick="closeForm`+ postID + `()">Close</button>
+                    <button id="CloseMsgBut`+ postID + `" onclick="closeForm` + postID + `()">Close</button>
                     <form id="message">
                         <input type="hidden"  name="post_id" value="`+ postID + `">
                         <input type="hidden"  name="target_id" value="`+ owner + `">
@@ -382,7 +389,7 @@ $(document).ready(function () {
                 </li>
 
 
-                <li>
+                <li class="CommentButton_`+ postID + `">
                     <a id="`+ postID + `" href="#" title="" class="com"><img src="images/com.png" alt=""> Comment </a></li>
                 <li>
 
@@ -403,7 +410,7 @@ $(document).ready(function () {
                 <div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
                 <div id="`+ postID + `comment"> </div>
                 </div>
-                
+            <div  id="comment_box`+ postID + `">
                 <div class="cm_img">
                     <img style="width: 40px;
                     height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
@@ -416,6 +423,7 @@ $(document).ready(function () {
                         <button type="submit">Send</button>
                     </form>
                 </div>
+            </div>
                 </div>    
                 <!--post-comment end-->
                 </div>
@@ -424,6 +432,33 @@ $(document).ready(function () {
 
 
                         $('#Posts_list').append(html);
+
+                        if (status != "Discussions") {
+                            $("#comment_box" + postID).remove();
+                            $(".CommentButton_" + postID).html("");
+                            switch (status) {
+                                case "Develop":
+
+                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Invest</a>') : console.log("NotAllowdToDevolop"));
+                                    break;
+                                case "Invest":
+                                    ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="invest buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
+                                    break;
+                                default:
+                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Invest</a>') : console.log("NotAllowdToDevolop"));
+                                    ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="invest  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
+                            }
+                        }
+
+                        if (result['requests'] != false ) {
+                            for (var w in result['requests']) {
+                                
+                                if (result['requests'][w]['post_id'] === postID ) {
+                                    $('.buttoWhilePostID_' +postID).addClass('invested').click(false);
+                                }
+                            }
+                        }
+
                         if (result['likes'] != 'false') {
                             for (var w in result['likes']) {
                                 if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id'] && result['likes'][w]['post_id'] === postID) {
@@ -435,17 +470,12 @@ $(document).ready(function () {
                             }
                         }
 
-                        // $('#Post_Form').html("<div class='alert alert-success'>Posted Succsefully.</div>");
                     } else {
-                        // on error/fail, tell the user he needs to login to show the account page
-                        // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                        // window.location.href = "?login";
+
                     }
                 }
                 catch (err) {
-                    // on error/fail, tell the user he needs to login to show the account page
-                    // $('#post_RS').html("<div class='alert alert-danger'>Internal Server Error.</div>");
-                    // window.location.href = "?login";
+
                 }
             }
         });
@@ -881,21 +911,141 @@ $(document).ready(function () {
         return false;
     });
 
+
+    $(document).on('click', '.invest', function () {
+        var object = $(this);
+        var post_id = object[0].id;
+        var jwt = getCookie('jwt');
+        object.click(false);
+        // object.removeClass("invest").addClass("invested");
+        // object.html('<i class="la la-bank"></i>' + object[0].dataset.textSwap);
+        $(".post-popup.invest-pj").addClass("active");
+        $(".wrapper").addClass("overlay");
+        $('#post_id_invest').val(post_id);
+
+        return false
+    });
+
+    $(document).on('click', '.devolop', function () {
+        var object = $(this);
+        var post_id = object[0].id;
+        // object.removeClass("invest").addClass("invested");
+        // object.html('<i class="la la-code-fork"></i>' + object[0].dataset.textSwap);
+        $(".post-popup.devolop-pj").addClass("active");
+        $(".wrapper").addClass("overlay");
+        $('#post_id_devolop').val(post_id);
+    });
+
+    $(document).on('submit', '#Invest_Form', function () {
+        var update_account_form = $(this);
+        var jwt = getCookie('jwt');
+        var update_account_form_obj = update_account_form.serializeObject()
+        // add jwt on the object
+        update_account_form_obj.jwt = jwt;
+        // convert object to json string
+        var form_data = JSON.stringify({
+            "option": 600,
+            "jwt": update_account_form_obj.jwt,
+            "data": update_account_form_obj
+        });
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log(this.response);
+
+                result = $.parseJSON(this.responseText);
+                try {
+                    if (result['status'] === true) {
+                        $('.buttoWhilePostID_' +update_account_form_obj['post_id']).addClass('invested').click(false);
+
+                        $('#post_RS2').html("<div class='alert alert-success'>Request Sent Succsefully.</div>");
+                        setTimeout(
+                            function () {
+                                $('#post_RS2').html('');
+                                $(".post-popup").removeClass("active");
+                                $(".wrapper").removeClass("overlay");
+                            }, 2000);
+
+                    } else {
+                        $('#post_RS2').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                    }
+                }
+                catch (err) {
+                    $('#post_RS2').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
+
+    $(document).on('submit', '#Devolop_Form', function () {
+        var update_account_form = $(this);
+        var jwt = getCookie('jwt');
+        var update_account_form_obj = update_account_form.serializeObject()
+        // add jwt on the object
+        update_account_form_obj.jwt = jwt;
+        // convert object to json string
+        var form_data = JSON.stringify({
+            "option": 600,
+            "jwt": update_account_form_obj.jwt,
+            "data": update_account_form_obj
+        });
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log(this.response);
+
+                result = $.parseJSON(this.responseText);
+                try {
+                    if (result['status'] === true) {
+                        $('.buttoWhilePostID_' +update_account_form_obj['post_id']).addClass('invested').click(false);
+                        $('#post_RS3').html("<div class='alert alert-success'>Request Sent Succsefully.</div>");
+                        setTimeout(
+                            function () {
+                                $('#post_RS3').html('');
+                                $(".post-popup").removeClass("active");
+                                $(".wrapper").removeClass("overlay");
+                            }, 2000);
+
+                    } else {
+                        $('#post_RS3').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                    }
+                }
+                catch (err) {
+                    $('#post_RS3').html("<div class='alert alert-danger'>Internal Server Error.</div>");
+                }
+            }
+        });
+        xhr.open("POST", "/api/index.php/home/");
+        xhr.setRequestHeader("content-type", "application/json");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(form_data);
+        return false;
+    });
+
+
     $(document).on('click', '.post-project > a', function () {
 
-        $(".post-popup.pst-pj").removeClass("active");
+        $(".post-popup").removeClass("active");
         $(".wrapper").removeClass("overlay");
         return false;
     });
 
     $(document).on('click', '.CanslePost', function () {
 
-        $(".post-popup.pst-pj").removeClass("active");
+        $(".post-popup").removeClass("active");
         $(".wrapper").removeClass("overlay");
         return false;
     });
 
     //////////////////////////////////
+
 
 
 

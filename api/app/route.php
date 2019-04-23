@@ -292,7 +292,15 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{user_id}/{username}]', function($requ
                         )));
                     }
                 }elseif ($opt == 600) {
-                    
+                    $GLOBALS['HostNameUrl'] = substr($request->getUri()->getBaseUrl(), 0,-14);
+                    $response->write(json_encode(array(
+                        "status" => $action->SendReuest($data['data'])
+                    )));
+                    $sendMail = new SendRequestMail();
+                    $curentDate = date('Y-m-d H:i:s');
+                    $body = filter_var( $data['data']['caption'], FILTER_SANITIZE_STRING);
+
+                    $sendMail->sendRequestMail($data['data']['head'], $body, $curentDate, $data['data']['post_id']);
                 }
 
 
@@ -641,8 +649,9 @@ $app->post('/action', function($request, $response){
 
 $app->post('/test', function($request, $response){
     $GLOBALS['HostNameUrl'] = substr($request->getUri()->getBaseUrl(), 0,-14);
-
-    $response->getBody()->write( $GLOBALS['HostNameUrl'] );
+    $data = $request->getParsedBody();
+    $res = "\t*--- " . $data['head'] . " ---*<br>". $data['body'] . "<br>With Average Cost\t" .$data['price_from']. "$ to " . $data['price_to'] . "$<br>";
+    $response->getBody()->write( $res );
 });
 
 

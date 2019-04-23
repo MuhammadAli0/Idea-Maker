@@ -1225,6 +1225,14 @@ main {
 	width: 100%;
 	padding: 15px 20px;
 }
+/* ============== Invest-sec ============= */
+.invested{
+	color: #da2525 !important;
+}
+.invest{
+	color: green;
+}
+
 
 /* ============== liked-sec ============= */
 .unlike{

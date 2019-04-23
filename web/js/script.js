@@ -456,23 +456,22 @@ $(window).on("load", function () {
 
         $("#navMsgs").html("");
 
-        var msgsUsersUsed = [];
+        
         // msgsUsersUsed.push("n506070");
-
+        var msgsUsersUsed = [];
         if (msgs['user_id_from']) {
             AddMsgs(msgs[i]);
             msgsUsersUsed.push(msgs[i]['user_id_from']);
         } else {
 
-            for (i in msgs) {
+            for (var i in msgs) {
                 if (SortMsgs(msgs, i, msgsUsersUsed) != false) {
                     var msgDataHtml = `                                
-                    <p>`+ msgs[i]['content'] + `</p>
+                    <p>`+ msgs[i]['content'] + `</p><span> `+ timeSince(new Date(msgs[i]['date_created'])) + ` </span>
                     `;
-
-                    var id = "#msgBody" + msgs[i]['user_id_from'] + "";
-                    setTimeout(function () { $(id).append(msgDataHtml); }, 1000);
-
+                    var id = "#msgBody" + msgs[i]['user_id_from'] ;
+                    $(id).html(msgDataHtml);
+                    
                 } else {
                     AddMsgs(msgs[i]);
                     msgsUsersUsed.push(msgs[i]['user_id_from']);
@@ -485,7 +484,7 @@ $(window).on("load", function () {
     };
 
     function SortMsgs(msgsX, n, msgsUsersUsed) {
-        for (x in msgsUsersUsed) {
+        for (var x in msgsUsersUsed) {
             if (msgsX[n]['user_id_from'] === msgsUsersUsed[x]) {
                 return true;
             }

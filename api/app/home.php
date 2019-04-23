@@ -8,10 +8,10 @@ class homeDB{
     // private $MySqlPassword = '23243125';
     // private $DBname        = 'idea';
 
-    // private $host = 'db4free.net';
-    // private $MySqlUsername = 'ideamakeruser';
-    // private $MySqlPassword = '23243125';
-    // private $DBname        = 'ideamakerdb';
+    // // private $host = 'db4free.net';
+    // // private $MySqlUsername = 'ideamakeruser';
+    // // private $MySqlPassword = '23243125';
+    // // private $DBname        = 'ideamakerdb';
 
     private $host = 'sql2.freemysqlhosting.net';
     private $MySqlUsername = 'sql2286394';
@@ -190,6 +190,29 @@ class GetData{
         );
     }
 
+    public function GetRequests($user_id){
+        $dlb = $this->conn->prepare("SELECT request_id, post_id  FROM requests WHERE user_id = '$user_id'");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        }
+    }
+
+    public function GetXRequests($user_id){
+        $dlb = $this->conn->prepare("SELECT request_id, post_id, user_id  FROM requests WHERE 
+        post_id in (select post_id from Posts where user_id = '$user_id')");
+        $dlb->execute();
+        if($dlb->rowCount() > 0){
+            $data     =  $dlb->fetchall();
+            return $data;
+        }else{
+            return FALSE;
+        }
+    }
+
 
 
 
@@ -231,7 +254,8 @@ class retriveHome {
             "posts" => $GetDataX->GetPosts(FALSE),
             "likes" => $GetDataX->GetLikes($this->user_id),
             "msg" => $GetDataX->GetUnReadedMessages($this->user_id),
-            "nutf" => $GetDataX->GetNuotification($this->user_id)
+            "nutf" => $GetDataX->GetNuotification($this->user_id),
+            "requests" => $GetDataX->GetRequests($this->user_id)
 
                 ));
     }
@@ -369,13 +393,70 @@ class userActions extends retriveHome {
 
     }
 
+    public function SendReuest($data){
+        try{
+            $curentDate = date('Y-m-d H:i:s');
+            $post_id =  $data['post_id'];
+            $head = filter_var($data['head'], FILTER_SANITIZE_STRING);
+            $body = filter_var($data['caption'], FILTER_SANITIZE_STRING, FILTER_SANITIZE_MAGIC_QUOTES);
+            
+            if (isset($data['price_from'])){
+                $salary1 = $data['price_from'];
+                $salary2 = $data['price_to'];
+                $dlp = $this->conn->prepare("INSERT INTO requests (`post_id`, `user_id`, `head`, `body`, `request_time`, `salary_from`, `slalary_to`)
+                VALUES(
+                    '$post_id', 
+                    '$this->user_id', 
+                    '$head',
+                    '$body',
+                    '$curentDate',
+                    '$salary1',
+                    '$salary2'
+                    )");
+                $dlp->execute();
+                $mssg = "<b>*-- DEVOLOP REQUEST --*</b><br>*--- " . $head . " ---*<br>". $body . "<br>With Average Cost  " . $salary1 . "$ to " . $salary2 . "$<br>";
+                $this->conn->exec("INSERT INTO  Messages (user_id_from, user_id_to, content, date_created) 
+                VALUES (
+                    '$this->user_id',
+                    (SELECT user_id FROM Posts WHERE post_id = '$post_id'),
+                    '$mssg',
+                    '$curentDate'
+                    )");
+                return TRUE;
+
+            } else {
+                $dlp = $this->conn->prepare("INSERT INTO requests (`post_id`, `user_id`, `head`, `body`, `request_time`)
+                VALUES(
+                    '$post_id', 
+                    '$this->user_id', 
+                    '$head',
+                    '$body',
+                    '$curentDate'
+                    )");
+                $dlp->execute();
+                $mssg = "<b>*-- INVEST REQUEST --*</b><br>*--- " . $head . " ---*<br>". $body . "<br>";
+                $this->conn->exec("INSERT INTO  Messages (user_id_from, user_id_to, content, date_created) 
+                VALUES (
+                    '$this->user_id',
+                    (SELECT user_id FROM Posts WHERE post_id = '$post_id'),
+                    '$mssg',
+                    '$curentDate'
+                    )");
+
+                return TRUE;
+
+            }
+            
+
+        } catch (PDOException $e){
+            die($e->getMessage());
+        }
+    }
+
     public function GetUpdate (){
         
     }
 
-
-    
-    
 
     function __destruct(){
     }

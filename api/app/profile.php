@@ -70,6 +70,7 @@ class retrieveProfile {
     public $date;
     public $user_id;
     public $skills;
+    
 
 
     public function __prepare(){
@@ -102,7 +103,8 @@ class retrieveProfile {
             "posts" => (array) $GetDataX->GetPosts($this->user_id),
             "likes" => (array) $GetDataX->GetLikes($this->user_id),
             "accType"  => $data['uType'],
-            "EnterdDate" => $data['cDateTime']
+            "EnterdDate" => $data['cDateTime'],
+            "requests" => $GetDataX->GetXRequests($this->user_id)
 
                 ));
     }

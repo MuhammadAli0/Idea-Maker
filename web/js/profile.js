@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
 
     // }); 
@@ -100,7 +99,6 @@ $(document).ready(function () {
             for (i in $.parseJSON(result['skills'])) {
                 $('#skills_list').append(`
             <li><a href="#" title="">`+ $.parseJSON(result['skills'])[i] + `</a></li>
-
             `);
             }
         }
@@ -137,9 +135,7 @@ $(document).ready(function () {
         <h4>`+ data['work']['position'] + `</h4>
         <h5 >at `+ data['work']['work_name'] + `</h5>
         <span>`+ data['work']['started_date'] + ` - ` + data['work']['end_date'] + `</span>
-
         <p> `+ data['work']['summary'] + ` </p>
-
         <input type="hidden" name="workID" value="`+ data['work']['work_id'] + `">
 `;
             // document.getElementById("exp_year").value = result['work']['work_id_user_id'];
@@ -195,14 +191,10 @@ $(document).ready(function () {
     </div>
     <div class="job-status-bar">
         <ul class="like-com">
-
-
             <li>
                 <a id="`+ postID + `" class="like" href="#" data-text-swap="Unlike" ><i class="la la-heart"></i> Like</a>
             </li>
-
-
-            <li>
+            <li class="CommentButton_`+ postID + `">
                 <a id="`+ postID + `" href="#" title="" class="com"><img src="images/com.png" alt=""> Comment </a></li>
             <li>
 
@@ -211,38 +203,42 @@ $(document).ready(function () {
         </ul>
        <!-- <a><i class="la la-eye"></i>Views 50</a> -->
 
-            </div>
-            <div class="comment-section">
+    </div>
+    <div class="comment-section">
 
 
     
+    <div  id="comment_box`+ postID + `">
 
 
-            <div class="post-comment">
-            <div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
-            <div id="`+ postID + `comment"> </div>
-            </div>
-            
-            <div class="cm_img">
-                <img style="width: 40px;
-                height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
-            </div>
-            
-            <div class="comment_box">
-                <form id="CommentsForm">
-                    <input type="text" name="form" placeholder="Post a comment"  required="" >
-                    <input type="hidden"  name="post_id" value="`+ postID + `">
-                    <button type="submit">Send</button>
-                </form>
-            </div>
-            </div>    
-            <!--post-comment end-->
-            </div>
-            </div><!--post-bar end-->
+        <div class="post-comment">
+        <div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
+        <div id="`+ postID + `comment"> </div>
+        </div>
+
+        <div class="cm_img">
+            <img style="width: 40px;
+            height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+        </div>
+
+        <div class="comment_box">
+            <form id="CommentsForm">
+                <input type="text" name="form" placeholder="Post a comment"  required="" >
+                <input type="hidden"  name="post_id" value="`+ postID + `">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+        </div> 
+    </div>    
+
+        <!--post-comment end-->
+        </div>
+        </div><!--post-bar end-->
             `;
 
 
         $('#feed-dd').append(html);
+
         if (result['likes'] != 'false') {
             for (w in result['likes']) {
                 if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id']) {
@@ -253,6 +249,11 @@ $(document).ready(function () {
 
             }
         }
+        if (status != "Discussions") {
+            $("#comment_box" + postID).remove();
+            $(".CommentButton_" + postID).remove();
+        }
+        
         return false;
     }
 
@@ -317,7 +318,6 @@ $(document).ready(function () {
                         <li><a id="delete_Comment" data-comment_id="`+ Comment['comment_id'] + `"  href="#" title="">Delete</a></li>
                     </ul>
                 </div>
-
                         <div class="comment-list">
                         
                             <div class="bg-img">
@@ -325,9 +325,7 @@ $(document).ready(function () {
                                 height: 40px;" src="`+ profile_pic + `" alt="">
                             </div>
                             <div class="comment">
-
                                                     
-
                                 <h3> <a href="profile.html?user_id=`+ Comment['user_id'] + `&username=` + rresult['name']['username'] + `">` + name + `</a></h3>
                                 <span><img src="images/clock.png" alt=""> `+ time + ` </span>
                                 <p>`+ body + ` </p>
@@ -446,9 +444,7 @@ $(document).ready(function () {
         <h4>`+ update_account_form_obj['position'] + `<a href="#" title=""><i class="fa fa-pencil"></i></a></h4>
         <h5 >at `+ update_account_form_obj['organization'] + `</h5>
         <span>`+ update_account_form_obj['sDate'] + ` - ` + update_account_form_obj['eDate'] + `</span>
-
         <p> `+ update_account_form_obj['summary'] + ` </p>
-
         <input type="hidden" name="workID" value="1">
 `;
                         // document.getElementById("exp_year").value = result['work']['work_id_user_id'];
@@ -690,7 +686,6 @@ $(document).ready(function () {
 
 
                         var commentHTML = `
-
                     <div class="comment-sec">
                     <ul>
                         <li>
@@ -1025,5 +1020,4 @@ $(document).ready(function () {
 
 
 });
-
 
