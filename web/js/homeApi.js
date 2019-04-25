@@ -131,7 +131,7 @@ $(document).ready(function () {
             $('.post-topbar').show();
         }
         setTopUsers(result['topUsers']);
-        // setTopIdeas(result['topPosts']);
+        setTopIdeas(result['topPosts']);
 
     }
 
@@ -599,13 +599,17 @@ $(document).ready(function () {
             $('#topIdeas').append(`
         <div class="job-info">
             <div class="job-details">
-                <h3>`+IdeasData[i]['title']+`</h3>
-                <p>`+IdeasData[i]['skills']+`</p>
+                <a href="/web/profile.html?user_id=`+IdeasData[i]['user_id']+`&username=`+IdeasData[i]['username']+`"><h3>`+IdeasData[i]['title'].substring(0, 20)+`...</h3>
+                <p>`+IdeasData[i]['caption'].substring(0, 40)+`...<p></a>
             </div>
-            <div class="hr-rate">
+            
+
+                <div class="hr-rate">
+                <ul >
+                <li><span style="/*! background-color: darkblue; */color: #fff;/*! -webkit-text-fill-color: #fff; *//*! background: -webkit-gradient(linear,left top,right top,from(#ff8a00),to(#da1b60)); */background: linear-gradient(to right,#ff8a00,#da1b60);/*! background-clip: border-box; */-webkit-background-clip: text;-webkit-text-fill-color: transparent;/*! -webkit-box-decoration-break: clone; */box-decoration-break: clone;display: block;/*! background: #9c27b0; */">`+IdeasData[i]['p_status']+`</span></li> 
+                </ul>
             </div>
         </div> 
-
             `);
         } 
     };

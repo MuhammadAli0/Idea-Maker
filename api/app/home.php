@@ -232,17 +232,21 @@ class GetData{
     }
 
     public function GetTopPosts(){
-        $dlb = $this->conn->prepare("SELECT a.post_id , count(a.post_id) as likes,
-        b.user_id as owner,  
-        b.title as title, 
-        b.p_status as stat, 
-        b.skills as skills,
-        b.date_created as created
-            FROM Likes a, Posts b 
-                where a.post_id  = b.post_id 
-                    group by a.post_id 
-                        order by likes DESC 
-                            limit 10    
+        $dlb = $this->conn->prepare("SELECT 
+        users.user_id, username, profile_picture_url, Posts.post_id,
+        Posts.title, Posts.caption, Posts.p_status,
+        Posts.skills, Posts.date_created
+        FROM
+            users
+                JOIN
+            Posts ON Posts.user_id = users.user_id
+                LEFT JOIN
+            (SELECT 
+                Likes.post_id, COUNT(*) AS likes
+            FROM
+                Likes
+            GROUP BY Likes.post_id) Likes ON Posts.post_id = Likes.post_id 
+            order by likes desc limit 10;
         ");
         $dlb->execute();
         if($dlb->rowCount() > 0){
