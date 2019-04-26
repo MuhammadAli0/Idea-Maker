@@ -296,11 +296,7 @@ $app->map(['GET', 'PUT', 'POST'], '/home/[{user_id}/{username}]', function($requ
                     $response->write(json_encode(array(
                         "status" => $action->SendReuest($data['data'])
                     )));
-                    $sendMail = new SendRequestMail();
-                    $curentDate = date('Y-m-d H:i:s');
-                    $body = filter_var( $data['data']['caption'], FILTER_SANITIZE_STRING);
-
-                    $sendMail->sendRequestMail($data['data']['head'], $body, $curentDate, $data['data']['post_id']);
+                    shell_exec("php sendRequestMail.php ".$AllowData->id." > /dev/null 2>/dev/null &");
                 }
 
 

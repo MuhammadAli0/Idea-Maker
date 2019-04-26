@@ -1498,44 +1498,6 @@ class ContactUs extends mailer {
 
 }
 
-class SendRequestMail extends mailer {
 
-    private $conn;
-
-    function __construct (){
-        $DB = homeDB::getInstance();
-        $this->conn = $DB->conn;
-    }
-    public function sendRequestMail($head, $body, $dateTime, $post_id){
-
-            $data = $this->GetRequre($post_id);
-            if ($data != false){
-                $email = $data['email'];
-                $name = filter_var($data['fname'], FILTER_SANITIZE_EMAIL);
-                $this->CreateRequestMail($head, $body, $dateTime, $data['fname'], $GLOBALS['HostNameUrl']);
-
-                $this->sendMail($email, $name, "Idea-Maker Team");
-            }   
-
-
-    }
-
-
-    private function GetRequre($post_id){
-        
-        $dlb = $this->conn->prepare("SELECT email, fname FROM users WHERE  user_id  = (select user_id from Posts WHERE post_id = '$post_id');");
-        $dlb->execute();
-        if($dlb->rowCount() > 0){
-            $data     =  $dlb->fetch(PDO::FETCH_ASSOC);
-            return $data;
-        }else{
-            return FALSE;
-        }
-    }
-
-
-
-
-}
 
 ?>

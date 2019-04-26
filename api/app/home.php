@@ -94,7 +94,7 @@ class GetData{
         if ($user_id != FALSE)
         {
             $dlb = $this->conn->prepare("SELECT b.*,count(b.post_id) FROM Likes a 
-            left join Posts b on a.post_id and b.post_id WHERE b.user_id = '$user_id' group by b.post_id
+            left join Posts b on a.post_id and b.post_id WHERE b.user_id = '$user_id' group by b.post_id 
             ");
             $dlb->execute();
             if($dlb->rowCount() > 0){
@@ -104,7 +104,15 @@ class GetData{
                 return FALSE;
             }
         } else {
-            $dlb = $this->conn->prepare("SELECT * FROM Posts ");
+            $dlb = $this->conn->prepare("SELECT
+            users.user_id, username, profile_picture_url, 
+            fname, lname, 
+            post_id, title, caption, date_created, p_status, Posts.skills
+            FROM
+                users
+                    JOIN
+                Posts on Posts.user_id = users.user_id
+                order by Posts.date_created desc");
             $dlb->execute();
             if($dlb->rowCount() > 0){
                 $data     = $dlb->fetchAll();
@@ -497,7 +505,12 @@ class userActions extends retriveHome {
             
 
         } catch (PDOException $e){
-            die($e->getMessage());
+            if ($e->getMessage() === "SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'content' at row 1"){
+                return TRUE;
+            } else {
+                die($e->getMessage());
+            }
+            // die($e->getMessage());
         }
     }
 

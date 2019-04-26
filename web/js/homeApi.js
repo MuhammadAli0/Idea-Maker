@@ -77,6 +77,7 @@ $(document).ready(function () {
     };
 
 
+
     function loadPage() {
         // validate jwt to verify access
         var jwt = getCookie('jwt');
@@ -156,7 +157,8 @@ $(document).ready(function () {
                 }
                 else {
 
-                    SetOtherPost(i, result);
+                    // SetOtherPost(i, result);
+                    SetPostsToPage(result, i);
                 }
             }
         }
@@ -168,6 +170,183 @@ $(document).ready(function () {
         return JSON.parse(window.atob(base64));
     };
 
+    function SetPostsToPage(result, i) {
+        var owner = result['posts'][i]['user_id'];
+        var postID = result['posts'][i]['post_id'];
+        var title = result['posts'][i]['title'];
+        var body = result['posts'][i]['caption'];
+        var date_created = result['posts'][i]['date_created'];
+        date_created = timeSince(new Date(date_created));
+        var status = result['posts'][i]['p_status'];
+        var skills = result['posts'][i]['skills'];
+        var skillsHTML = ``;
+        for (x in $.parseJSON(skills)) {
+            skillsHTML += '<li><a href="#" title="">' + $.parseJSON(skills)[x] + '</a></li>';
+        }
+
+        try {
+
+            var name = result['posts'][i]['fname'] + ' ' + result['posts'][i]['lname'];
+            var profile_pic = ((result['posts'][i]['profile_picture_url'] != null) ? result['posts'][i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg');
+
+
+
+
+
+            html = `
+                <div class="post-bar">
+                <div class="post_topbar">
+                    <div class="usy-dt">
+                        <img style="width: 60px;
+                        height: 60px;" src="`+ profile_pic + `" alt="">
+                        <div class="usy-name">
+                            <h3> <a href="profile.html?user_id=`+ owner + `&username=` + result['posts'][i]['username'] + `">` + name + `</a></h3>
+                            <span><img src="images/clock.png" alt="">`+ date_created + `</span>
+                        </div>
+                    </div>
+                    <div class="ed-opts">
+                        <a href="#" title="" class="ed-opts-open"><i class="la la-ellipsis-v"></i></a>
+                        <ul class="ed-options">
+                            <li><a class="report" data-post_id="`+ postID + `" data-owner_id="` + owner + `"  href="#" title="">Report Post</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <script>
+                function openForm`+ postID + `() {
+                    document.getElementById("`+ postID + `msg").style.display = "block";
+                    document.getElementById("OpenMsgBut`+ postID + `").style.display = "none";
+
+                }
+                
+                function closeForm`+ postID + `() {
+                    document.getElementById("`+ postID + `msg").style.display = "none";
+                    document.getElementById("OpenMsgBut`+ postID + `").style.display = "contents";
+
+                } 
+                </script>
+
+                <div class="epi-sec">					
+                    <ul class="bk-links">
+                    <button  style="background-color: rgb(255, 255, 255); display: contents;"  id="OpenMsgBut`+ postID + `" onclick="openForm` + postID + `()"><li><i class="la la-envelope"></i></li></button>
+                    <div id="`+ postID + `msg" style="display: none; border: 3px solid #f1f1f1; z-index: 9;">	
+                    <button id="CloseMsgBut`+ postID + `" onclick="closeForm` + postID + `()">Close</button>
+                    <form id="message">
+                        <input type="hidden"  name="post_id" value="`+ postID + `">
+                        <input type="hidden"  name="target_id" value="`+ owner + `">
+                        <textarea placeholder="Type a message here" name="msg"></textarea>
+                        <button type="submit"  class="la la-envelope"> </button> 
+                    </form>
+                    </ul>
+                </div>
+
+                                                        
+                
+                <div class="job_descp">
+                    <h3>`+ title + `</h3>
+                    <ul class="job-dt">
+                        <li><a href="#" title="">`+ status + `</a></li>
+                    <!-- <li><span>$30 / hr</span></li> -->
+                    </ul>
+                    <p>`+ body + `</p>
+                    <ul class="skill-tags">
+                    `+ skillsHTML + `
+                    </ul>
+                </div>
+                <div class="job-status-bar">
+                    <ul class="like-com">
+
+                    <li>
+                    <a id="`+ postID + `"  class="like"  href="#" data-text-swap="Unlike"><i class="la la-heart"></i> Like</a>
+                </li>
+
+
+                <li class="CommentButton_`+ postID + `">
+                    <a id="`+ postID + `" href="#" title="" class="com"><img src="images/com.png" alt=""> Comment </a></li>
+                <li>
+
+
+
+                    </ul>
+                <!-- <a><i class="la la-eye"></i>Views 50</a> -->
+
+                </div>
+                
+                <div class="comment-section">
+
+
+    
+
+
+                <div class="post-comment">
+                <div class="plus-ic" id="`+ postID + `commentSec" style="display: none;" > 
+                <div id="`+ postID + `comment"> </div>
+                </div>
+            <div  id="comment_box`+ postID + `">
+                <div class="cm_img">
+                    <img style="width: 40px;
+                    height: 40px;"  src=" `+ ((result['posts'][i]['profile_picture_url'] != null) ? result['posts'][i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+                </div>
+                
+                <div class="comment_box">
+                    <form id="CommentsForm">
+                        <input type="text" name="form" placeholder="Post a comment"  required="" >
+                        <input type="hidden"  name="post_id" value="`+ postID + `">
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+            </div>
+                </div>    
+                <!--post-comment end-->
+                </div>
+                </div><!--post-bar end-->
+        `;
+
+
+            $('#Posts_list').append(html);
+
+            if (status != "Discussions") {
+                $("#comment_box" + postID).remove();
+                $(".CommentButton_" + postID).html("");
+                switch (status) {
+                    case "Develop":
+
+                        ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="' + postID + '" class="devolop  buttoWhilePostID_' + postID + '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
+                        break;
+                    case "Invest":
+                        ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="' + postID + '" class="invest buttoWhilePostID_' + postID + '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
+                        break;
+                    default:
+                        ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="' + postID + '" class="devolop  buttoWhilePostID_' + postID + '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
+                        ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="' + postID + '" class="invest  buttoWhilePostID_' + postID + '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
+                }
+            }
+
+            if (result['requests'] != false) {
+                for (var w in result['requests']) {
+
+                    if (result['requests'][w]['post_id'] === postID) {
+                        $('.buttoWhilePostID_' + postID).addClass('invested').click(false);
+                    }
+                }
+            }
+
+            if (result['likes'] != 'false') {
+                for (var w in result['likes']) {
+                    if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id'] && result['likes'][w]['post_id'] === postID) {
+                        $("#" + result['likes'][w]['post_id']).html('<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
+                        $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap = "like";
+                        $("#" + result['likes'][w]['post_id']).removeClass("like").addClass("unlike");
+
+                    }
+                }
+            }
+
+        }
+        catch (err) {
+
+        }
+    }
 
     function SetMyPosts(i, result) {
         var owner = result['posts'][i]['user_id'];
@@ -442,22 +621,22 @@ $(document).ready(function () {
                             switch (status) {
                                 case "Develop":
 
-                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
+                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="' + postID + '" class="devolop  buttoWhilePostID_' + postID + '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
                                     break;
                                 case "Invest":
-                                    ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="invest buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
+                                    ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="' + postID + '" class="invest buttoWhilePostID_' + postID + '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
                                     break;
                                 default:
-                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="devolop  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
-                                    ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="'+postID+'" class="invest  buttoWhilePostID_' +postID+ '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
+                                    ((result['accType'] === "developer") ? $(".CommentButton_" + postID).html('<a id="' + postID + '" class="devolop  buttoWhilePostID_' + postID + '" href="#" data-text-swap="Devolop Request Sent"><i class="la la-code-fork"></i> Devolop</a>') : console.log("NotAllowdToDevolop"));
+                                    ((result['accType'] === "investor") ? $(".CommentButton_" + postID).html('<a id="' + postID + '" class="invest  buttoWhilePostID_' + postID + '" href="#" data-text-swap="Invest Request Sent"><i class="la la-bank"></i> Invest</a>') : console.log("NotAllowdToInvest"));
                             }
                         }
 
-                        if (result['requests'] != false ) {
+                        if (result['requests'] != false) {
                             for (var w in result['requests']) {
-                                
-                                if (result['requests'][w]['post_id'] === postID ) {
-                                    $('.buttoWhilePostID_' +postID).addClass('invested').click(false);
+
+                                if (result['requests'][w]['post_id'] === postID) {
+                                    $('.buttoWhilePostID_' + postID).addClass('invested').click(false);
                                 }
                             }
                         }
@@ -578,40 +757,40 @@ $(document).ready(function () {
 
     }
 
-    function setTopUsers(usersData){
-        for (var i in usersData){
+    function setTopUsers(usersData) {
+        for (var i in usersData) {
             $('#topUsers').append(`
         <div class="suggestion-usd">
-            <img style="height: 40px;width: 40px;" src="`+((usersData[i]['profile_picture_url'] != null) ? usersData[i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+            <img style="height: 40px;width: 40px;" src="`+ ((usersData[i]['profile_picture_url'] != null) ? usersData[i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
             <div class="sgt-text">
-                <a href="profile.html?user_id=`+usersData[i]['user_id']+`&username=`+usersData[i]['username']+`"><h4>`+usersData[i]['fname']+` `+usersData[i]['lname']+`</h4></a>
-                <span>`+usersData[i]['uType']+`</span>
+                <a href="profile.html?user_id=`+ usersData[i]['user_id'] + `&username=` + usersData[i]['username'] + `"><h4>` + usersData[i]['fname'] + ` ` + usersData[i]['lname'] + `</h4></a>
+                <span>`+ usersData[i]['uType'] + `</span>
             </div>
             <span></span>
         </div> 
 
             `);
-        } 
+        }
     };
 
-    function setTopIdeas(IdeasData){
-        for (var i in IdeasData){
+    function setTopIdeas(IdeasData) {
+        for (var i in IdeasData) {
             $('#topIdeas').append(`
         <div class="job-info">
             <div class="job-details">
-                <a href="/web/profile.html?user_id=`+IdeasData[i]['user_id']+`&username=`+IdeasData[i]['username']+`"><h3>`+IdeasData[i]['title'].substring(0, 20)+`...</h3>
-                <p>`+IdeasData[i]['caption'].substring(0, 40)+`...<p></a>
+                <a href="/web/profile.html?user_id=`+ IdeasData[i]['user_id'] + `&username=` + IdeasData[i]['username'] + `"><h3>` + IdeasData[i]['title'].substring(0, 20) + `...</h3>
+                <p>`+ IdeasData[i]['caption'].substring(0, 40) + `...<p></a>
             </div>
             
 
                 <div class="hr-rate">
                 <ul >
-                <li><span style="/*! background-color: darkblue; */color: #fff;/*! -webkit-text-fill-color: #fff; *//*! background: -webkit-gradient(linear,left top,right top,from(#ff8a00),to(#da1b60)); */background: linear-gradient(to right,#ff8a00,#da1b60);/*! background-clip: border-box; */-webkit-background-clip: text;-webkit-text-fill-color: transparent;/*! -webkit-box-decoration-break: clone; */box-decoration-break: clone;display: block;/*! background: #9c27b0; */">`+IdeasData[i]['p_status']+`</span></li> 
+                <li><span style="/*! background-color: darkblue; */color: #fff;/*! -webkit-text-fill-color: #fff; *//*! background: -webkit-gradient(linear,left top,right top,from(#ff8a00),to(#da1b60)); */background: linear-gradient(to right,#ff8a00,#da1b60);/*! background-clip: border-box; */-webkit-background-clip: text;-webkit-text-fill-color: transparent;/*! -webkit-box-decoration-break: clone; */box-decoration-break: clone;display: block;/*! background: #9c27b0; */">`+ IdeasData[i]['p_status'] + `</span></li> 
                 </ul>
             </div>
         </div> 
             `);
-        } 
+        }
     };
 
 
@@ -996,7 +1175,7 @@ $(document).ready(function () {
                 result = $.parseJSON(this.responseText);
                 try {
                     if (result['status'] === true) {
-                        $('.buttoWhilePostID_' +update_account_form_obj['post_id']).addClass('invested').click(false);
+                        $('.buttoWhilePostID_' + update_account_form_obj['post_id']).addClass('invested').click(false);
 
                         $('#post_RS2').html("<div class='alert alert-success'>Request Sent Succsefully.</div>");
                         setTimeout(
@@ -1043,7 +1222,7 @@ $(document).ready(function () {
                 result = $.parseJSON(this.responseText);
                 try {
                     if (result['status'] === true) {
-                        $('.buttoWhilePostID_' +update_account_form_obj['post_id']).addClass('invested').click(false);
+                        $('.buttoWhilePostID_' + update_account_form_obj['post_id']).addClass('invested').click(false);
                         $('#post_RS3').html("<div class='alert alert-success'>Request Sent Succsefully.</div>");
                         setTimeout(
                             function () {
