@@ -24,7 +24,7 @@ class homeDB{
 
     function __construct(){
         try{
-            $conn = new PDO("mysql:host=$this->host;dbname=$this->DBname;charset=utf8", $this->MySqlUsername, $this->MySqlPassword, []);
+            $conn = new PDO("mysql:host=$this->host;dbname=$this->DBname;charset=utf8mb4", $this->MySqlUsername, $this->MySqlPassword, []);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $conn->beginTransaction();
             $this->conn = $conn;
