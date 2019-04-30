@@ -187,7 +187,7 @@ $(document).ready(function () {
                 <form id="SendMsg">
                     <div class="mf-field">
                         <input type="hidden" name="target_id" value="`+ user_Data['user_id'] + `">
-                        <input type="text" name="message" required="" placeholder="Type a message here">
+                        <input class="ChatInputBox" type="text" name="message" required="" placeholder="Type a message here">
                         <button type="submit">Send</button>
                     </div>
 
@@ -394,9 +394,12 @@ $(document).ready(function () {
 
 
 
+
     setInterval(function () { Update(); }, 500);
 
-
+    setTimeout(function (){$('.ChatInputBox').emojioneArea({
+        pickerPosition: "right"
+    });}, 2000);
 
     $(document).on('click', '.msdg', function () {
         var form = $(this);
