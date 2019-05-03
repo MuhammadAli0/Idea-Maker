@@ -397,9 +397,9 @@ $(document).ready(function () {
 
     setInterval(function () { Update(); }, 500);
 
-    setTimeout(function (){$('.ChatInputBox').emojioneArea({
-        pickerPosition: "right"
-    });}, 2000);
+    // setTimeout(function (){$('.ChatInputBox').emojioneArea({
+    //     pickerPosition: "right"
+    // });}, 2000);
 
     $(document).on('click', '.msdg', function () {
         var form = $(this);

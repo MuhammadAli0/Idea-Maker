@@ -748,7 +748,8 @@ $(document).ready(function () {
                 var resp = JSON.parse(this.responseText);
                 if (resp['status'] === 200) {
                     console.log('Server got:', resp);
-                    location.reload(); 
+                    // location.reload(); 
+                    window.location.reload();
                 };
             };
         };        
@@ -777,7 +778,8 @@ $(document).ready(function () {
             if (this.status == 200) {
                 var resp = JSON.parse(this.responseText);
                 console.log('Server got:', resp);
-                location.reload(); 
+                // location.reload();
+                window.location.reload(); 
             };
         };
         xhr.send(fd);
