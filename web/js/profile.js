@@ -73,7 +73,8 @@ $(document).ready(function () {
                 }
                 catch (err) {
                     // on error/fail, tell the user he needs to login to show the account page
-                    window.location.href = "/index.html?login";
+                    // window.location.href = "/index.html?login";
+                    console.log(err);
                 }
             }
         });
@@ -144,6 +145,7 @@ $(document).ready(function () {
     }
 
     function SetMyPosts(i, result) {
+
         var owner = result['posts'][i]['user_id'];
         var postID = result['posts'][i]['post_id'];
         var title = result['posts'][i]['title'];
@@ -240,15 +242,17 @@ $(document).ready(function () {
         $('#feed-dd').append(html);
 
         if (result['likes'] != 'false') {
-            for (w in result['likes']) {
-                if (parseJwt(jwt)['data']['id'] === result['likes'][w]['user_id']) {
-                    $("#" + result['likes'][w]['post_id']).html('<i class="la la-heart"></i>' + $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap);
-                    $("#" + result['likes'][w]['post_id']).removeClass("like").addClass("unlike");
-                    $("#" + result['likes'][w]['post_id'])[0].dataset.textSwap = "like";
+            for (var w in result['likes']) {
+                if ( owner === result['likes'][w]['user_id']) {
+                    $("#" + postID).html('<i class="la la-heart"></i>' + $("#" + postID)[0].dataset.textSwap);
+                    $("#" + postID).removeClass("like").addClass("unlike");
+                    $("#" + postID)[0].dataset.textSwap = "like";
+                    break;
                 }
 
             }
         }
+
         if (status != "Discussions") {
             $("#comment_box" + postID).remove();
             $(".CommentButton_" + postID).remove();
@@ -260,10 +264,9 @@ $(document).ready(function () {
     function setPosts(result) {
         if (result['posts'] != 'false') {
 
-
-            for (i in result['posts']) {
-                SetMyPosts(i, result)
-
+            for (var i in result['posts']) {
+                
+                SetMyPosts(i, result);
             }
         }
     }
