@@ -285,7 +285,7 @@ $(document).ready(function () {
             <div  id="comment_box`+ postID + `">
                 <div class="cm_img">
                     <img style="width: 40px;
-                    height: 40px;"  src=" `+ ((result['posts'][i]['profile_picture_url'] != null) ? result['posts'][i]['profile_picture_url'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
+                    height: 40px;"  src=" `+ ((result['profile_pic'] != null) ? result['profile_pic'].slice(1) : 'images/profile/unkown.jpeg') + `" alt="">
                 </div>
                 
                 <div class="comment_box">
