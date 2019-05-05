@@ -744,6 +744,9 @@ $(document).ready(function () {
             if (e.lengthComputable) {
                 var percentComplete = (e.loaded / e.total) * 100;
                 console.log(percentComplete + '% uploaded');
+                if((e.loaded / e.total) * 100 === 100){
+                    window.location.reload();
+                }
             }
         };
         xhr.onload = function () {
